@@ -130,7 +130,7 @@ export const products: Product[] = [
     name: "Kemeja Stripe Rempel Feat Body Wanita Atasan",
     category: "Atasan Wanita",
     price: 195000,
-    mainImageUrl: "https://images.unsplash.com/photo-1598554000000-000000000000?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Placeholder
+    mainImageUrl: "https://images.unsplash.com/photo-1622470000000-000000000000?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Placeholder for striped shirt
     colorImages: generateColorImages(commonColors),
     description: commonDescription,
     sizes: commonSizes,
@@ -146,7 +146,7 @@ export const products: Product[] = [
     name: "Sasha Fitted Shirt",
     category: "Atasan Wanita",
     price: 210000,
-    mainImageUrl: "https://images.unsplash.com/photo-1603252109303-275144df1862?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Placeholder
+    mainImageUrl: "https://images.unsplash.com/photo-1603252109303-275144df1862?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Fitted shirt image
     colorImages: generateColorImages(commonColors),
     description: commonDescription,
     sizes: commonSizes,
@@ -162,7 +162,7 @@ export const products: Product[] = [
     name: "Kemeja Linen Wanita Oversize",
     category: "Atasan Wanita",
     price: 185000,
-    mainImageUrl: "https://images.unsplash.com/photo-1571867552700-22329921294c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Reusing existing image
+    mainImageUrl: "https://images.unsplash.com/photo-1571867552700-22329921294c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Reusing existing image for oversized linen
     colorImages: generateColorImages(commonColors),
     description: commonDescription,
     sizes: commonSizes,
@@ -178,7 +178,7 @@ export const products: Product[] = [
     name: "MSR Elsira Kemeja Wanita Kerja Kantor",
     category: "Atasan Wanita",
     price: 230000,
-    mainImageUrl: "https://images.unsplash.com/photo-1591047139829-f96f700860c6?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Placeholder
+    mainImageUrl: "https://images.unsplash.com/photo-1591047139829-f96f700860c6?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Black shirt for office wear
     colorImages: generateColorImages(commonColors),
     description: commonDescription,
     sizes: commonSizes,
@@ -194,7 +194,7 @@ export const products: Product[] = [
     name: "Kemeja Wanita Luna Top",
     category: "Atasan Wanita",
     price: 170000,
-    mainImageUrl: "https://images.unsplash.com/photo-1581044777550-4cfa607037dc?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Placeholder
+    mainImageUrl: "https://images.unsplash.com/photo-1581044777550-4cfa607037dc?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Pink blouse for stylish top
     colorImages: generateColorImages(commonColors),
     description: commonDescription,
     sizes: commonSizes,
@@ -210,7 +210,7 @@ export const products: Product[] = [
     name: "Mochi Shirt Kemeja Wanita",
     category: "Atasan Wanita",
     price: 160000,
-    mainImageUrl: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Placeholder
+    mainImageUrl: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Green shirt for casual wear
     colorImages: generateColorImages(commonColors),
     description: commonDescription,
     sizes: commonSizes,
@@ -226,7 +226,7 @@ export const products: Product[] = [
     name: "Denim Shirt Julia",
     category: "Atasan Wanita",
     price: 240000,
-    mainImageUrl: "https://images.unsplash.com/photo-1598554000000-000000000000?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Placeholder
+    mainImageUrl: "https://images.unsplash.com/photo-1543087900-a4536600639b?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Denim shirt image
     colorImages: generateColorImages(commonColors),
     description: commonDescription,
     sizes: commonSizes,

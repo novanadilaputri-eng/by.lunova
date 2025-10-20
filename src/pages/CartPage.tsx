@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Trash2, ShoppingCart } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label"; // Import Label component
 import HomePageHeader from "@/components/HomePageHeader"; // For consistent header
 
 const CartPage: React.FC = () => {

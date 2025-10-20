@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { products } from "@/data/products";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Star, Store, Truck, ShoppingCart } from "lucide-react"; // Menambahkan ShoppingCart
+import { Star, Store, Truck, ShoppingCart } from "lucide-react";
 import { showSuccess, showError } from "@/utils/toast";
 import { useCart } from "@/context/CartContext";
 import ReviewSection from "@/components/ReviewSection";
-import ProductCard from "@/components/ProductCard"; // For "Kamu mungkin juga suka" section
-import HomePageHeader from "@/components/HomePageHeader"; // For consistent header
+import ProductCard from "@/components/ProductCard";
+import HomePageHeader from "@/components/HomePageHeader";
 
 const ProductDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -20,7 +20,16 @@ const ProductDetailPage: React.FC = () => {
 
   const [selectedSize, setSelectedSize] = useState<string | undefined>(product?.sizes[0]);
   const [selectedColor, setSelectedColor] = useState<string | undefined>(product?.colors[0]);
+  const [displayImageUrl, setDisplayImageUrl] = useState<string | undefined>(product?.mainImageUrl);
   const [quantity, setQuantity] = useState<number>(1);
+
+  useEffect(() => {
+    if (product) {
+      // Set initial display image based on selected color, or main image if no color selected
+      const colorImage = product.colorImages.find(ci => ci.color === selectedColor);
+      setDisplayImageUrl(colorImage?.imageUrl || product.mainImageUrl);
+    }
+  }, [product, selectedColor]);
 
   if (!product) {
     return (
@@ -73,7 +82,7 @@ const ProductDetailPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white p-6 rounded-lg shadow-md">
           <div className="flex justify-center items-center">
             <img
-              src={product.imageUrl}
+              src={displayImageUrl} // Use displayImageUrl
               alt={product.name}
               className="w-full max-w-md h-auto object-cover rounded-lg shadow-sm"
             />

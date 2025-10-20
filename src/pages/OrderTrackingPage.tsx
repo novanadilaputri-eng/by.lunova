@@ -5,6 +5,7 @@ import { Package, Truck, CheckCircle, XCircle, Clock, Wallet } from "lucide-reac
 import HomePageHeader from "@/components/HomePageHeader";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { products } from "@/data/products"; // Import products to get image
 
 interface TrackingStepProps {
   icon: React.ElementType;
@@ -39,8 +40,10 @@ const OrderTrackingPage: React.FC = () => {
   const orderId = "BYLNV-20231225-001";
   const orderStatus = "Dikirim"; // Can be: "Menunggu Pembayaran", "Diproses", "Dikemas", "Dikirim", "Telah Sampai", "Selesai", "Dibatalkan"
   const deliveryEstimate = "28 Des 2023";
-  const productName = "Blouse Katun Motif Bunga";
-  const productImageUrl = "https://images.unsplash.com/photo-1581044777550-4cfa607037dc?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+  const productId = "1"; // Assuming this order is for product ID 1
+  const product = products.find(p => p.id === productId);
+  const productName = product?.name || "Produk Tidak Dikenal";
+  const productImageUrl = product?.mainImageUrl || "https://via.placeholder.com/150?text=No+Image"; // Use mainImageUrl
 
   const trackingSteps = [
     { label: "Pesanan Dibuat", icon: CheckCircle, status: "Pesanan Dibuat", date: "2023-12-25 10:00" },

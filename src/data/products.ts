@@ -1,12 +1,40 @@
 import { Product } from "@/types/product";
 
+const commonDescription = "Kemeja wanita kekinian dengan bahan nyaman, cocok untuk aktivitas santai maupun kerja.";
+const commonSizes = ["S", "M", "L", "XL"];
+const commonColors = ["BlackWhite", "Peach", "Ocean Blue", "Pastel Green", "Ivory", "Soft Grey", "Soft Purple"];
+const commonStoreName = "By.Lunova Official";
+const commonStoreReputation = "Platinum Seller";
+
+const colorImageMap = {
+  "BlackWhite": "https://images.unsplash.com/photo-1591047139829-f96f700860c6?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Black shirt
+  "Peach": "https://images.unsplash.com/photo-1581044777550-4cfa607037dc?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Pink/Peach blouse
+  "Ocean Blue": "https://images.unsplash.com/photo-1571867552700-22329921294c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Blue shirt
+  "Pastel Green": "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Green shirt
+  "Ivory": "https://images.unsplash.com/photo-1521572178477-fff92947c229?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // White/Cream shirt
+  "Soft Grey": "https://images.unsplash.com/photo-1583743814966-fafea78985f6?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Grey shirt
+  "Soft Purple": "https://images.unsplash.com/photo-1594633313472-01737179227f?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Lavender/Purple top
+};
+
+const generateColorImages = (colors: string[]) => {
+  return colors.map(color => ({
+    color,
+    imageUrl: colorImageMap[color as keyof typeof colorImageMap] || "https://via.placeholder.com/400x400?text=No+Image",
+  }));
+};
+
 export const products: Product[] = [
   {
     id: "1",
     name: "Blouse Katun Motif Bunga",
     category: "Atasan Wanita",
     price: 125000,
-    imageUrl: "https://images.unsplash.com/photo-1581044777550-4cfa607037dc?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    mainImageUrl: "https://images.unsplash.com/photo-1581044777550-4cfa607037dc?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    colorImages: [
+      { color: "Putih", imageUrl: "https://images.unsplash.com/photo-1521572178477-fff92947c229?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+      { color: "Biru", imageUrl: "https://images.unsplash.com/photo-1571867552700-22329921294c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+      { color: "Pink", imageUrl: "https://images.unsplash.com/photo-1581044777550-4cfa607037dc?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+    ],
     description: "Blouse katun lembut dengan motif bunga yang elegan, cocok untuk tampilan kasual maupun semi-formal. Tersedia dalam berbagai ukuran dan warna.",
     sizes: ["S", "M", "L", "XL"],
     colors: ["Putih", "Biru", "Pink"],
@@ -21,7 +49,12 @@ export const products: Product[] = [
     name: "Kemeja Linen Oversize",
     category: "Atasan Wanita",
     price: 180000,
-    imageUrl: "https://images.unsplash.com/photo-1571867552700-22329921294c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    mainImageUrl: "https://images.unsplash.com/photo-1571867552700-22329921294c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    colorImages: [
+      { color: "Beige", imageUrl: "https://images.unsplash.com/photo-1521572178477-fff92947c229?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+      { color: "Hijau Sage", imageUrl: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+      { color: "Hitam", imageUrl: "https://images.unsplash.com/photo-1591047139829-f96f700860c6?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+    ],
     description: "Kemeja linen oversize yang nyaman dan stylish, sempurna untuk gaya santai. Bahan adem dan tidak mudah kusut.",
     sizes: ["M", "L", "XL"],
     colors: ["Beige", "Hijau Sage", "Hitam"],
@@ -36,7 +69,11 @@ export const products: Product[] = [
     name: "Tunik Batik Modern",
     category: "Atasan Wanita",
     price: 250000,
-    imageUrl: "https://images.unsplash.com/photo-1607082348824-0a968821957e?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    mainImageUrl: "https://images.unsplash.com/photo-1607082348824-0a968821957e?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    colorImages: [
+      { color: "Coklat", imageUrl: "https://images.unsplash.com/photo-1521572178477-fff92947c229?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+      { color: "Biru Dongker", imageUrl: "https://images.unsplash.com/photo-1571867552700-22329921294c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+    ],
     description: "Tunik dengan motif batik kontemporer, memadukan tradisi dan gaya modern. Cocok untuk acara formal maupun semi-formal.",
     sizes: ["S", "M", "L"],
     colors: ["Coklat", "Biru Dongker"],
@@ -51,7 +88,13 @@ export const products: Product[] = [
     name: "Kaos Polos Basic",
     category: "Atasan Wanita",
     price: 75000,
-    imageUrl: "https://images.unsplash.com/photo-1521572178477-fff92947c229?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    mainImageUrl: "https://images.unsplash.com/photo-1521572178477-fff92947c229?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    colorImages: [
+      { color: "Hitam", imageUrl: "https://images.unsplash.com/photo-1591047139829-f96f700860c6?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+      { color: "Putih", imageUrl: "https://images.unsplash.com/photo-1521572178477-fff92947c229?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+      { color: "Abu-abu", imageUrl: "https://images.unsplash.com/photo-1583743814966-fafea78985f6?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+      { color: "Navy", imageUrl: "https://images.unsplash.com/photo-1571867552700-22329921294c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+    ],
     description: "Kaos polos basic dari bahan katun combed 30s, sangat nyaman dan cocok untuk sehari-hari. Pilihan warna lengkap.",
     sizes: ["S", "M", "L", "XL"],
     colors: ["Hitam", "Putih", "Abu-abu", "Navy"],
@@ -66,7 +109,12 @@ export const products: Product[] = [
     name: "Cardigan Rajut Korea",
     category: "Atasan Wanita",
     price: 150000,
-    imageUrl: "https://images.unsplash.com/photo-1594633313472-01737179227f?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    mainImageUrl: "https://images.unsplash.com/photo-1594633313472-01737179227f?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    colorImages: [
+      { color: "Cream", imageUrl: "https://images.unsplash.com/photo-1521572178477-fff92947c229?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+      { color: "Mint", imageUrl: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+      { color: "Lavender", imageUrl: "https://images.unsplash.com/photo-1594633313472-01737179227f?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+    ],
     description: "Cardigan rajut gaya Korea yang hangat dan modis, cocok untuk melengkapi outfit Anda. Tersedia dalam warna pastel.",
     sizes: ["All Size"],
     colors: ["Cream", "Mint", "Lavender"],
@@ -75,5 +123,118 @@ export const products: Product[] = [
     reviewsCount: 95,
     storeName: "K-Fashion Hub",
     storeReputation: "Gold Seller",
+  },
+  // New products
+  {
+    id: "6",
+    name: "Kemeja Stripe Rempel Feat Body Wanita Atasan",
+    category: "Atasan Wanita",
+    price: 195000,
+    mainImageUrl: "https://images.unsplash.com/photo-1598554000000-000000000000?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Placeholder
+    colorImages: generateColorImages(commonColors),
+    description: commonDescription,
+    sizes: commonSizes,
+    colors: commonColors,
+    stock: 50,
+    rating: 4.5,
+    reviewsCount: 100,
+    storeName: commonStoreName,
+    storeReputation: commonStoreReputation,
+  },
+  {
+    id: "7",
+    name: "Sasha Fitted Shirt",
+    category: "Atasan Wanita",
+    price: 210000,
+    mainImageUrl: "https://images.unsplash.com/photo-1603252109303-275144df1862?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Placeholder
+    colorImages: generateColorImages(commonColors),
+    description: commonDescription,
+    sizes: commonSizes,
+    colors: commonColors,
+    stock: 50,
+    rating: 4.6,
+    reviewsCount: 110,
+    storeName: commonStoreName,
+    storeReputation: commonStoreReputation,
+  },
+  {
+    id: "8",
+    name: "Kemeja Linen Wanita Oversize",
+    category: "Atasan Wanita",
+    price: 185000,
+    mainImageUrl: "https://images.unsplash.com/photo-1571867552700-22329921294c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Reusing existing image
+    colorImages: generateColorImages(commonColors),
+    description: commonDescription,
+    sizes: commonSizes,
+    colors: commonColors,
+    stock: 50,
+    rating: 4.7,
+    reviewsCount: 90,
+    storeName: commonStoreName,
+    storeReputation: commonStoreReputation,
+  },
+  {
+    id: "9",
+    name: "MSR Elsira Kemeja Wanita Kerja Kantor",
+    category: "Atasan Wanita",
+    price: 230000,
+    mainImageUrl: "https://images.unsplash.com/photo-1591047139829-f96f700860c6?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Placeholder
+    colorImages: generateColorImages(commonColors),
+    description: commonDescription,
+    sizes: commonSizes,
+    colors: commonColors,
+    stock: 50,
+    rating: 4.4,
+    reviewsCount: 80,
+    storeName: commonStoreName,
+    storeReputation: commonStoreReputation,
+  },
+  {
+    id: "10",
+    name: "Kemeja Wanita Luna Top",
+    category: "Atasan Wanita",
+    price: 170000,
+    mainImageUrl: "https://images.unsplash.com/photo-1581044777550-4cfa607037dc?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Placeholder
+    colorImages: generateColorImages(commonColors),
+    description: commonDescription,
+    sizes: commonSizes,
+    colors: commonColors,
+    stock: 50,
+    rating: 4.5,
+    reviewsCount: 105,
+    storeName: commonStoreName,
+    storeReputation: commonStoreReputation,
+  },
+  {
+    id: "11",
+    name: "Mochi Shirt Kemeja Wanita",
+    category: "Atasan Wanita",
+    price: 160000,
+    mainImageUrl: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Placeholder
+    colorImages: generateColorImages(commonColors),
+    description: commonDescription,
+    sizes: commonSizes,
+    colors: commonColors,
+    stock: 50,
+    rating: 4.3,
+    reviewsCount: 95,
+    storeName: commonStoreName,
+    storeReputation: commonStoreReputation,
+  },
+  {
+    id: "12",
+    name: "Denim Shirt Julia",
+    category: "Atasan Wanita",
+    price: 240000,
+    mainImageUrl: "https://images.unsplash.com/photo-1598554000000-000000000000?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Placeholder
+    colorImages: generateColorImages(commonColors),
+    description: commonDescription,
+    sizes: commonSizes,
+    colors: commonColors,
+    stock: 50,
+    rating: 4.8,
+    reviewsCount: 130,
+    storeName: commonStoreName,
+    storeReputation: commonStoreReputation,
   },
 ];

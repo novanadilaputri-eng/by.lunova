@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Trash2, ShoppingCart } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label"; // Import Label component
-import HomePageHeader from "@/components/HomePageHeader"; // For consistent header
+import { Label } from "@/components/ui/label";
+import HomePageHeader from "@/components/HomePageHeader";
 
 const CartPage: React.FC = () => {
   const { cartItems, updateQuantity, removeFromCart, getTotalPrice } = useCart();
@@ -132,7 +132,7 @@ const CartPage: React.FC = () => {
                     />
                     <Link to={`/products/${item.product.id}`} className="flex-shrink-0">
                       <img
-                        src={item.product.imageUrl}
+                        src={item.product.mainImageUrl} // Changed to mainImageUrl
                         alt={item.product.name}
                         className="w-24 h-24 object-cover rounded-md mr-4"
                       />

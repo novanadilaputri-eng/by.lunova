@@ -15,7 +15,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     <Card className="w-full max-w-sm overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 border-2 border-beige">
       <Link to={`/products/${product.id}`}>
         <img
-          src={product.imageUrl}
+          src={product.mainImageUrl} // Changed to mainImageUrl
           alt={product.name}
           className="w-full h-48 object-cover"
         />

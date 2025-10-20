@@ -3,7 +3,8 @@ export interface Product {
   name: string;
   category: string;
   price: number;
-  imageUrl: string;
+  mainImageUrl: string; // Main image for the product
+  colorImages: { color: string; imageUrl: string }[]; // Images for each color variant
   description: string;
   sizes: string[];
   colors: string[];

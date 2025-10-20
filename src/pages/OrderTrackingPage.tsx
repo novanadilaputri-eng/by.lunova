@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Package, Truck, CheckCircle, XCircle, Clock } from "lucide-react";
+import { Package, Truck, CheckCircle, XCircle, Clock, Wallet } from "lucide-react";
 import HomePageHeader from "@/components/HomePageHeader";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";

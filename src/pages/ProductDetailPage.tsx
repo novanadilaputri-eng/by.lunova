@@ -6,11 +6,14 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Star, Store } from "lucide-react";
-import { showSuccess, showError } from "@/utils/toast"; // Using the existing toast utility
+import { showSuccess, showError } from "@/utils/toast";
+import { useCart } from "@/context/CartContext"; // New import
+import ReviewSection from "@/components/ReviewSection"; // New import
 
 const ProductDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { addToCart } = useCart(); // Use cart context
   const product = products.find((p) => p.id === id);
 
   const [selectedSize, setSelectedSize] = useState<string | undefined>(product?.sizes[0]);
@@ -38,16 +41,20 @@ const ProductDetailPage: React.FC = () => {
       showError("Jumlah produk harus lebih dari 0.");
       return;
     }
-    // This is a placeholder for actual add to cart logic
-    showSuccess(`Berhasil menambahkan ${quantity}x ${product.name} (Ukuran: ${selectedSize}, Warna: ${selectedColor}) ke keranjang!`);
-    console.log({
-      productId: product.id,
-      name: product.name,
-      size: selectedSize,
-      color: selectedColor,
-      quantity,
-      price: product.price,
-    });
+    addToCart(product, selectedSize, selectedColor, quantity);
+  };
+
+  const handleBuyNow = () => {
+    if (!selectedSize || !selectedColor) {
+      showError("Mohon pilih ukuran dan warna produk.");
+      return;
+    }
+    if (quantity <= 0) {
+      showError("Jumlah produk harus lebih dari 0.");
+      return;
+    }
+    addToCart(product, selectedSize, selectedColor, quantity);
+    navigate("/cart"); // Navigate to cart page after adding
   };
 
   return (
@@ -135,11 +142,18 @@ const ProductDetailPage: React.FC = () => {
             <span className="ml-4 text-sm text-gray-600">Stok Tersedia: {product.stock}</span>
           </div>
 
-          <Button onClick={handleAddToCart} className="w-full py-3 text-lg">
-            Tambahkan ke Keranjang
-          </Button>
+          <div className="flex gap-4">
+            <Button onClick={handleAddToCart} className="flex-1 py-3 text-lg bg-rose-500 hover:bg-rose-600 text-white">
+              Tambahkan ke Keranjang
+            </Button>
+            <Button onClick={handleBuyNow} className="flex-1 py-3 text-lg" variant="outline">
+              Beli Sekarang
+            </Button>
+          </div>
         </div>
       </div>
+
+      <ReviewSection productId={product.id} />
     </div>
   );
 };

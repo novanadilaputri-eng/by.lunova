@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Shirt, Tag, Headscarf, Pocket, Footprints, ShoppingBag, Gem, Sparkles } from 'lucide-react';
+import { Shirt, Tag, Scarf, Pocket, Footprints, ShoppingBag, Gem, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface ShortcutItem {
@@ -14,7 +14,7 @@ interface ShortcutItem {
 const shortcutItems: ShortcutItem[] = [
   { icon: Shirt, label: "Atasan", to: "/products?category=Atasan Wanita" },
   { icon: Tag, label: "Dress", to: "/products?category=Dress" },
-  { icon: Headscarf, label: "Hijab", to: "/products?category=Hijab" },
+  { icon: Scarf, label: "Hijab", to: "/products?category=Hijab" },
   { icon: Pocket, label: "Celana", to: "/products?category=Celana" },
   { icon: Footprints, label: "Sepatu", to: "/products?category=Sepatu" },
   { icon: ShoppingBag, label: "Tas", to: "/products?category=Tas" },

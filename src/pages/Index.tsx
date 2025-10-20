@@ -1,42 +1,46 @@
 import { MadeWithDyad } from "@/components/made-with-dyad";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import PurchaseFlowchart from "@/components/PurchaseFlowchart";
+import HomePageHeader from "@/components/HomePageHeader";
+import CarouselBanner from "@/components/CarouselBanner";
+import ShortcutMenu from "@/components/ShortcutMenu";
+import FlashSaleSection from "@/components/FlashSaleSection";
+import RecommendationSection from "@/components/RecommendationSection";
+import OOTDBoard from "@/components/OOTDBoard";
+import { products as mockProducts } from '@/data/products';
 
 const Index = () => {
+  const bannerImages = [
+    "https://images.unsplash.com/photo-1581044777550-4cfa607037dc?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "https://images.unsplash.com/photo-1571867552700-22329921294c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "https://images.unsplash.com/photo-1607082348824-0a968821957e?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  ];
+
+  // For demo, just use a slice of mock products for recommendations
+  const recommendedProducts = mockProducts.slice(0, 4);
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-pink-100 to-purple-100 p-4">
-      <div
-        className="relative text-center bg-white p-8 rounded-lg shadow-xl max-w-lg w-full mb-8 overflow-hidden"
-        style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1581044777550-4cfa607037dc?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')`, // Placeholder image
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          minHeight: '300px',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <div className="absolute inset-0 bg-white opacity-70 rounded-lg"></div> {/* Overlay for text readability */}
-        <div className="relative z-10">
-          <h1 className="text-5xl font-extrabold text-gray-900 mb-4 leading-tight">
-            Selamat Datang di Fashionista!
+    <div className="min-h-screen bg-beige">
+      <HomePageHeader />
+      <div className="container mx-auto p-4 space-y-6">
+        <div className="text-center py-8 bg-gradient-to-br from-soft-pink to-gold-rose rounded-lg shadow-xl text-white">
+          <h1 className="text-4xl md:text-5xl font-playfair font-extrabold mb-2 leading-tight">
+            Selamat Datang di By.Lunova!
           </h1>
-          <p className="text-xl text-gray-700 mb-8">
-            Temukan Gaya Fashion Wanita Impian Anda
+          <p className="text-lg md:text-xl font-poppins mb-6">
+            Find Your Glow in Every Style ✨
           </p>
-          <Button asChild size="lg" className="px-8 py-3 text-lg bg-rose-500 hover:bg-rose-600 text-white">
+          <Button asChild size="lg" className="px-8 py-3 text-lg bg-white text-soft-pink hover:bg-gray-100">
             <Link to="/products">Mulai Belanja Sekarang</Link>
           </Button>
         </div>
-      </div>
 
-      <div className="w-full max-w-4xl mt-8">
-        <PurchaseFlowchart />
+        <CarouselBanner images={bannerImages} />
+        <ShortcutMenu />
+        <FlashSaleSection />
+        <RecommendationSection title="Rekomendasi Fashion Hari Ini" products={recommendedProducts} />
+        <OOTDBoard />
       </div>
-
       <MadeWithDyad />
     </div>
   );

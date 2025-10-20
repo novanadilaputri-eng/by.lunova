@@ -4,7 +4,7 @@ import { products } from "@/data/products";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import Header from "@/components/Header"; // New import
+import HomePageHeader from "@/components/HomePageHeader"; // Use HomePageHeader for consistency
 
 const ProductListingPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -31,30 +31,48 @@ const ProductListingPage: React.FC = () => {
 
   const categories = Array.from(new Set(products.map(p => p.category)));
 
+  const suggestionKeywords = ["Dress pastel", "Hijab satin", "Tas kecil", "Atasan kasual"];
+
   return (
     <>
-      <Header /> {/* Add Header component */}
+      <HomePageHeader /> {/* Use HomePageHeader for consistent search bar */}
       <div className="container mx-auto p-4">
-        <h1 className="text-3xl font-bold text-center mb-8">Produk Atasan Wanita</h1>
+        <h1 className="text-3xl font-playfair font-bold text-center mb-8 text-gray-900">Cari Produk Fashion</h1>
 
-        <div className="flex flex-col md:flex-row gap-4 mb-8 items-center justify-between">
-          <div className="w-full md:w-1/2">
-            <Label htmlFor="search">Cari Produk</Label>
+        <div className="flex flex-col md:flex-row gap-4 mb-6 items-center justify-between">
+          {/* Search input is now in HomePageHeader, but we can keep a local one for specific search page functionality if needed, or remove it. For now, let's assume HomePageHeader handles the main search. */}
+          {/* <div className="w-full md:w-1/2">
+            <Label htmlFor="search" className="font-poppins">Cari Produk</Label>
             <Input
               id="search"
               type="text"
               placeholder="Cari atasan wanita..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full"
+              className="w-full mt-1"
             />
+          </div> */}
+
+          <div className="flex flex-wrap gap-2 mb-4">
+            <span className="text-sm text-gray-600 font-poppins">Saran:</span>
+            {suggestionKeywords.map((keyword, index) => (
+              <Button
+                key={index}
+                variant="outline"
+                size="sm"
+                className="rounded-full text-xs bg-beige border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white"
+                onClick={() => setSearchTerm(keyword)}
+              >
+                {keyword}
+              </Button>
+            ))}
           </div>
 
-          <div className="flex gap-4 w-full md:w-auto">
+          <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
             <div className="w-full md:w-auto">
-              <Label htmlFor="category-filter">Kategori</Label>
+              <Label htmlFor="category-filter" className="font-poppins">Kategori</Label>
               <Select value={filterCategory} onValueChange={setFilterCategory}>
-                <SelectTrigger id="category-filter" className="w-full md:w-[180px]">
+                <SelectTrigger id="category-filter" className="w-full md:w-[180px] mt-1 border-soft-pink focus:ring-soft-pink">
                   <SelectValue placeholder="Pilih Kategori" />
                 </SelectTrigger>
                 <SelectContent>
@@ -67,15 +85,17 @@ const ProductListingPage: React.FC = () => {
             </div>
 
             <div className="w-full md:w-auto">
-              <Label htmlFor="sort-by">Urutkan Berdasarkan</Label>
+              <Label htmlFor="sort-by" className="font-poppins">Urutkan Berdasarkan</Label>
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger id="sort-by" className="w-full md:w-[180px]">
+                <SelectTrigger id="sort-by" className="w-full md:w-[180px] mt-1 border-soft-pink focus:ring-soft-pink">
                   <SelectValue placeholder="Urutkan" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="popularity">Popularitas</SelectItem>
                   <SelectItem value="price-asc">Harga: Terendah ke Tertinggi</SelectItem>
                   <SelectItem value="price-desc">Harga: Tertinggi ke Terendah</SelectItem>
+                  <SelectItem value="best-reviews">Ulasan Terbaik</SelectItem> {/* New sort option */}
+                  <SelectItem value="fastest-delivery">Pengiriman Tercepat</SelectItem> {/* Placeholder sort option */}
                 </SelectContent>
               </Select>
             </div>
@@ -83,7 +103,7 @@ const ProductListingPage: React.FC = () => {
         </div>
 
         {filteredProducts.length === 0 ? (
-          <p className="text-center text-gray-600 text-lg">Tidak ada produk yang ditemukan.</p>
+          <p className="text-center text-gray-600 text-lg font-poppins">Tidak ada produk yang ditemukan.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredProducts.map((product) => (

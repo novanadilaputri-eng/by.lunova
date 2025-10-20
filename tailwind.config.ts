@@ -62,11 +62,19 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Custom By.Lunova colors
+        'soft-pink': 'hsl(var(--soft-pink))',
+        'beige': 'hsl(var(--beige))',
+        'gold-rose': 'hsl(var(--gold-rose))',
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      fontFamily: {
+        playfair: ['"Playfair Display"', 'serif'],
+        poppins: ['Poppins', 'sans-serif'],
       },
       keyframes: {
         "accordion-down": {

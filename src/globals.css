@@ -4,8 +4,8 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 0 0% 100%; /* White */
+    --foreground: 222.2 84% 4.9%; /* Dark text */
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -13,16 +13,16 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 340 70% 70%; /* Soft Pink */
+    --primary-foreground: 0 0% 100%; /* White */
 
-    --secondary: 210 40% 96.1%;
+    --secondary: 30 100% 97%; /* Beige */
     --secondary-foreground: 222.2 47.4% 11.2%;
 
-    --muted: 210 40% 96.1%;
+    --muted: 30 100% 97%; /* Beige */
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 96.1%;
+    --accent: 30 100% 97%; /* Beige */
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
@@ -30,25 +30,23 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 340 70% 70%; /* Soft Pink */
 
-    --radius: 0.5rem;
+    --radius: 0.75rem; /* Slightly more rounded */
 
-    --sidebar-background: 0 0% 98%;
+    --soft-pink: 340 70% 70%; /* #FADADD */
+    --beige: 30 100% 97%; /* #FFF8F3 */
+    --gold-rose: 28 50% 78%; /* #EAC4A3 */
 
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Sidebar colors (adjusting to new theme) */
+    --sidebar-background: 30 100% 97%; /* Beige */
+    --sidebar-foreground: 222.2 47.4% 11.2%;
+    --sidebar-primary: 340 70% 70%; /* Soft Pink */
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 340 70% 70%; /* Soft Pink */
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 214.3 31.8% 91.4%;
+    --sidebar-ring: 340 70% 70%; /* Soft Pink */
   }
 
   .dark {
@@ -96,6 +94,10 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-poppins; /* Apply Poppins as default */
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-playfair; /* Apply Playfair Display for headings */
   }
 }

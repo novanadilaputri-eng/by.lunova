@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Star, Store, Truck } from "lucide-react";
+import { Star, Store, Truck, ShoppingCart } from "lucide-react"; // Menambahkan ShoppingCart
 import { showSuccess, showError } from "@/utils/toast";
 import { useCart } from "@/context/CartContext";
 import ReviewSection from "@/components/ReviewSection";

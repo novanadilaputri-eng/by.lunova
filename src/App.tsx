@@ -8,11 +8,13 @@ import NotFound from "./pages/NotFound";
 import ProductListingPage from "./pages/ProductListingPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import CartPage from "./pages/CartPage";
-import CheckoutPage from "./pages/CheckoutPage"; // New import
-import ProfilePage from "./pages/ProfilePage"; // New import
-import OrderConfirmationPage from "./pages/OrderConfirmationPage"; // New import
+import CheckoutPage from "./pages/CheckoutPage";
+import ProfilePage from "./pages/ProfilePage";
+import OrderConfirmationPage from "./pages/OrderConfirmationPage";
+import OrderTrackingPage from "./pages/OrderTrackingPage"; // New import
+import ReturnRequestPage from "./pages/ReturnRequestPage"; // New import
 import { CartProvider } from "./context/CartContext";
-import BottomNavigationBar from "./components/BottomNavigationBar"; // New import
+import BottomNavigationBar from "./components/BottomNavigationBar";
 
 const queryClient = new QueryClient();
 
@@ -29,9 +31,11 @@ const App = () => (
               <Route path="/products" element={<ProductListingPage />} />
               <Route path="/products/:id" element={<ProductDetailPage />} />
               <Route path="/cart" element={<CartPage />} />
-              <Route path="/checkout" element={<CheckoutPage />} /> {/* New route */}
-              <Route path="/order-confirmation" element={<OrderConfirmationPage />} /> {/* New route */}
-              <Route path="/profile" element={<ProfilePage />} /> {/* New route */}
+              <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/profile/orders/:orderId" element={<OrderTrackingPage />} /> {/* New route */}
+              <Route path="/profile/return-request" element={<ReturnRequestPage />} /> {/* New route */}
               <Route path="/live" element={<NotFound />} /> {/* Placeholder for Live page */}
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />

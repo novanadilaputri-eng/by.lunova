@@ -48,7 +48,7 @@ const ProfilePage: React.FC = () => {
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h3 className="text-xl font-playfair font-bold text-gray-900 mb-4">Pesanan Saya</h3>
             <div className="grid grid-cols-2 gap-2">
-              <Link to="/profile/orders?status=all" className="flex flex-col items-center p-3 bg-beige rounded-lg hover:bg-soft-pink/20 transition-colors">
+              <Link to="/profile/orders/BYLNV-20231225-001" className="flex flex-col items-center p-3 bg-beige rounded-lg hover:bg-soft-pink/20 transition-colors">
                 <Package className="h-6 w-6 text-soft-pink mb-1" />
                 <span className="text-sm font-poppins text-gray-700">Semua</span>
               </Link>

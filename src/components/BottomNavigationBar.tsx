@@ -39,7 +39,7 @@ const BottomNavigationBar: React.FC = () => {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow-lg md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow-lg"> {/* Removed md:hidden */}
       <div className="flex h-14">
         {navItems.map((item) => (
           <NavItem

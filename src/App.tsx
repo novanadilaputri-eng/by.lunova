@@ -37,9 +37,8 @@ const App = () => (
         <Sonner />
         <CartProvider>
           <BrowserRouter>
-            {/* Membungkus div dan BottomNavigationBar dalam satu React.Fragment */}
             <>
-              <div className="pb-14 md:pb-0">
+              <div className="pb-14"> {/* Changed md:pb-0 to pb-14 */}
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/products" element={<ProductListingPage />} />

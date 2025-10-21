@@ -180,8 +180,9 @@ const OrderTrackingPage: React.FC = () => {
           )}
           {currentOrderStatus === "Selesai" && (
             <div className="mt-8 text-center">
+              {/* Link to review the first product in the order */}
               <Button asChild className="py-3 text-lg bg-soft-pink hover:bg-rose-600 text-white font-poppins">
-                <Link to={`/products/${order.items[0].productId}`}>Berikan Ulasan</Link> {/* Link to first product detail for review */}
+                <Link to={`/products/${order.items[0].productId}`}>Berikan Ulasan</Link>
               </Button>
             </div>
           )}

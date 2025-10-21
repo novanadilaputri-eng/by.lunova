@@ -37,24 +37,42 @@ const TrackingStep: React.FC<TrackingStepProps> = ({ icon: Icon, label, date, is
 
 const OrderTrackingPage: React.FC = () => {
   const { orderId } = useParams<{ orderId: string }>();
-  // Simulate order status and details. In a real app, this would come from an API.
   const [currentOrderStatus, setCurrentOrderStatus] = useState("Sedang Dalam Perjalanan"); // Initial status for demo
-  const deliveryEstimate = "28 Des 2023";
+
+  // Calculate dynamic dates
+  const today = new Date();
+  const formatDate = (date: Date) => {
+    const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+    return date.toLocaleDateString('id-ID', options);
+  };
+
+  const getRelativeDate = (daysAgo: number, hoursAgo: number, minutesAgo: number) => {
+    const date = new Date(today);
+    date.setDate(today.getDate() - daysAgo);
+    date.setHours(today.getHours() - hoursAgo);
+    date.setMinutes(today.getMinutes() - minutesAgo);
+    return formatDate(date);
+  };
+
+  const deliveryEstimateDate = new Date(today);
+  deliveryEstimateDate.setDate(today.getDate() + 2); // 2 days from now
+  const deliveryEstimate = deliveryEstimateDate.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+
   const productId = "1"; // Assuming this order is for product ID 1
   const product = products.find(p => p.id === productId);
   const productName = product?.name || "Produk Tidak Dikenal";
   const productImageUrl = product?.mainImageUrl || "https://via.placeholder.com/150?text=No+Image";
 
   const trackingSteps = [
-    { label: "Pesanan Dibuat", icon: CheckCircle, status: "Pesanan Dibuat", date: "2023-12-25 10:00" },
-    { label: "Menunggu Pembayaran", icon: Clock, status: "Menunggu Pembayaran", date: "2023-12-25 10:05" },
-    { label: "Pembayaran Dikonfirmasi", icon: Wallet, status: "Pembayaran Dikonfirmasi", date: "2023-12-25 10:30" },
-    { label: "Pesanan Diproses", icon: Package, status: "Diproses", date: "2023-12-25 11:00" },
-    { label: "Pesanan Dikemas", icon: Package, status: "Dikemas", date: "2023-12-25 14:00" },
-    { label: "Menunggu Penjemputan Kurir", icon: Truck, status: "Menunggu Penjemputan Kurir", date: "2023-12-26 09:00" },
-    { label: "Sedang Dalam Perjalanan", icon: Truck, status: "Sedang Dalam Perjalanan", date: "2023-12-26 11:00" },
-    { label: "Telah Sampai di Tujuan", icon: CheckCircle, status: "Telah Sampai", date: "2023-12-27 16:00" },
-    { label: "Pesanan Selesai", icon: CheckCircle, status: "Selesai", date: "2023-12-27 17:00" },
+    { label: "Pesanan Dibuat", icon: CheckCircle, status: "Pesanan Dibuat", date: getRelativeDate(2, 10, 0) },
+    { label: "Menunggu Pembayaran", icon: Clock, status: "Menunggu Pembayaran", date: getRelativeDate(2, 9, 55) },
+    { label: "Pembayaran Dikonfirmasi", icon: Wallet, status: "Pembayaran Dikonfirmasi", date: getRelativeDate(2, 9, 30) },
+    { label: "Pesanan Diproses", icon: Package, status: "Diproses", date: getRelativeDate(2, 8, 0) },
+    { label: "Pesanan Dikemas", icon: Package, status: "Dikemas", date: getRelativeDate(1, 14, 0) },
+    { label: "Menunggu Penjemputan Kurir", icon: Truck, status: "Menunggu Penjemputan Kurir", date: getRelativeDate(1, 9, 0) },
+    { label: "Sedang Dalam Perjalanan", icon: Truck, status: "Sedang Dalam Perjalanan", date: getRelativeDate(0, 2, 0) }, // Today, 2 hours ago
+    { label: "Telah Sampai di Tujuan", icon: CheckCircle, status: "Telah Sampai", date: getRelativeDate(-1, 16, 0) }, // Tomorrow, 4 PM (example future)
+    { label: "Pesanan Selesai", icon: CheckCircle, status: "Selesai", date: getRelativeDate(-1, 17, 0) }, // Tomorrow, 5 PM (example future)
   ];
 
   const currentStepIndex = trackingSteps.findIndex(step => step.status === currentOrderStatus);

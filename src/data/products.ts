@@ -23,7 +23,7 @@ const generateColorImages = (colors: string[]) => {
   }));
 };
 
-export const products: Product[] = [
+export let products: Product[] = [
   {
     id: "1",
     name: "Blouse Katun Motif Bunga",
@@ -238,3 +238,27 @@ export const products: Product[] = [
     storeReputation: commonStoreReputation,
   },
 ];
+
+export const addProduct = (newProduct: Omit<Product, 'id' | 'rating' | 'reviewsCount' | 'storeName' | 'storeReputation'>) => {
+  const productWithDefaults: Product = {
+    ...newProduct,
+    id: `prod-${Date.now()}`,
+    rating: 0,
+    reviewsCount: 0,
+    storeName: commonStoreName, // Default for new products
+    storeReputation: "New Seller", // Default for new products
+  };
+  products.push(productWithDefaults);
+  return productWithDefaults;
+};
+
+export const updateProduct = (updatedProduct: Product) => {
+  const index = products.findIndex(p => p.id === updatedProduct.id);
+  if (index !== -1) {
+    products[index] = updatedProduct;
+  }
+};
+
+export const deleteProduct = (productId: string) => {
+  products = products.filter(p => p.id !== productId);
+};

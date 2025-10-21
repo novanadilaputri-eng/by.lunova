@@ -20,8 +20,11 @@ import SettingsPage from "./pages/SettingsPage";
 import HelpPage from "./pages/HelpPage";
 import SellerDashboardPage from "./pages/SellerDashboardPage";
 import EditProductPage from "./pages/EditProductPage";
-import OrderListPage from "./pages/OrderListPage"; // New import
+import OrderListPage from "./pages/OrderListPage";
+import LunoPointsPage from "./pages/LunoPointsPage"; // New import
+import LunoLivePage from "./pages/LunoLivePage"; // New import
 import { CartProvider } from "./context/CartContext";
+import { ThemeProvider } from "./context/ThemeContext"; // Ensure ThemeProvider is imported
 import BottomNavigationBar from "./components/BottomNavigationBar";
 
 const queryClient = new QueryClient();
@@ -33,7 +36,7 @@ const App = () => (
       <Sonner />
       <CartProvider>
         <BrowserRouter>
-          <div className="pb-14 md:pb-0"> {/* Add padding-bottom for fixed bottom nav on mobile */}
+          <div className="pb-14 md:pb-0">
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/products" element={<ProductListingPage />} />
@@ -42,7 +45,7 @@ const App = () => (
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
               <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/profile/orders" element={<OrderListPage />} /> {/* New route for order list */}
+              <Route path="/profile/orders" element={<OrderListPage />} />
               <Route path="/profile/orders/:orderId" element={<OrderTrackingPage />} />
               <Route path="/profile/return-request" element={<ReturnRequestPage />} />
               <Route path="/profile/wishlist" element={<WishlistPage />} />
@@ -50,10 +53,11 @@ const App = () => (
               <Route path="/profile/addresses" element={<AddressPage />} />
               <Route path="/profile/settings" element={<SettingsPage />} />
               <Route path="/profile/help" element={<HelpPage />} />
+              <Route path="/profile/lunopoints" element={<LunoPointsPage />} /> {/* New route */}
               <Route path="/seller/dashboard" element={<SellerDashboardPage />} />
               <Route path="/seller/products/new" element={<EditProductPage />} />
               <Route path="/seller/products/edit/:id" element={<EditProductPage />} />
-              <Route path="/live" element={<NotFound />} /> {/* Placeholder for Live page */}
+              <Route path="/live" element={<LunoLivePage />} /> {/* LunoLive page */}
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

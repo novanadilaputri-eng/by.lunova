@@ -34,15 +34,20 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
   const firstItem = order.items[0];
   const otherItemsCount = order.items.length - 1;
 
+  const formatDate = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'short', year: 'numeric' };
+    return new Date(dateString).toLocaleDateString('id-ID', options);
+  };
+
   return (
-    <Card className="w-full overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 border-2 border-beige">
+    <Card className="w-full overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 border-2 border-beige dark:border-gray-700 bg-white dark:bg-gray-800">
       <Link to={`/profile/orders/${order.id}`}>
         <CardContent className="p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center space-x-2">
               {getStatusIcon(order.status)}
               <span className={cn(
-                "font-poppins font-semibold text-sm",
+                "font-poppins font-semibold text-sm dark:text-gray-200",
                 order.status === "Menunggu Pembayaran" && "text-orange-600",
                 (order.status === "Dikemas" || order.status === "Diproses") && "text-blue-600",
                 (order.status === "Sedang Dalam Perjalanan" || order.status === "Menunggu Penjemputan Kurir") && "text-indigo-600",
@@ -52,8 +57,8 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
                 {order.status}
               </span>
             </div>
-            <span className="text-xs text-gray-500 font-poppins">
-              {new Date(order.orderDate).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}
+            <span className="text-xs text-gray-500 font-poppins dark:text-gray-400">
+              {formatDate(order.orderDate)}
             </span>
           </div>
 
@@ -64,20 +69,20 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
               className="w-20 h-20 object-cover rounded-md flex-shrink-0"
             />
             <div className="flex-grow">
-              <h3 className="text-md font-poppins font-semibold text-gray-800 line-clamp-2">
+              <h3 className="text-md font-poppins font-semibold text-gray-800 dark:text-gray-200 line-clamp-2">
                 {firstItem.name}
               </h3>
-              <p className="text-sm text-gray-600 font-poppins">
+              <p className="text-sm text-gray-600 font-poppins dark:text-gray-400">
                 {firstItem.quantity}x {firstItem.size}, {firstItem.color}
               </p>
               {otherItemsCount > 0 && (
-                <p className="text-sm text-gray-500 font-poppins">+{otherItemsCount} produk lainnya</p>
+                <p className="text-sm text-gray-500 font-poppins dark:text-gray-400">+{otherItemsCount} produk lainnya</p>
               )}
             </div>
           </div>
 
-          <div className="flex justify-between items-center mt-4 pt-3 border-t border-beige">
-            <span className="text-sm text-gray-700 font-poppins">Total Pembayaran:</span>
+          <div className="flex justify-between items-center mt-4 pt-3 border-t border-beige dark:border-gray-700">
+            <span className="text-sm text-gray-700 font-poppins dark:text-gray-300">Total Pembayaran:</span>
             <span className="text-lg font-playfair font-bold text-gold-rose">
               Rp{order.totalAmount.toLocaleString("id-ID")}
             </span>

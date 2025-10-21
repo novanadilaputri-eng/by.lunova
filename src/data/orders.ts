@@ -27,7 +27,7 @@ const getProductDetails = (productId: string, size: string, color: string, quant
   };
 };
 
-export const mockOrders: Order[] = [
+export let mockOrders: Order[] = [
   {
     id: "BYLNV-20231225-001",
     userId: "user1",
@@ -103,3 +103,14 @@ export const mockOrders: Order[] = [
     courier: "ByLuno Express",
   },
 ];
+
+export const updateOrderStatus = (orderId: string, newStatus: Order["status"]) => {
+  const orderIndex = mockOrders.findIndex(order => order.id === orderId);
+  if (orderIndex > -1) {
+    mockOrders[orderIndex].status = newStatus;
+    // For demo, also update orderDate to reflect status change time
+    mockOrders[orderIndex].orderDate = new Date().toISOString();
+    console.log(`Order ${orderId} status updated to ${newStatus}`);
+    // In a real app, you'd persist this to a database
+  }
+};

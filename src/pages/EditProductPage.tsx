@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom"; // Import Link here
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,6 +9,7 @@ import HomePageHeader from "@/components/HomePageHeader";
 import { products as mockProducts } from "@/data/products";
 import { showSuccess, showError } from "@/utils/toast";
 import { Product } from "@/types/product";
+import { Trash2 } from "lucide-react"; // Import Trash2 for remove buttons
 
 const EditProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();

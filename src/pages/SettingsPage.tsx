@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import HomePageHeader from "@/components/HomePageHeader";
-import { Settings, Bell, Language, MoonStar } from "lucide-react";
+import { Settings, Bell, Languages, MoonStar } from "lucide-react"; // Changed Language to Languages
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 
@@ -24,7 +24,7 @@ const SettingsPage: React.FC = () => {
 
           <div className="flex items-center justify-between border-b pb-4">
             <div className="flex items-center">
-              <Language className="h-5 w-5 text-soft-pink mr-3" />
+              <Languages className="h-5 w-5 text-soft-pink mr-3" /> {/* Changed Language to Languages */}
               <Label htmlFor="language-setting" className="text-lg font-poppins font-medium">Bahasa</Label>
             </div>
             <span className="text-gray-700 font-poppins">Bahasa Indonesia</span>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -31,17 +31,52 @@ const ProfilePage: React.FC = () => {
   const [profilePicture, setProfilePicture] = useState("https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); // Placeholder
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [tempUsername, setTempUsername] = useState(username);
-  const [tempProfilePicture, setTempProfilePicture] = useState(profilePicture);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(null);
+
+  // Effect to reset temp states when dialog opens/closes
+  useEffect(() => {
+    if (isEditDialogOpen) {
+      setTempUsername(username);
+      setFilePreviewUrl(profilePicture); // Initialize preview with current profile picture
+      setSelectedFile(null); // Clear any previously selected file
+    }
+  }, [isEditDialogOpen, username, profilePicture]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setSelectedFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFilePreviewUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setSelectedFile(null);
+      setFilePreviewUrl(profilePicture); // Revert to current profile picture if file cleared
+    }
+  };
 
   const handleSaveProfile = () => {
     if (!tempUsername.trim()) {
       showError("Nama pengguna tidak boleh kosong.");
       return;
     }
+
     setUsername(tempUsername);
-    setProfilePicture(tempProfilePicture);
+
+    if (selectedFile) {
+      setProfilePicture(filePreviewUrl!); // Use the data URL for immediate preview
+      showSuccess("Profil berhasil diperbarui! (Foto akan diunggah ke server di aplikasi nyata)");
+    } else if (filePreviewUrl !== profilePicture) {
+      // If user cleared the file input and it was previously a file, or changed the URL input
+      setProfilePicture(filePreviewUrl || ""); // If filePreviewUrl is null, it means cleared
+      showSuccess("Profil berhasil diperbarui!");
+    } else {
+      showSuccess("Profil berhasil diperbarui!");
+    }
     setIsEditDialogOpen(false);
-    showSuccess("Profil berhasil diperbarui!");
   };
 
   return (
@@ -139,15 +174,15 @@ const ProfilePage: React.FC = () => {
               </Label>
               <Input
                 id="picture"
-                value={tempProfilePicture}
-                onChange={(e) => setTempProfilePicture(e.target.value)}
-                placeholder="URL Gambar"
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
                 className="col-span-3 font-poppins"
               />
             </div>
-            {tempProfilePicture && (
+            {filePreviewUrl && (
               <div className="col-span-full flex justify-center mt-2">
-                <img src={tempProfilePicture} alt="Preview" className="h-24 w-24 rounded-full object-cover border" />
+                <img src={filePreviewUrl} alt="Preview" className="h-24 w-24 rounded-full object-cover border" />
               </div>
             )}
           </div>

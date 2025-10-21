@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Package, Truck, CheckCircle, XCircle, Clock, Wallet } from "lucide-react";
 import HomePageHeader from "@/components/HomePageHeader";
@@ -36,14 +36,14 @@ const TrackingStep: React.FC<TrackingStepProps> = ({ icon: Icon, label, date, is
 );
 
 const OrderTrackingPage: React.FC = () => {
-  // Placeholder data for a single order
-  const orderId = "BYLNV-20231225-001";
-  const orderStatus = "Dikirim"; // Can be: "Menunggu Pembayaran", "Diproses", "Dikemas", "Dikirim", "Telah Sampai", "Selesai", "Dibatalkan"
+  const { orderId } = useParams<{ orderId: string }>();
+  // Simulate order status and details. In a real app, this would come from an API.
+  const [currentOrderStatus, setCurrentOrderStatus] = useState("Sedang Dalam Perjalanan"); // Initial status for demo
   const deliveryEstimate = "28 Des 2023";
   const productId = "1"; // Assuming this order is for product ID 1
   const product = products.find(p => p.id === productId);
   const productName = product?.name || "Produk Tidak Dikenal";
-  const productImageUrl = product?.mainImageUrl || "https://via.placeholder.com/150?text=No+Image"; // Use mainImageUrl
+  const productImageUrl = product?.mainImageUrl || "https://via.placeholder.com/150?text=No+Image";
 
   const trackingSteps = [
     { label: "Pesanan Dibuat", icon: CheckCircle, status: "Pesanan Dibuat", date: "2023-12-25 10:00" },
@@ -52,12 +52,17 @@ const OrderTrackingPage: React.FC = () => {
     { label: "Pesanan Diproses", icon: Package, status: "Diproses", date: "2023-12-25 11:00" },
     { label: "Pesanan Dikemas", icon: Package, status: "Dikemas", date: "2023-12-25 14:00" },
     { label: "Menunggu Penjemputan Kurir", icon: Truck, status: "Menunggu Penjemputan Kurir", date: "2023-12-26 09:00" },
-    { label: "Sedang Dalam Perjalanan", icon: Truck, status: "Dikirim", date: "2023-12-26 11:00" },
+    { label: "Sedang Dalam Perjalanan", icon: Truck, status: "Sedang Dalam Perjalanan", date: "2023-12-26 11:00" },
     { label: "Telah Sampai di Tujuan", icon: CheckCircle, status: "Telah Sampai", date: "2023-12-27 16:00" },
     { label: "Pesanan Selesai", icon: CheckCircle, status: "Selesai", date: "2023-12-27 17:00" },
   ];
 
-  const currentStepIndex = trackingSteps.findIndex(step => step.status === orderStatus);
+  const currentStepIndex = trackingSteps.findIndex(step => step.status === currentOrderStatus);
+
+  const handleConfirmDelivery = () => {
+    setCurrentOrderStatus("Selesai");
+    showSuccess("Pesanan berhasil dikonfirmasi diterima!");
+  };
 
   return (
     <>
@@ -67,7 +72,7 @@ const OrderTrackingPage: React.FC = () => {
 
         <div className="bg-white p-6 rounded-lg shadow-md mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-playfair font-bold text-gray-900">Status Pesanan: <span className="text-soft-pink">{orderStatus}</span></h2>
+            <h2 className="text-2xl font-playfair font-bold text-gray-900">Status Pesanan: <span className="text-soft-pink">{currentOrderStatus}</span></h2>
             <span className="text-md font-poppins text-gray-600">Estimasi Tiba: {deliveryEstimate}</span>
           </div>
           <Separator className="my-4" />
@@ -100,9 +105,9 @@ const OrderTrackingPage: React.FC = () => {
             ))}
           </div>
 
-          {orderStatus === "Telah Sampai" && (
+          {currentOrderStatus === "Telah Sampai" && (
             <div className="mt-8 flex flex-col md:flex-row gap-4">
-              <Button className="flex-1 py-3 text-lg bg-soft-pink hover:bg-rose-600 text-white font-poppins">
+              <Button onClick={handleConfirmDelivery} className="flex-1 py-3 text-lg bg-soft-pink hover:bg-rose-600 text-white font-poppins">
                 Konfirmasi Pesanan Diterima
               </Button>
               <Button asChild variant="outline" className="flex-1 py-3 text-lg border-gold-rose text-gold-rose hover:bg-gold-rose hover:text-white font-poppins">
@@ -110,10 +115,10 @@ const OrderTrackingPage: React.FC = () => {
               </Button>
             </div>
           )}
-          {orderStatus === "Selesai" && (
+          {currentOrderStatus === "Selesai" && (
             <div className="mt-8 text-center">
               <Button asChild className="py-3 text-lg bg-soft-pink hover:bg-rose-600 text-white font-poppins">
-                <Link to={`/products/1`}>Berikan Ulasan</Link> {/* Link to product detail for review */}
+                <Link to={`/products/${productId}`}>Berikan Ulasan</Link> {/* Link to product detail for review */}
               </Button>
             </div>
           )}

@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Package, Heart, Gift, MapPin, Settings, HelpCircle, LogOut,
-  Wallet, Truck, CheckCircle, XCircle, Clock
+  Wallet, Truck, CheckCircle, XCircle, Clock, User as UserIcon // Renamed User to UserIcon to avoid conflict
 } from "lucide-react";
 import HomePageHeader from "@/components/HomePageHeader";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { showSuccess, showError } from "@/utils/toast";
 
 interface ProfileMenuItemProps {
   icon: React.ElementType;
@@ -23,8 +27,22 @@ const ProfileMenuItem: React.FC<ProfileMenuItemProps> = ({ icon: Icon, label, to
 );
 
 const ProfilePage: React.FC = () => {
-  const username = "LunovaUser123"; // Placeholder
-  const profilePicture = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"; // Placeholder
+  const [username, setUsername] = useState("LunovaUser123"); // Placeholder
+  const [profilePicture, setProfilePicture] = useState("https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); // Placeholder
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [tempUsername, setTempUsername] = useState(username);
+  const [tempProfilePicture, setTempProfilePicture] = useState(profilePicture);
+
+  const handleSaveProfile = () => {
+    if (!tempUsername.trim()) {
+      showError("Nama pengguna tidak boleh kosong.");
+      return;
+    }
+    setUsername(tempUsername);
+    setProfilePicture(tempProfilePicture);
+    setIsEditDialogOpen(false);
+    showSuccess("Profil berhasil diperbarui!");
+  };
 
   return (
     <>
@@ -39,7 +57,11 @@ const ProfilePage: React.FC = () => {
           </Avatar>
           <h2 className="text-2xl font-playfair font-bold text-gray-900">{username}</h2>
           <p className="text-md text-gray-600 font-poppins">lunova.user@example.com</p>
-          <Button variant="outline" className="mt-4 border-gold-rose text-gold-rose hover:bg-gold-rose hover:text-white font-poppins">
+          <Button
+            variant="outline"
+            className="mt-4 border-gold-rose text-gold-rose hover:bg-gold-rose hover:text-white font-poppins"
+            onClick={() => setIsEditDialogOpen(true)}
+          >
             Edit Profil
           </Button>
         </div>
@@ -85,9 +107,57 @@ const ProfilePage: React.FC = () => {
           <ProfileMenuItem icon={MapPin} label="Alamat Saya" to="/profile/addresses" />
           <ProfileMenuItem icon={Settings} label="Pengaturan Aplikasi" to="/profile/settings" />
           <ProfileMenuItem icon={HelpCircle} label="Pusat Bantuan" to="/profile/help" />
+          <ProfileMenuItem icon={UserIcon} label="Dashboard Penjual" to="/seller/dashboard" /> {/* New link for seller dashboard */}
           <ProfileMenuItem icon={LogOut} label="Logout" to="/logout" className="text-red-500 hover:bg-red-50" />
         </div>
       </div>
+
+      {/* Edit Profile Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="font-playfair">Edit Profil</DialogTitle>
+            <DialogDescription className="font-poppins">
+              Perbarui informasi profil Anda di sini. Klik simpan setelah selesai.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name" className="text-right font-poppins">
+                Nama
+              </Label>
+              <Input
+                id="name"
+                value={tempUsername}
+                onChange={(e) => setTempUsername(e.target.value)}
+                className="col-span-3 font-poppins"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="picture" className="text-right font-poppins">
+                Foto Profil
+              </Label>
+              <Input
+                id="picture"
+                value={tempProfilePicture}
+                onChange={(e) => setTempProfilePicture(e.target.value)}
+                placeholder="URL Gambar"
+                className="col-span-3 font-poppins"
+              />
+            </div>
+            {tempProfilePicture && (
+              <div className="col-span-full flex justify-center mt-2">
+                <img src={tempProfilePicture} alt="Preview" className="h-24 w-24 rounded-full object-cover border" />
+              </div>
+            )}
+          </div>
+          <DialogFooter>
+            <Button type="button" onClick={handleSaveProfile} className="bg-soft-pink hover:bg-rose-600 text-white font-poppins">
+              Simpan Perubahan
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

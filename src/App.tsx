@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"; // Import useState and useEffect
+import React, { useState, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -25,7 +25,8 @@ import OrderListPage from "./pages/OrderListPage";
 import LunoPointsPage from "./pages/LunoPointsPage";
 import LunoLivePage from "./pages/LunoLivePage";
 import ChatPage from "./pages/ChatPage";
-import SplashScreen from "./pages/SplashScreen"; // Import SplashScreen
+import SplashScreen from "./pages/SplashScreen";
+import VideoListingPage from "./pages/VideoListingPage"; // Import VideoListingPage
 import { CartProvider } from "./context/CartContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import BottomNavigationBar from "./components/BottomNavigationBar";
@@ -82,6 +83,7 @@ const App = () => {
                     <Route path="/seller/products/new" element={<EditProductPage />} />
                     <Route path="/seller/products/edit/:id" element={<EditProductPage />} />
                     <Route path="/live" element={<LunoLivePage />} />
+                    <Route path="/videos" element={<VideoListingPage />} /> {/* New Video Route */}
                     <Route path="/chat" element={<ChatPage />} />
                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                     <Route path="*" element={<NotFound />} />

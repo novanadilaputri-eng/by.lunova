@@ -1,16 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ProductCard from "@/components/ProductCard";
 import { products } from "@/data/products";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/input"; // Keep Input for local filters if needed, but main search is in header
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import HomePageHeader from "@/components/HomePageHeader"; // Use HomePageHeader for consistency
-import { Button } from "@/components/ui/button"; // Import Button component
+import HomePageHeader from "@/components/HomePageHeader";
+import { Button } from "@/components/ui/button";
+import { useLocation } from "react-router-dom"; // Import useLocation
 
 const ProductListingPage: React.FC = () => {
+  const location = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCategory, setFilterCategory] = useState("all");
   const [sortBy, setSortBy] = useState("popularity"); // popularity, price-asc, price-desc
+
+  // Update searchTerm from URL query params
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    setSearchTerm(queryParams.get("search") || "");
+  }, [location.search]);
 
   const filteredProducts = products.filter((product) => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -36,24 +44,11 @@ const ProductListingPage: React.FC = () => {
 
   return (
     <>
-      <HomePageHeader /> {/* Use HomePageHeader for consistent search bar */}
+      <HomePageHeader />
       <div className="container mx-auto p-4">
         <h1 className="text-3xl font-playfair font-bold text-center mb-8 text-gray-900">Cari Produk Fashion</h1>
 
         <div className="flex flex-col md:flex-row gap-4 mb-6 items-center justify-between">
-          {/* Search input is now in HomePageHeader, but we can keep a local one for specific search page functionality if needed, or remove it. For now, let's assume HomePageHeader handles the main search. */}
-          {/* <div className="w-full md:w-1/2">
-            <Label htmlFor="search" className="font-poppins">Cari Produk</Label>
-            <Input
-              id="search"
-              type="text"
-              placeholder="Cari atasan wanita..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full mt-1"
-            />
-          </div> */}
-
           <div className="flex flex-wrap gap-2 mb-4">
             <span className="text-sm text-gray-600 font-poppins">Saran:</span>
             {suggestionKeywords.map((keyword, index) => (
@@ -62,7 +57,7 @@ const ProductListingPage: React.FC = () => {
                 variant="outline"
                 size="sm"
                 className="rounded-full text-xs bg-beige border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white"
-                onClick={() => setSearchTerm(keyword)}
+                onClick={() => setSearchTerm(keyword)} // This will update local state, but main search is via header
               >
                 {keyword}
               </Button>
@@ -95,8 +90,8 @@ const ProductListingPage: React.FC = () => {
                   <SelectItem value="popularity">Popularitas</SelectItem>
                   <SelectItem value="price-asc">Harga: Terendah ke Tertinggi</SelectItem>
                   <SelectItem value="price-desc">Harga: Tertinggi ke Terendah</SelectItem>
-                  <SelectItem value="best-reviews">Ulasan Terbaik</SelectItem> {/* New sort option */}
-                  <SelectItem value="fastest-delivery">Pengiriman Tercepat</SelectItem> {/* Placeholder sort option */}
+                  <SelectItem value="best-reviews">Ulasan Terbaik</SelectItem>
+                  <SelectItem value="fastest-delivery">Pengiriman Tercepat</SelectItem>
                 </SelectContent>
               </Select>
             </div>

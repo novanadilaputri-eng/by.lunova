@@ -1,5 +1,4 @@
 import { MadeWithDyad } from "@/components/made-with-dyad";
-import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import HomePageHeader from "@/components/HomePageHeader";
 import CarouselBanner from "@/components/CarouselBanner";
@@ -30,9 +29,7 @@ const Index = () => {
           <p className="text-lg md:text-xl font-poppins mb-6">
             Find Your Glow in Every Style ✨
           </p>
-          <Button asChild size="lg" className="px-8 py-3 text-lg bg-white text-soft-pink hover:bg-gray-100">
-            <Link to="/products">Mulai Belanja Sekarang</Link>
-          </Button>
+          {/* Removed the 'Mulai Belanja Sekarang' button */}
         </div>
 
         <CarouselBanner images={bannerImages} />

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Star, Store, Truck, ShoppingCart } from "lucide-react";
+import { Star, Store, Truck, ShoppingCart, MessageSquare } from "lucide-react"; // Import MessageSquare
 import { showSuccess, showError } from "@/utils/toast";
 import { useCart } from "@/context/CartContext";
 import ReviewSection from "@/components/ReviewSection";
@@ -34,8 +34,8 @@ const ProductDetailPage: React.FC = () => {
   if (!product) {
     return (
       <div className="container mx-auto p-4 text-center">
-        <h1 className="text-3xl font-playfair font-bold mb-4">Produk Tidak Ditemukan</h1>
-        <p className="text-lg text-gray-600 font-poppins">Maaf, produk yang Anda cari tidak tersedia.</p>
+        <h1 className="text-3xl font-playfair font-bold mb-4 dark:text-gray-100">Produk Tidak Ditemukan</h1>
+        <p className="text-lg text-gray-600 font-poppins dark:text-gray-400">Maaf, produk yang Anda cari tidak tersedia.</p>
         <Button onClick={() => navigate("/products")} className="mt-4 bg-soft-pink hover:bg-rose-600 text-white">
           Kembali ke Daftar Produk
         </Button>
@@ -75,11 +75,11 @@ const ProductDetailPage: React.FC = () => {
     <>
       <HomePageHeader />
       <div className="container mx-auto p-4 md:p-8">
-        <Button onClick={() => navigate("/products")} variant="outline" className="mb-6 border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white">
+        <Button onClick={() => navigate("/products")} variant="outline" className="mb-6 border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white dark:border-gold-rose dark:text-gold-rose dark:hover:bg-gold-rose dark:hover:text-white">
           &larr; Kembali ke Daftar Produk
         </Button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white p-6 rounded-lg shadow-md">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
           <div className="flex justify-center items-center">
             <img
               src={displayImageUrl} // Use displayImageUrl
@@ -89,36 +89,36 @@ const ProductDetailPage: React.FC = () => {
           </div>
 
           <div>
-            <h1 className="text-4xl font-playfair font-bold text-gray-900 mb-2">{product.name}</h1>
-            <p className="text-xl text-gray-600 font-poppins mb-4">{product.category}</p>
+            <h1 className="text-4xl font-playfair font-bold text-gray-900 dark:text-gray-100 mb-2">{product.name}</h1>
+            <p className="text-xl text-gray-600 font-poppins dark:text-gray-400 mb-4">{product.category}</p>
 
             <div className="flex items-center mb-4">
               <Star className="h-5 w-5 text-yellow-500 fill-yellow-500 mr-1" />
-              <span className="text-lg text-gray-700 font-poppins font-medium">
+              <span className="text-lg text-gray-700 font-poppins font-medium dark:text-gray-300">
                 {product.rating.toFixed(1)} ({product.reviewsCount} ulasan)
               </span>
             </div>
 
-            <div className="flex items-center text-gray-700 mb-6">
-              <Store className="h-5 w-5 mr-2 text-soft-pink" />
+            <div className="flex items-center text-gray-700 dark:text-gray-300 mb-6">
+              <Store className="h-5 w-5 mr-2 text-soft-pink dark:text-gold-rose" />
               <span className="text-lg font-poppins font-medium">{product.storeName}</span>
-              <span className="ml-2 text-sm text-gray-500 font-poppins">({product.storeReputation})</span>
+              <span className="ml-2 text-sm text-gray-500 font-poppins dark:text-gray-400">({product.storeReputation})</span>
             </div>
 
             <p className="text-5xl font-playfair font-extrabold text-gold-rose mb-6">
               Rp{product.price.toLocaleString("id-ID")}
             </p>
 
-            <p className="text-gray-800 font-poppins leading-relaxed mb-6">{product.description}</p>
+            <p className="text-gray-800 font-poppins leading-relaxed mb-6 dark:text-gray-200">{product.description}</p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div>
-                <Label htmlFor="size-select" className="text-base font-poppins font-medium">Ukuran</Label>
+                <Label htmlFor="size-select" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">Ukuran</Label>
                 <Select value={selectedSize} onValueChange={setSelectedSize}>
-                  <SelectTrigger id="size-select" className="w-full mt-2 border-soft-pink focus:ring-soft-pink">
+                  <SelectTrigger id="size-select" className="w-full mt-2 border-soft-pink focus:ring-soft-pink dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose">
                     <SelectValue placeholder="Pilih Ukuran" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="dark:bg-gray-800 dark:text-gray-100 dark:border-gold-rose">
                     {product.sizes.map((size) => (
                       <SelectItem key={size} value={size}>
                         {size}
@@ -129,12 +129,12 @@ const ProductDetailPage: React.FC = () => {
               </div>
 
               <div>
-                <Label htmlFor="color-select" className="text-base font-poppins font-medium">Warna</Label>
+                <Label htmlFor="color-select" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">Warna</Label>
                 <Select value={selectedColor} onValueChange={setSelectedColor}>
-                  <SelectTrigger id="color-select" className="w-full mt-2 border-soft-pink focus:ring-soft-pink">
+                  <SelectTrigger id="color-select" className="w-full mt-2 border-soft-pink focus:ring-soft-pink dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose">
                     <SelectValue placeholder="Pilih Warna" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="dark:bg-gray-800 dark:text-gray-100 dark:border-gold-rose">
                     {product.colors.map((color) => (
                       <SelectItem key={color} value={color}>
                         {color}
@@ -146,35 +146,42 @@ const ProductDetailPage: React.FC = () => {
             </div>
 
             <div className="mb-8">
-              <Label htmlFor="quantity-input" className="text-base font-poppins font-medium">Jumlah</Label>
+              <Label htmlFor="quantity-input" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">Jumlah</Label>
               <Input
                 id="quantity-input"
                 type="number"
                 min="1"
                 value={quantity}
                 onChange={(e) => setQuantity(Math.max(1, Number(e.target.value)))}
-                className="w-24 mt-2 border-soft-pink focus:ring-soft-pink"
+                className="w-24 mt-2 border-soft-pink focus:ring-soft-pink dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose"
               />
-              <span className="ml-4 text-sm text-gray-600 font-poppins">Stok Tersedia: {product.stock}</span>
+              <span className="ml-4 text-sm text-gray-600 font-poppins dark:text-gray-400">Stok Tersedia: {product.stock}</span>
             </div>
 
             <div className="flex gap-4">
               <Button onClick={handleAddToCart} className="flex-1 py-3 text-lg bg-soft-pink hover:bg-rose-600 text-white font-poppins">
                 <ShoppingCart className="h-5 w-5 mr-2" /> Tambahkan ke Keranjang
               </Button>
-              <Button onClick={handleBuyNow} className="flex-1 py-3 text-lg border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins" variant="outline">
+              <Button onClick={handleBuyNow} className="flex-1 py-3 text-lg border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins dark:border-gold-rose dark:text-gold-rose dark:hover:bg-gold-rose dark:hover:text-white" variant="outline">
                 Beli Sekarang
               </Button>
             </div>
-            <div className="mt-4 text-sm text-gray-600 flex items-center justify-center">
+            <div className="mt-4 flex justify-center">
+              <Button asChild variant="outline" className="w-full py-3 text-lg border-gold-rose text-gold-rose hover:bg-gold-rose hover:text-white font-poppins dark:border-soft-pink dark:text-soft-pink dark:hover:bg-soft-pink dark:hover:text-white">
+                <Link to="/chat">
+                  <MessageSquare className="h-5 w-5 mr-2" /> Chat dengan Penjual
+                </Link>
+              </Button>
+            </div>
+            <div className="mt-4 text-sm text-gray-600 flex items-center justify-center dark:text-gray-400">
               <Truck className="h-4 w-4 mr-1 text-green-600" /> Gratis Ongkir
             </div>
           </div>
         </div>
 
         {similarProducts.length > 0 && (
-          <div className="mt-10 p-6 bg-white rounded-lg shadow-md">
-            <h2 className="text-3xl font-playfair font-bold text-gray-900 mb-6">Kamu Mungkin Juga Suka</h2>
+          <div className="mt-10 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+            <h2 className="text-3xl font-playfair font-bold text-gray-900 dark:text-gray-100 mb-6">Kamu Mungkin Juga Suka</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               {similarProducts.map((p) => (
                 <ProductCard key={p.id} product={p} />

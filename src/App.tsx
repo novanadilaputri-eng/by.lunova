@@ -23,6 +23,7 @@ import EditProductPage from "./pages/EditProductPage";
 import OrderListPage from "./pages/OrderListPage";
 import LunoPointsPage from "./pages/LunoPointsPage";
 import LunoLivePage from "./pages/LunoLivePage";
+import ChatPage from "./pages/ChatPage"; // Import ChatPage
 import { CartProvider } from "./context/CartContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import BottomNavigationBar from "./components/BottomNavigationBar";
@@ -38,7 +39,7 @@ const App = () => (
         <CartProvider>
           <BrowserRouter>
             <>
-              <div className="pb-14"> {/* Changed md:pb-0 to pb-14 */}
+              <div className="pb-14">
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/products" element={<ProductListingPage />} />
@@ -60,6 +61,7 @@ const App = () => (
                   <Route path="/seller/products/new" element={<EditProductPage />} />
                   <Route path="/seller/products/edit/:id" element={<EditProductPage />} />
                   <Route path="/live" element={<LunoLivePage />} />
+                  <Route path="/chat" element={<ChatPage />} /> {/* New Chat Route */}
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>

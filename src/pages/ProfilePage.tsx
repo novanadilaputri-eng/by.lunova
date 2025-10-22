@@ -30,12 +30,12 @@ const ProfileMenuItem: React.FC<ProfileMenuItemProps> = ({ icon: Icon, label, to
 
 const ProfilePage: React.FC = () => {
   const { userRole, loginAsBuyer, loginAsSeller, logout } = useAuth();
-  const [username, setUsername] = useState("LunovaUser123"); // Placeholder
-  const [profilePicture, setProfilePicture] = useState("https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); // Placeholder
+  const [username, setUsername] = useState(() => localStorage.getItem("profileUsername") || "LunovaUser123"); // Initialize from localStorage
+  const [profilePicture, setProfilePicture] = useState(() => localStorage.getItem("profilePictureUrl") || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); // Initialize from localStorage
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [tempUsername, setTempUsername] = useState(username);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(null);
+  const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(profilePicture); // Initialize preview with current profile picture
 
   // Calculate order counts
   const pendingPaymentCount = mockOrders.filter(order => order.status === "Menunggu Pembayaran").length;
@@ -79,13 +79,16 @@ const ProfilePage: React.FC = () => {
     }
 
     setUsername(tempUsername);
+    localStorage.setItem("profileUsername", tempUsername); // Persist username
 
     if (selectedFile) {
-      setProfilePicture(filePreviewUrl!); // Use the data URL for immediate preview
+      setProfilePicture(filePreviewUrl!);
+      localStorage.setItem("profilePictureUrl", filePreviewUrl!); // Persist new profile picture
       showSuccess("Profil berhasil diperbarui! (Foto akan diunggah ke server di aplikasi nyata)");
     } else if (filePreviewUrl !== profilePicture) {
       // If user cleared the file input and it was previously a file, or changed the URL input
       setProfilePicture(filePreviewUrl || ""); // If filePreviewUrl is null, it means cleared
+      localStorage.setItem("profilePictureUrl", filePreviewUrl || ""); // Persist cleared/changed URL
       showSuccess("Profil berhasil diperbarui!");
     } else {
       showSuccess("Profil berhasil diperbarui!");

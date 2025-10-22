@@ -2,18 +2,18 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom'; // Hapus import ini
 
 interface SplashScreenProps {
   onFinish: () => void;
 }
 
 const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate(); // Hapus hook ini
 
   const handleEnterApp = () => {
     onFinish();
-    navigate('/'); // Navigate to the main index page
+    // navigate('/'); // Hapus panggilan ini, onFinish akan menangani transisi
   };
 
   return (

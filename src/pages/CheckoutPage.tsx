@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Tambahkan Link ke import
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -23,12 +23,12 @@ const CheckoutPage: React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState("Transfer Bank");
   const [voucherCode, setVoucherCode] = useState("");
   const [lunoPointsUsed, setLunoPointsUsed] = useState(0);
-
+  
   const subtotal = getTotalPrice();
   const shippingCost = courierOption === "ByLuno Express" ? 0 : 15000; // Example shipping
   const discount = 0; // Placeholder for voucher/points discount
   const totalAmount = subtotal + shippingCost - discount;
-
+  
   const selectedAddress = mockAddresses.find(addr => addr.id === selectedAddressId);
 
   const handlePlaceOrder = () => {
@@ -36,11 +36,12 @@ const CheckoutPage: React.FC = () => {
       showError("Mohon lengkapi semua detail pengiriman dan pembayaran.");
       return;
     }
+    
     if (cartItems.length === 0) {
       showError("Keranjang belanja Anda kosong.");
       return;
     }
-
+    
     // Simulate order placement
     const newOrderId = `BYLNV-${Date.now()}`;
     const newOrder = addOrder({
@@ -62,12 +63,12 @@ const CheckoutPage: React.FC = () => {
       paymentMethod: paymentMethod,
       courier: courierOption,
     });
-
+    
     // Reduce product stock for each item in the cart
     cartItems.forEach(item => {
       reduceProductStock(item.product.id, item.quantity);
     });
-
+    
     // Add notification for seller
     addNotification({
       userId: "seller1", // Assuming a fixed seller ID for demo
@@ -77,11 +78,12 @@ const CheckoutPage: React.FC = () => {
       timestamp: new Date().toISOString(),
       link: `/seller/dashboard`,
     });
-
+    
     showSuccess("Pesanan Anda berhasil dibuat!");
     if (paymentMethod !== "COD" && paymentMethod !== "Menunggu Pembayaran") {
       showSuccess("Pembayaran Anda akan langsung masuk ke rekening penjual.");
     }
+    
     clearCart(); // Clear cart after successful order
     navigate("/order-confirmation");
   };
@@ -91,7 +93,6 @@ const CheckoutPage: React.FC = () => {
       <HomePageHeader />
       <div className="container mx-auto p-4 md:p-8">
         <h1 className="text-4xl font-playfair font-bold text-center mb-10 text-gray-900">Checkout Pesanan</h1>
-
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-md space-y-8">
             {/* Alamat Pengiriman */}
@@ -115,9 +116,7 @@ const CheckoutPage: React.FC = () => {
                 <Link to="/profile/addresses">Kelola Alamat</Link>
               </Button>
             </div>
-
             <Separator />
-
             {/* Opsi Kurir */}
             <div>
               <h2 className="text-2xl font-playfair font-bold text-gray-900 mb-4">Opsi Kurir</h2>
@@ -132,9 +131,7 @@ const CheckoutPage: React.FC = () => {
                 </SelectContent>
               </Select>
             </div>
-
             <Separator />
-
             {/* Voucher & LunoPoints */}
             <div>
               <h2 className="text-2xl font-playfair font-bold text-gray-900 mb-4">Voucher & LunoPoints</h2>
@@ -158,9 +155,7 @@ const CheckoutPage: React.FC = () => {
                 <span className="ml-2 text-sm text-gray-600 font-poppins">Poin Anda: 1200</span>
               </div>
             </div>
-
             <Separator />
-
             {/* Metode Pembayaran */}
             <div>
               <h2 className="text-2xl font-playfair font-bold text-gray-900 mb-4">Metode Pembayaran</h2>
@@ -184,7 +179,6 @@ const CheckoutPage: React.FC = () => {
                     <Label htmlFor="payment-bni" className="ml-2 font-poppins">BNI</Label>
                   </div>
                 </div>
-
                 <Label className="font-poppins font-semibold text-gray-700 mt-4">E-Wallet</Label>
                 <div className="grid grid-cols-2 gap-2 ml-4">
                   {/* Limiting to 2 E-Wallet options */}
@@ -197,7 +191,6 @@ const CheckoutPage: React.FC = () => {
                     <Label htmlFor="payment-gopay" className="ml-2 font-poppins">Gopay</Label>
                   </div>
                 </div>
-
                 <div className="flex items-center mt-4">
                   <RadioGroupItem value="COD" id="payment-cod" className="border-soft-pink data-[state=checked]:bg-soft-pink" />
                   <Label htmlFor="payment-cod" className="ml-2 font-poppins">Cash On Delivery (COD)</Label>
@@ -205,7 +198,6 @@ const CheckoutPage: React.FC = () => {
               </RadioGroup>
             </div>
           </div>
-
           <div className="lg:col-span-1 bg-white p-6 rounded-lg shadow-md h-fit">
             <h2 className="text-2xl font-playfair font-bold text-gray-900 mb-4">Ringkasan Pesanan</h2>
             <div className="space-y-2 mb-4 text-gray-700 font-poppins">

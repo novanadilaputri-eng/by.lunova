@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { showSuccess, showError } from "@/utils/toast";
 import { mockOrders } from "@/data/orders"; // Import mockOrders
 import { useAuth } from "@/hooks/use-auth"; // Import useAuth hook
+import WhatsAppVerificationDialog from "@/components/WhatsAppVerificationDialog"; // Import new component
 
 interface ProfileMenuItemProps {
   icon: React.ElementType;
@@ -33,6 +34,7 @@ const ProfilePage: React.FC = () => {
   const [username, setUsername] = useState(() => localStorage.getItem("profileUsername") || "LunovaUser123"); // Initialize from localStorage
   const [profilePicture, setProfilePicture] = useState(() => localStorage.getItem("profilePictureUrl") || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); // Initialize from localStorage
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isWhatsAppVerificationOpen, setIsWhatsAppVerificationOpen] = useState(false); // New state for WhatsApp dialog
   const [tempUsername, setTempUsername] = useState(username);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(profilePicture); // Initialize preview with current profile picture
@@ -98,7 +100,6 @@ const ProfilePage: React.FC = () => {
 
   const handleLogout = () => {
     logout();
-    showSuccess("Anda telah logout.");
     // Optionally redirect to login page
   };
 
@@ -128,7 +129,7 @@ const ProfilePage: React.FC = () => {
           </Button>
           <div className="mt-4 flex space-x-2">
             {userRole === "buyer" && (
-              <Button onClick={loginAsSeller} className="bg-gold-rose hover:bg-gold-rose/80 text-white font-poppins">
+              <Button onClick={() => setIsWhatsAppVerificationOpen(true)} className="bg-gold-rose hover:bg-gold-rose/80 text-white font-poppins">
                 Login sebagai Penjual
               </Button>
             )}
@@ -142,7 +143,7 @@ const ProfilePage: React.FC = () => {
                 <Button onClick={loginAsBuyer} className="bg-soft-pink hover:bg-rose-600 text-white font-poppins">
                   Login sebagai Pembeli
                 </Button>
-                <Button onClick={loginAsSeller} className="bg-gold-rose hover:bg-gold-rose/80 text-white font-poppins">
+                <Button onClick={() => setIsWhatsAppVerificationOpen(true)} className="bg-gold-rose hover:bg-gold-rose/80 text-white font-poppins">
                   Login sebagai Penjual
                 </Button>
               </>
@@ -185,27 +186,29 @@ const ProfilePage: React.FC = () => {
           </div>
         </div>
 
-        {/* E-Wallet Connection Section */}
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-8">
-          <h3 className="text-xl font-playfair font-bold text-gray-900 dark:text-gray-100 mb-4">Hubungkan E-Wallet</h3>
-          <p className="text-gray-700 dark:text-gray-300 font-poppins mb-4">
-            Hubungkan akun e-wallet Anda untuk pembayaran yang lebih cepat dan mudah.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Button variant="outline" className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins" onClick={() => handleConnectEWallet("Dana")}>
-              <CreditCard className="h-5 w-5 mr-2" /> Hubungkan Dana
-            </Button>
-            <Button variant="outline" className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins" onClick={() => handleConnectEWallet("Gopay")}>
-              <CreditCard className="h-5 w-5 mr-2" /> Hubungkan Gopay
-            </Button>
-            <Button variant="outline" className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins" onClick={() => handleConnectEWallet("ShopeePay")}>
-              <CreditCard className="h-5 w-5 mr-2" /> Hubungkan ShopeePay
-            </Button>
-            <Button variant="outline" className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins" onClick={() => handleConnectEWallet("OVO")}>
-              <CreditCard className="h-5 w-5 mr-2" /> Hubungkan OVO
-            </Button>
+        {/* E-Wallet Connection Section - Only for Buyers */}
+        {userRole === "buyer" && (
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-8">
+            <h3 className="text-xl font-playfair font-bold text-gray-900 dark:text-gray-100 mb-4">Hubungkan E-Wallet</h3>
+            <p className="text-gray-700 dark:text-gray-300 font-poppins mb-4">
+              Hubungkan akun e-wallet Anda untuk pembayaran yang lebih cepat dan mudah.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Button variant="outline" className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins" onClick={() => handleConnectEWallet("Dana")}>
+                <CreditCard className="h-5 w-5 mr-2" /> Hubungkan Dana
+              </Button>
+              <Button variant="outline" className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins" onClick={() => handleConnectEWallet("Gopay")}>
+                <CreditCard className="h-5 w-5 mr-2" /> Hubungkan Gopay
+              </Button>
+              <Button variant="outline" className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins" onClick={() => handleConnectEWallet("ShopeePay")}>
+                <CreditCard className="h-5 w-5 mr-2" /> Hubungkan ShopeePay
+              </Button>
+              <Button variant="outline" className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins" onClick={() => handleConnectEWallet("OVO")}>
+                <CreditCard className="h-5 w-5 mr-2" /> Hubungkan OVO
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
 
 
         <div className="space-y-4">
@@ -270,6 +273,17 @@ const ProfilePage: React.FC = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* WhatsApp Verification Dialog */}
+      <WhatsAppVerificationDialog
+        isOpen={isWhatsAppVerificationOpen}
+        onClose={() => setIsWhatsAppVerificationOpen(false)}
+        onVerified={() => {
+          loginAsSeller(); // Log in as seller after successful (simulated) verification
+          setIsWhatsAppVerificationOpen(false);
+          showSuccess("Verifikasi WhatsApp berhasil! Anda sekarang login sebagai Penjual.");
+        }}
+      />
     </>
   );
 };

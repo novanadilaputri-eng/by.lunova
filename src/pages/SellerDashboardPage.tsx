@@ -12,6 +12,7 @@ import { Order } from "@/types/order";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"; // Import Tabs components
 import SellerOrderItem from "@/components/SellerOrderItem"; // Import SellerOrderItem
 import { mockNotifications, markNotificationAsRead } from "@/data/notifications"; // Import notifications
+import SellerBankAccountManagement from "@/components/SellerBankAccountManagement"; // Import new component
 
 const SellerDashboardPage: React.FC = () => {
   const { userRole } = useAuth();
@@ -64,10 +65,6 @@ const SellerDashboardPage: React.FC = () => {
   const handleMarkNotificationAsRead = (notificationId: string) => {
     markNotificationAsRead(notificationId);
     setSellerNotifications([...mockNotifications.filter(n => n.userId === currentSellerId)]); // Refresh notifications
-  };
-
-  const handleManageBankAccount = () => {
-    showError("Fitur manajemen rekening bank memerlukan integrasi backend. (Frontend-only)");
   };
 
   if (userRole !== "seller") {
@@ -173,10 +170,7 @@ const SellerDashboardPage: React.FC = () => {
 
         {/* Bank Account Management */}
         <div className="mb-10">
-          <h2 className="text-2xl font-playfair font-bold text-gray-900 dark:text-gray-100 mb-4">Rekening Bank Saya</h2>
-          <Button onClick={handleManageBankAccount} className="w-full py-3 text-lg bg-soft-pink hover:bg-rose-600 text-white font-poppins">
-            <Banknote className="h-5 w-5 mr-2" /> Kelola Rekening Bank
-          </Button>
+          <SellerBankAccountManagement sellerId={currentSellerId} />
         </div>
 
         {/* Order Management */}

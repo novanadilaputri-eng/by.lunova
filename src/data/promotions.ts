@@ -1,6 +1,8 @@
 import { Promotion } from "@/types/promotion";
 
-export let mockPromotions: Promotion[] = [
+const PROMOTIONS_STORAGE_KEY = "bylunova_promotions";
+
+const initialPromotions: Promotion[] = [
   {
     id: "promo1",
     title: "Diskon Spesial Awal Bulan!",
@@ -33,12 +35,33 @@ export let mockPromotions: Promotion[] = [
   },
 ];
 
+// Helper to load data from localStorage
+const loadPromotions = (): Promotion[] => {
+  if (typeof window !== "undefined") {
+    const storedPromotions = localStorage.getItem(PROMOTIONS_STORAGE_KEY);
+    if (storedPromotions) {
+      return JSON.parse(storedPromotions);
+    }
+  }
+  return initialPromotions;
+};
+
+// Helper to save data to localStorage
+const savePromotions = (currentPromotions: Promotion[]) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem(PROMOTIONS_STORAGE_KEY, JSON.stringify(currentPromotions));
+  }
+};
+
+export let mockPromotions: Promotion[] = loadPromotions();
+
 export const addPromotion = (newPromotion: Omit<Promotion, 'id'>) => {
   const promotionWithId: Promotion = {
     ...newPromotion,
     id: `promo-${Date.now()}`,
   };
   mockPromotions.push(promotionWithId);
+  savePromotions(mockPromotions);
   return promotionWithId;
 };
 
@@ -46,9 +69,11 @@ export const updatePromotion = (updatedPromotion: Promotion) => {
   const index = mockPromotions.findIndex(p => p.id === updatedPromotion.id);
   if (index !== -1) {
     mockPromotions[index] = updatedPromotion;
+    savePromotions(mockPromotions);
   }
 };
 
 export const deletePromotion = (promotionId: string) => {
   mockPromotions = mockPromotions.filter(p => p.id !== promotionId);
+  savePromotions(mockPromotions);
 };

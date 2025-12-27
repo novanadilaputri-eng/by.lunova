@@ -35,7 +35,7 @@ const LunoPointsPage: React.FC = () => {
           ) : (
             <div className="space-y-4">
               {pointsHistory.map((entry) => (
-                <div key={entry.id} className="flex justify-between items-center border-b pb-3 last:border-b-0 last:pb-0 border-gray-100 dark:border-gray-700">
+                <div key={entry.id} className="flex justify-between items-center border-b pb-3 last:border-b-0 border-gray-100 dark:border-gray-700">
                   <div>
                     <p className="font-poppins font-medium text-gray-800 dark:text-gray-200">{entry.type}</p>
                     <p className="text-sm text-gray-500 dark:text-gray-400">{entry.date}</p>

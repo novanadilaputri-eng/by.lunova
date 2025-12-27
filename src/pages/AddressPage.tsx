@@ -28,6 +28,11 @@ const AddressPage: React.FC = () => {
   const [isMain, setIsMain] = useState(false);
 
   useEffect(() => {
+    // Update local state when global mock data changes
+    setAddresses([...mockAddresses]);
+  }, [mockAddresses]);
+
+  useEffect(() => {
     if (editingAddress) {
       setRecipientName(editingAddress.recipientName);
       setPhoneNumber(editingAddress.phoneNumber);
@@ -89,21 +94,21 @@ const AddressPage: React.FC = () => {
       addAddress(newOrUpdatedAddress);
       showSuccess("Alamat baru berhasil ditambahkan!");
     }
-    setAddresses([...mockAddresses]); // Update local state from mock data
+    // setAddresses([...mockAddresses]); // State update handled by useEffect on mockAddresses change
     handleCloseForm();
   };
 
   const handleDelete = (id: string) => {
     if (window.confirm("Apakah Anda yakin ingin menghapus alamat ini?")) {
       deleteAddress(id);
-      setAddresses([...mockAddresses]);
+      // setAddresses([...mockAddresses]); // State update handled by useEffect on mockAddresses change
       showSuccess("Alamat berhasil dihapus.");
     }
   };
 
   const handleSetMain = (id: string) => {
     setMainAddress(id);
-    setAddresses([...mockAddresses]);
+    // setAddresses([...mockAddresses]); // State update handled by useEffect on mockAddresses change
     showSuccess("Alamat utama berhasil diubah.");
   };
 

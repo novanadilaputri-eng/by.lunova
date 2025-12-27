@@ -1,6 +1,8 @@
 import { Order } from "@/types/order";
 import { products } from "./products";
 
+const ORDERS_STORAGE_KEY = "bylunova_orders";
+
 // Helper to get product details for order items
 const getProductDetails = (productId: string, size: string, color: string, quantity: number) => {
   const product = products.find(p => p.id === productId);
@@ -27,7 +29,7 @@ const getProductDetails = (productId: string, size: string, color: string, quant
   };
 };
 
-export let mockOrders: Order[] = [
+const initialOrders: Order[] = [
   {
     id: "BYLNV-20231225-001",
     userId: "user1",
@@ -104,12 +106,33 @@ export let mockOrders: Order[] = [
   },
 ];
 
+// Helper to load data from localStorage
+const loadOrders = (): Order[] => {
+  if (typeof window !== "undefined") {
+    const storedOrders = localStorage.getItem(ORDERS_STORAGE_KEY);
+    if (storedOrders) {
+      return JSON.parse(storedOrders);
+    }
+  }
+  return initialOrders;
+};
+
+// Helper to save data to localStorage
+const saveOrders = (currentOrders: Order[]) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(currentOrders));
+  }
+};
+
+export let mockOrders: Order[] = loadOrders();
+
 export const updateOrderStatus = (orderId: string, newStatus: Order["status"]) => {
   const orderIndex = mockOrders.findIndex(order => order.id === orderId);
   if (orderIndex > -1) {
     mockOrders[orderIndex].status = newStatus;
     // For demo, also update orderDate to reflect status change time
     mockOrders[orderIndex].orderDate = new Date().toISOString();
+    saveOrders(mockOrders);
     console.log(`Order ${orderId} status updated to ${newStatus}`);
     // In a real app, you'd persist this to a database
   }
@@ -117,5 +140,6 @@ export const updateOrderStatus = (orderId: string, newStatus: Order["status"]) =
 
 export const addOrder = (newOrder: Order) => {
   mockOrders.unshift(newOrder); // Add new order to the beginning
+  saveOrders(mockOrders);
   return newOrder;
 };

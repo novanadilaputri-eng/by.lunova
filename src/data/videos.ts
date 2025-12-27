@@ -8,7 +8,9 @@ export interface Video {
   uploadDate: string;
 }
 
-export const mockVideos: Video[] = [
+const VIDEOS_STORAGE_KEY = "bylunova_videos";
+
+const initialVideos: Video[] = [
   {
     id: "vid1",
     title: "Review Blouse Katun Motif Bunga Terbaru!",
@@ -55,3 +57,46 @@ export const mockVideos: Video[] = [
     uploadDate: "2023-11-20",
   },
 ];
+
+// Helper to load data from localStorage
+const loadVideos = (): Video[] => {
+  if (typeof window !== "undefined") {
+    const storedVideos = localStorage.getItem(VIDEOS_STORAGE_KEY);
+    if (storedVideos) {
+      return JSON.parse(storedVideos);
+    }
+  }
+  return initialVideos;
+};
+
+// Helper to save data to localStorage
+const saveVideos = (currentVideos: Video[]) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem(VIDEOS_STORAGE_KEY, JSON.stringify(currentVideos));
+  }
+};
+
+export let mockVideos: Video[] = loadVideos();
+
+export const addVideo = (newVideo: Omit<Video, 'id'>) => {
+  const videoWithId: Video = {
+    ...newVideo,
+    id: `vid-${Date.now()}`,
+  };
+  mockVideos.unshift(videoWithId); // Add to the beginning
+  saveVideos(mockVideos);
+  return videoWithId;
+};
+
+export const updateVideo = (updatedVideo: Video) => {
+  const index = mockVideos.findIndex(v => v.id === updatedVideo.id);
+  if (index !== -1) {
+    mockVideos[index] = updatedVideo;
+    saveVideos(mockVideos);
+  }
+};
+
+export const deleteVideo = (videoId: string) => {
+  mockVideos = mockVideos.filter(v => v.id !== videoId);
+  saveVideos(mockVideos);
+};

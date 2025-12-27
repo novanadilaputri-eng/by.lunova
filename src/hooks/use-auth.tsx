@@ -22,10 +22,12 @@ export const useAuth = (): AuthContextType => {
   });
 
   useEffect(() => {
-    if (userRole) {
-      localStorage.setItem("userRole", userRole);
-    } else {
-      localStorage.removeItem("userRole");
+    if (typeof window !== "undefined") {
+      if (userRole) {
+        localStorage.setItem("userRole", userRole);
+      } else {
+        localStorage.removeItem("userRole");
+      }
     }
   }, [userRole]);
 

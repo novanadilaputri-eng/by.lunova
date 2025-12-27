@@ -1,5 +1,7 @@
 import { Address } from "@/types/address";
 
+const ADDRESSES_STORAGE_KEY = "bylunova_addresses";
+
 export let mockAddresses: Address[] = [
   {
     id: "addr1",
@@ -27,6 +29,27 @@ export let mockAddresses: Address[] = [
   },
 ];
 
+// Helper to load data from localStorage
+const loadAddresses = (): Address[] => {
+  if (typeof window !== "undefined") {
+    const storedAddresses = localStorage.getItem(ADDRESSES_STORAGE_KEY);
+    if (storedAddresses) {
+      return JSON.parse(storedAddresses);
+    }
+  }
+  return mockAddresses; // Use initial mock data if nothing in localStorage
+};
+
+// Helper to save data to localStorage
+const saveAddresses = (currentAddresses: Address[]) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem(ADDRESSES_STORAGE_KEY, JSON.stringify(currentAddresses));
+  }
+};
+
+// Initialize mockAddresses from localStorage or initial data
+mockAddresses = loadAddresses();
+
 export const addAddress = (newAddress: Omit<Address, 'id'>) => {
   const addressWithId: Address = {
     ...newAddress,
@@ -36,6 +59,7 @@ export const addAddress = (newAddress: Omit<Address, 'id'>) => {
     mockAddresses = mockAddresses.map(addr => ({ ...addr, isMain: false }));
   }
   mockAddresses.push(addressWithId);
+  saveAddresses(mockAddresses);
   return addressWithId;
 };
 
@@ -46,6 +70,7 @@ export const updateAddress = (updatedAddress: Address) => {
       mockAddresses = mockAddresses.map(addr => ({ ...addr, isMain: false }));
     }
     mockAddresses[index] = updatedAddress;
+    saveAddresses(mockAddresses);
   }
 };
 
@@ -55,6 +80,7 @@ export const deleteAddress = (addressId: string) => {
   if (mockAddresses.length > 0 && !mockAddresses.some(addr => addr.isMain)) {
     mockAddresses[0].isMain = true;
   }
+  saveAddresses(mockAddresses);
 };
 
 export const setMainAddress = (addressId: string) => {
@@ -62,4 +88,5 @@ export const setMainAddress = (addressId: string) => {
     ...addr,
     isMain: addr.id === addressId,
   }));
+  saveAddresses(mockAddresses);
 };

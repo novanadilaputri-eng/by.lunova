@@ -1,6 +1,8 @@
 import { BankAccount } from "@/types/bankAccount";
 
-export let mockBankAccounts: BankAccount[] = [
+const BANK_ACCOUNTS_STORAGE_KEY = "bylunova_bank_accounts";
+
+const initialBankAccounts: BankAccount[] = [
   {
     id: "bank1",
     sellerId: "seller1", // Assuming a seller ID
@@ -19,6 +21,26 @@ export let mockBankAccounts: BankAccount[] = [
   },
 ];
 
+// Helper to load data from localStorage
+const loadBankAccounts = (): BankAccount[] => {
+  if (typeof window !== "undefined") {
+    const storedAccounts = localStorage.getItem(BANK_ACCOUNTS_STORAGE_KEY);
+    if (storedAccounts) {
+      return JSON.parse(storedAccounts);
+    }
+  }
+  return initialBankAccounts;
+};
+
+// Helper to save data to localStorage
+const saveBankAccounts = (currentAccounts: BankAccount[]) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem(BANK_ACCOUNTS_STORAGE_KEY, JSON.stringify(currentAccounts));
+  }
+};
+
+export let mockBankAccounts: BankAccount[] = loadBankAccounts();
+
 export const addBankAccount = (newAccount: Omit<BankAccount, 'id'>) => {
   const accountWithId: BankAccount = {
     ...newAccount,
@@ -28,6 +50,7 @@ export const addBankAccount = (newAccount: Omit<BankAccount, 'id'>) => {
     mockBankAccounts = mockBankAccounts.map(acc => ({ ...acc, isMain: false }));
   }
   mockBankAccounts.push(accountWithId);
+  saveBankAccounts(mockBankAccounts);
   return accountWithId;
 };
 
@@ -38,6 +61,7 @@ export const updateBankAccount = (updatedAccount: BankAccount) => {
       mockBankAccounts = mockBankAccounts.map(acc => ({ ...acc, isMain: false }));
     }
     mockBankAccounts[index] = updatedAccount;
+    saveBankAccounts(mockBankAccounts);
   }
 };
 
@@ -47,6 +71,7 @@ export const deleteBankAccount = (accountId: string) => {
   if (mockBankAccounts.length > 0 && !mockBankAccounts.some(acc => acc.isMain)) {
     mockBankAccounts[0].isMain = true;
   }
+  saveBankAccounts(mockBankAccounts);
 };
 
 export const setMainBankAccount = (accountId: string) => {
@@ -54,4 +79,5 @@ export const setMainBankAccount = (accountId: string) => {
     ...acc,
     isMain: acc.id === accountId,
   }));
+  saveBankAccounts(mockBankAccounts);
 };

@@ -1,5 +1,7 @@
 import { Product } from "@/types/product";
 
+const PRODUCTS_STORAGE_KEY = "bylunova_products";
+
 const commonDescription = "Kemeja wanita kekinian dengan bahan nyaman, cocok untuk aktivitas santai maupun kerja.";
 const commonSizes = ["S", "M", "L", "XL"];
 const commonColors = ["BlackWhite", "Peach", "Ocean Blue", "Pastel Green", "Ivory", "Soft Grey", "Soft Purple"];
@@ -23,7 +25,7 @@ const generateColorImages = (colors: string[]) => {
   }));
 };
 
-export let products: Product[] = [
+const initialProducts: Product[] = [
   {
     id: "1",
     name: "Blouse Katun Motif Bunga",
@@ -251,6 +253,26 @@ export let products: Product[] = [
   },
 ];
 
+// Helper to load data from localStorage
+const loadProducts = (): Product[] => {
+  if (typeof window !== "undefined") {
+    const storedProducts = localStorage.getItem(PRODUCTS_STORAGE_KEY);
+    if (storedProducts) {
+      return JSON.parse(storedProducts);
+    }
+  }
+  return initialProducts;
+};
+
+// Helper to save data to localStorage
+const saveProducts = (currentProducts: Product[]) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(currentProducts));
+  }
+};
+
+export let products: Product[] = loadProducts();
+
 export const addProduct = (newProduct: Omit<Product, 'id' | 'rating' | 'reviewsCount' | 'storeName' | 'storeReputation'>) => {
   const productWithDefaults: Product = {
     ...newProduct,
@@ -262,6 +284,7 @@ export const addProduct = (newProduct: Omit<Product, 'id' | 'rating' | 'reviewsC
     isFeatured: false, // Default to not featured
   };
   products.push(productWithDefaults);
+  saveProducts(products);
   return productWithDefaults;
 };
 
@@ -269,17 +292,20 @@ export const updateProduct = (updatedProduct: Product) => {
   const index = products.findIndex(p => p.id === updatedProduct.id);
   if (index !== -1) {
     products[index] = updatedProduct;
+    saveProducts(products);
   }
 };
 
 export const deleteProduct = (productId: string) => {
   products = products.filter(p => p.id !== productId);
+  saveProducts(products);
 };
 
 export const reduceProductStock = (productId: string, quantity: number) => {
   const productIndex = products.findIndex(p => p.id === productId);
   if (productIndex !== -1) {
     products[productIndex].stock = Math.max(0, products[productIndex].stock - quantity);
+    saveProducts(products);
     console.log(`Stok produk ${productId} berkurang menjadi ${products[productIndex].stock}`);
   }
 };
@@ -289,6 +315,7 @@ export const updateProductStats = (productId: string, newRating: number, newRevi
   if (productIndex !== -1) {
     products[productIndex].rating = newRating;
     products[productIndex].reviewsCount = newReviewsCount;
+    saveProducts(products);
     console.log(`Product ${productId} stats updated: Rating ${newRating}, Reviews ${newReviewsCount}`);
   }
 };

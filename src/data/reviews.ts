@@ -7,7 +7,9 @@ export interface Review {
   date: string;
 }
 
-export const reviews: Review[] = [
+const REVIEWS_STORAGE_KEY = "bylunova_reviews";
+
+const initialReviews: Review[] = [
   {
     id: "rev1",
     productId: "1",
@@ -57,3 +59,33 @@ export const reviews: Review[] = [
     date: "2023-11-10",
   },
 ];
+
+// Helper to load data from localStorage
+const loadReviews = (): Review[] => {
+  if (typeof window !== "undefined") {
+    const storedReviews = localStorage.getItem(REVIEWS_STORAGE_KEY);
+    if (storedReviews) {
+      return JSON.parse(storedReviews);
+    }
+  }
+  return initialReviews;
+};
+
+// Helper to save data to localStorage
+const saveReviews = (currentReviews: Review[]) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem(REVIEWS_STORAGE_KEY, JSON.stringify(currentReviews));
+  }
+};
+
+export let reviews: Review[] = loadReviews();
+
+export const addReview = (newReview: Omit<Review, 'id'>) => {
+  const reviewWithId: Review = {
+    ...newReview,
+    id: `rev-${Date.now()}`,
+  };
+  reviews.unshift(reviewWithId); // Add to the beginning
+  saveReviews(reviews);
+  return reviewWithId;
+};

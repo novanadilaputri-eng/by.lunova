@@ -6,7 +6,9 @@ export interface CollagePhoto {
   sellerId: string; // To restrict editing to sellers
 }
 
-export let mockCollagePhotos: CollagePhoto[] = [
+const COLLAGE_PHOTOS_STORAGE_KEY = "bylunova_collage_photos";
+
+const initialCollagePhotos: CollagePhoto[] = [
   {
     id: "collage1",
     imageUrl: "https://images.unsplash.com/photo-1581044777550-4cfa607037dc?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -44,12 +46,33 @@ export let mockCollagePhotos: CollagePhoto[] = [
   },
 ];
 
+// Helper to load data from localStorage
+const loadCollagePhotos = (): CollagePhoto[] => {
+  if (typeof window !== "undefined") {
+    const storedPhotos = localStorage.getItem(COLLAGE_PHOTOS_STORAGE_KEY);
+    if (storedPhotos) {
+      return JSON.parse(storedPhotos);
+    }
+  }
+  return initialCollagePhotos;
+};
+
+// Helper to save data to localStorage
+const saveCollagePhotos = (currentPhotos: CollagePhoto[]) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem(COLLAGE_PHOTOS_STORAGE_KEY, JSON.stringify(currentPhotos));
+  }
+};
+
+export let mockCollagePhotos: CollagePhoto[] = loadCollagePhotos();
+
 export const addCollagePhoto = (newPhoto: Omit<CollagePhoto, 'id'>) => {
   const photoWithId: CollagePhoto = {
     ...newPhoto,
     id: `collage-${Date.now()}`,
   };
   mockCollagePhotos.unshift(photoWithId); // Add to the beginning
+  saveCollagePhotos(mockCollagePhotos);
   return photoWithId;
 };
 
@@ -57,9 +80,11 @@ export const updateCollagePhoto = (updatedPhoto: CollagePhoto) => {
   const index = mockCollagePhotos.findIndex(p => p.id === updatedPhoto.id);
   if (index !== -1) {
     mockCollagePhotos[index] = updatedPhoto;
+    saveCollagePhotos(mockCollagePhotos);
   }
 };
 
 export const deleteCollagePhoto = (photoId: string) => {
   mockCollagePhotos = mockCollagePhotos.filter(p => p.id !== photoId);
+  saveCollagePhotos(mockCollagePhotos);
 };

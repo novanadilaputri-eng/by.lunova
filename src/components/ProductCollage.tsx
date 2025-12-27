@@ -29,8 +29,9 @@ const ProductCollage: React.FC = () => {
   const currentSellerId = "seller1";
 
   useEffect(() => {
-    setPhotos([...mockCollagePhotos]); // Ensure state is updated if mock data changes
-  }, [mockCollagePhotos]);
+    // Load initial photos from the persisted mock data
+    setPhotos([...mockCollagePhotos]);
+  }, []); // Run only once on mount
 
   useEffect(() => {
     if (editingPhoto) {
@@ -97,14 +98,14 @@ const ProductCollage: React.FC = () => {
       addCollagePhoto(newOrUpdatedPhoto);
       showSuccess("Foto kolase baru berhasil ditambahkan!");
     }
-    setPhotos([...mockCollagePhotos]);
+    setPhotos([...mockCollagePhotos]); // Update local state from persisted mock data
     handleCloseForm();
   };
 
   const handleDelete = (id: string) => {
     if (window.confirm("Apakah Anda yakin ingin menghapus foto ini dari kolase?")) {
       deleteCollagePhoto(id);
-      setPhotos([...mockCollagePhotos]);
+      setPhotos([...mockCollagePhotos]); // Update local state from persisted mock data
       showSuccess("Foto kolase berhasil dihapus.");
     }
   };

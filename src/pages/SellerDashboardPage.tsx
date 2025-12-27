@@ -31,10 +31,12 @@ const SellerDashboardPage: React.FC = () => {
     }
   }, [userRole, navigate]);
 
-  // Update notifications when mockNotifications change
+  // Update local state when global mock data changes (due to persistence)
   useEffect(() => {
-    setSellerNotifications(mockNotifications.filter(n => n.userId === currentSellerId));
-  }, [mockNotifications, currentSellerId]);
+    setCurrentProducts([...mockProducts]);
+    setCurrentOrders([...mockOrders]);
+    setSellerNotifications([...mockNotifications.filter(n => n.userId === currentSellerId)]);
+  }, [mockProducts, mockOrders, mockNotifications, currentSellerId]);
 
 
   // Filter products by seller (for demo, assume all mockProducts are from this seller)

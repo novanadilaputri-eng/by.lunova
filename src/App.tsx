@@ -38,14 +38,18 @@ const App = () => {
   const [hasSeenSplashScreen, setHasSeenSplashScreen] = useState(false);
 
   useEffect(() => {
-    const seen = localStorage.getItem('hasSeenSplashScreen');
-    if (seen === 'true') {
-      setHasSeenSplashScreen(true);
+    if (typeof window !== "undefined") {
+      const seen = localStorage.getItem('hasSeenSplashScreen');
+      if (seen === 'true') {
+        setHasSeenSplashScreen(true);
+      }
     }
   }, []);
 
   const handleSplashScreenFinish = () => {
-    localStorage.setItem('hasSeenSplashScreen', 'true');
+    if (typeof window !== "undefined") {
+      localStorage.setItem('hasSeenSplashScreen', 'true');
+    }
     setHasSeenSplashScreen(true);
   };
 

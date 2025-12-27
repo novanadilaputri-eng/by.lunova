@@ -52,7 +52,7 @@ const OrderTrackingPage: React.FC = () => {
       showError("Pesanan tidak ditemukan.");
       navigate("/profile/orders"); // Redirect to order list if not found
     }
-  }, [orderId, navigate]);
+  }, [orderId, navigate, mockOrders]); // Add mockOrders to dependency array
 
   if (!order) {
     return (

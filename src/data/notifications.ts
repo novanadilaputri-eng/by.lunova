@@ -1,6 +1,8 @@
 import { Notification } from "@/types/notification";
 
-export let mockNotifications: Notification[] = [
+const NOTIFICATIONS_STORAGE_KEY = "bylunova_notifications";
+
+const initialNotifications: Notification[] = [
   {
     id: "notif1",
     userId: "seller1", // Assuming a seller ID
@@ -21,12 +23,33 @@ export let mockNotifications: Notification[] = [
   },
 ];
 
+// Helper to load data from localStorage
+const loadNotifications = (): Notification[] => {
+  if (typeof window !== "undefined") {
+    const storedNotifications = localStorage.getItem(NOTIFICATIONS_STORAGE_KEY);
+    if (storedNotifications) {
+      return JSON.parse(storedNotifications);
+    }
+  }
+  return initialNotifications;
+};
+
+// Helper to save data to localStorage
+const saveNotifications = (currentNotifications: Notification[]) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem(NOTIFICATIONS_STORAGE_KEY, JSON.stringify(currentNotifications));
+  }
+};
+
+export let mockNotifications: Notification[] = loadNotifications();
+
 export const addNotification = (newNotification: Omit<Notification, 'id'>) => {
   const notificationWithId: Notification = {
     ...newNotification,
     id: `notif-${Date.now()}`,
   };
   mockNotifications.unshift(notificationWithId); // Add to the beginning
+  saveNotifications(mockNotifications);
   return notificationWithId;
 };
 
@@ -34,6 +57,7 @@ export const markNotificationAsRead = (notificationId: string) => {
   const index = mockNotifications.findIndex(n => n.id === notificationId);
   if (index !== -1) {
     mockNotifications[index].isRead = true;
+    saveNotifications(mockNotifications);
   }
 };
 

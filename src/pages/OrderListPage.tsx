@@ -49,7 +49,7 @@ const OrderListPage: React.FC = () => {
           return true;
       }
     });
-  }, [statusFilter]);
+  }, [statusFilter, mockOrders]); // Add mockOrders to dependency array
 
   return (
     <>

@@ -41,6 +41,11 @@ const SellerPromotionManagementPage: React.FC = () => {
   }, [userRole, navigate]);
 
   useEffect(() => {
+    // Update local state when global mock data changes
+    setPromotions([...mockPromotions]);
+  }, [mockPromotions]);
+
+  useEffect(() => {
     if (editingPromotion) {
       setTitle(editingPromotion.title);
       setMessage(editingPromotion.message);
@@ -93,14 +98,14 @@ const SellerPromotionManagementPage: React.FC = () => {
       addPromotion(newOrUpdatedPromotion);
       showSuccess("Promosi baru berhasil ditambahkan!");
     }
-    setPromotions([...mockPromotions]); // Update local state from mock data
+    // setPromotions([...mockPromotions]); // State update handled by useEffect
     handleCloseForm();
   };
 
   const handleDelete = (id: string) => {
     if (window.confirm("Apakah Anda yakin ingin menghapus promosi ini?")) {
       deletePromotion(id);
-      setPromotions([...mockPromotions]);
+      // setPromotions([...mockPromotions]); // State update handled by useEffect
       showSuccess("Promosi berhasil dihapus.");
     }
   };

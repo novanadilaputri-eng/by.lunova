@@ -26,9 +26,9 @@ const SellerBankAccountManagement: React.FC<SellerBankAccountManagementProps> = 
   const [isMain, setIsMain] = useState(false);
 
   useEffect(() => {
-    // Filter accounts for the current seller
+    // Filter accounts for the current seller and update local state when global mock data changes
     setBankAccounts(mockBankAccounts.filter(acc => acc.sellerId === sellerId));
-  }, [sellerId, mockBankAccounts]); // Re-run when mockBankAccounts change
+  }, [sellerId, mockBankAccounts]); // Re-run when mockBankAccounts or sellerId change
 
   useEffect(() => {
     if (editingAccount) {
@@ -77,21 +77,21 @@ const SellerBankAccountManagement: React.FC<SellerBankAccountManagementProps> = 
       addBankAccount(newOrUpdatedAccount);
       showSuccess("Rekening bank baru berhasil ditambahkan!");
     }
-    setBankAccounts([...mockBankAccounts.filter(acc => acc.sellerId === sellerId)]); // Refresh local state
+    // setBankAccounts([...mockBankAccounts.filter(acc => acc.sellerId === sellerId)]); // State update handled by useEffect
     handleCloseForm();
   };
 
   const handleDelete = (id: string) => {
     if (window.confirm("Apakah Anda yakin ingin menghapus rekening bank ini?")) {
       deleteBankAccount(id);
-      setBankAccounts([...mockBankAccounts.filter(acc => acc.sellerId === sellerId)]);
+      // setBankAccounts([...mockBankAccounts.filter(acc => acc.sellerId === sellerId)]); // State update handled by useEffect
       showSuccess("Rekening bank berhasil dihapus.");
     }
   };
 
   const handleSetMain = (id: string) => {
     setMainBankAccount(id);
-    setBankAccounts([...mockBankAccounts.filter(acc => acc.sellerId === sellerId)]);
+    // setBankAccounts([...mockBankAccounts.filter(acc => acc.sellerId === sellerId)]); // State update handled by useEffect
     showSuccess("Rekening bank utama berhasil diubah.");
   };
 

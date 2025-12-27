@@ -13,11 +13,12 @@ import HomePageHeader from "@/components/HomePageHeader";
 import { reduceProductStock } from "@/data/products"; // Import reduceProductStock
 import { addNotification } from "@/data/notifications"; // Import addNotification
 import { addOrder } from "@/data/orders"; // Import addOrder
+import { mockAddresses } from "@/data/addresses"; // Import mockAddresses
 
 const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
   const { cartItems, getTotalPrice, clearCart } = useCart();
-  const [deliveryAddress, setDeliveryAddress] = useState("Alamat Utama Saya");
+  const [selectedAddressId, setSelectedAddressId] = useState(mockAddresses.find(addr => addr.isMain)?.id || "");
   const [courierOption, setCourierOption] = useState("ByLuno Express");
   const [paymentMethod, setPaymentMethod] = useState("Transfer Bank");
   const [voucherCode, setVoucherCode] = useState("");
@@ -28,8 +29,10 @@ const CheckoutPage: React.FC = () => {
   const discount = 0; // Placeholder for voucher/points discount
   const totalAmount = subtotal + shippingCost - discount;
 
+  const selectedAddress = mockAddresses.find(addr => addr.id === selectedAddressId);
+
   const handlePlaceOrder = () => {
-    if (!deliveryAddress || !courierOption || !paymentMethod) {
+    if (!selectedAddressId || !courierOption || !paymentMethod) {
       showError("Mohon lengkapi semua detail pengiriman dan pembayaran.");
       return;
     }
@@ -55,7 +58,7 @@ const CheckoutPage: React.FC = () => {
         quantity: item.quantity,
       })),
       totalAmount: totalAmount,
-      shippingAddress: deliveryAddress,
+      shippingAddress: selectedAddress ? `${selectedAddress.fullAddress}, ${selectedAddress.city}, ${selectedAddress.province}, ${selectedAddress.postalCode}` : "Alamat tidak ditemukan",
       paymentMethod: paymentMethod,
       courier: courierOption,
     });
@@ -91,23 +94,23 @@ const CheckoutPage: React.FC = () => {
             {/* Alamat Pengiriman */}
             <div>
               <h2 className="text-2xl font-playfair font-bold text-gray-900 mb-4">Alamat Pengiriman</h2>
-              <RadioGroup value={deliveryAddress} onValueChange={setDeliveryAddress} className="space-y-2">
-                <div className="flex items-center">
-                  <RadioGroupItem value="Alamat Utama Saya" id="address-main" className="border-soft-pink data-[state=checked]:bg-soft-pink" />
-                  <Label htmlFor="address-main" className="ml-2 font-poppins">Alamat Utama Saya (Jl. Contoh No. 123, Jakarta)</Label>
-                </div>
-                <div className="flex items-center">
-                  <RadioGroupItem value="Tambah Alamat Baru" id="address-new" className="border-soft-pink data-[state=checked]:bg-soft-pink" />
-                  <Label htmlFor="address-new" className="ml-2 font-poppins">Tambah Alamat Baru</Label>
-                </div>
+              <RadioGroup value={selectedAddressId} onValueChange={setSelectedAddressId} className="space-y-2">
+                {mockAddresses.length === 0 ? (
+                  <p className="text-gray-600 font-poppins">Tidak ada alamat tersimpan. <Link to="/profile/addresses" className="text-soft-pink hover:underline">Tambah Alamat</Link></p>
+                ) : (
+                  mockAddresses.map(addr => (
+                    <div key={addr.id} className="flex items-center">
+                      <RadioGroupItem value={addr.id} id={`address-${addr.id}`} className="border-soft-pink data-[state=checked]:bg-soft-pink" />
+                      <Label htmlFor={`address-${addr.id}`} className="ml-2 font-poppins">
+                        {addr.recipientName} ({addr.phoneNumber}) - {addr.fullAddress}, {addr.city} {addr.isMain && <span className="text-xs text-soft-pink">(Utama)</span>}
+                      </Label>
+                    </div>
+                  ))
+                )}
               </RadioGroup>
-              {deliveryAddress === "Tambah Alamat Baru" && (
-                <div className="mt-4 space-y-3">
-                  <Input placeholder="Nama Penerima" className="border-soft-pink focus:ring-soft-pink font-poppins" />
-                  <Input placeholder="Nomor Telepon" className="border-soft-pink focus:ring-soft-pink font-poppins" />
-                  <Textarea placeholder="Alamat Lengkap (Jalan, Nomor, RT/RW, Kelurahan, Kecamatan, Kota, Provinsi, Kode Pos)" rows={3} className="border-soft-pink focus:ring-soft-pink font-poppins" />
-                </div>
-              )}
+              <Button asChild variant="link" className="mt-2 px-0 text-soft-pink hover:text-rose-600 font-poppins">
+                <Link to="/profile/addresses">Kelola Alamat</Link>
+              </Button>
             </div>
 
             <Separator />
@@ -227,7 +230,7 @@ const CheckoutPage: React.FC = () => {
             <Button
               onClick={handlePlaceOrder}
               className="w-full py-3 text-lg bg-soft-pink hover:bg-rose-600 text-white font-poppins"
-              disabled={cartItems.length === 0}
+              disabled={cartItems.length === 0 || !selectedAddressId}
             >
               Buat Pesanan Sekarang
             </Button>

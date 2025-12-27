@@ -69,27 +69,6 @@ const initialProducts: Product[] = [
     sellerId: "seller1",
   },
   {
-    id: "3",
-    name: "Tunik Batik Modern",
-    category: "Atasan Wanita",
-    price: 250000,
-    mainImageUrl: "https://images.unsplash.com/photo-1607082348824-0a968821957e?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    colorImages: [
-      { color: "Coklat", imageUrl: "https://images.unsplash.com/photo-1521572178477-fff92947c229?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
-      { color: "Biru Dongker", imageUrl: "https://images.unsplash.com/photo-1571867552700-22329921294c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
-    ],
-    description: "Tunik dengan motif batik kontemporer, memadukan tradisi dan gaya modern. Cocok untuk acara formal maupun semi-formal.",
-    sizes: ["S", "M", "L"],
-    colors: ["Coklat", "Biru Dongker"],
-    stock: 0, // Mulai dari 0
-    rating: 0, // Mulai dari 0
-    reviewsCount: 0, // Mulai dari 0
-    storeName: "Batik Nusantara",
-    storeReputation: "Gold Seller",
-    isFeatured: true,
-    sellerId: "seller2",
-  },
-  {
     id: "4",
     name: "Kaos Polos Basic",
     category: "Atasan Wanita",
@@ -111,28 +90,6 @@ const initialProducts: Product[] = [
     storeReputation: "Silver Seller",
     isFeatured: false,
     sellerId: "seller1",
-  },
-  {
-    id: "5",
-    name: "Cardigan Rajut Korea",
-    category: "Atasan Wanita",
-    price: 150000,
-    mainImageUrl: "https://images.unsplash.com/photo-1594633313472-01737179227f?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    colorImages: [
-      { color: "Cream", imageUrl: "https://images.unsplash.com/photo-1521572178477-fff92947c229?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
-      { color: "Mint", imageUrl: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
-      { color: "Lavender", imageUrl: "https://images.unsplash.com/photo-1594633313472-01737179227f?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
-    ],
-    description: "Cardigan rajut gaya Korea yang hangat dan modis, cocok untuk melengkapi outfit Anda. Tersedia dalam warna pastel.",
-    sizes: ["All Size"],
-    colors: ["Cream", "Mint", "Lavender"],
-    stock: 0, // Mulai dari 0
-    rating: 0, // Mulai dari 0
-    reviewsCount: 0, // Mulai dari 0
-    storeName: "K-Fashion Hub",
-    storeReputation: "Gold Seller",
-    isFeatured: false,
-    sellerId: "seller2",
   },
   // New products
   {
@@ -293,7 +250,6 @@ export const addProduct = (newProduct: Omit<Product, 'id' | 'rating' | 'reviewsC
     storeReputation: "New Seller", // Default for new products
     isFeatured: false, // Default to not featured
   };
-  
   products.push(productWithDefaults);
   saveProducts(products);
   console.log("Produk baru ditambahkan:", productWithDefaults); // Debug log

@@ -13,7 +13,6 @@ import { Label } from "@/components/ui/label";
 import { showSuccess, showError } from "@/utils/toast";
 import { mockOrders } from "@/data/orders"; // Import mockOrders
 import { useAuth } from "@/hooks/use-auth"; // Import useAuth hook
-import SellerOtpVerification from "@/components/SellerOtpVerification"; // Import SellerOtpVerification
 
 interface ProfileMenuItemProps {
   icon: React.ElementType;
@@ -30,7 +29,7 @@ const ProfileMenuItem: React.FC<ProfileMenuItemProps> = ({ icon: Icon, label, to
 );
 
 const ProfilePage: React.FC = () => {
-  const { userRole, loginAsBuyer, loginAsSeller, logout, isVerifyingSeller, cancelSellerOtp } = useAuth();
+  const { userRole, loginAsBuyer, loginAsSeller, logout } = useAuth();
   const [username, setUsername] = useState(() => localStorage.getItem("profileUsername") || "LunovaUser123"); // Initialize from localStorage
   const [profilePicture, setProfilePicture] = useState(() => localStorage.getItem("profilePictureUrl") || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); // Initialize from localStorage
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -186,29 +185,27 @@ const ProfilePage: React.FC = () => {
           </div>
         </div>
 
-        {/* E-Wallet Connection Section (Only for Buyers) */}
-        {userRole === "buyer" && (
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-8">
-            <h3 className="text-xl font-playfair font-bold text-gray-900 dark:text-gray-100 mb-4">Hubungkan E-Wallet</h3>
-            <p className="text-gray-700 dark:text-gray-300 font-poppins mb-4">
-              Hubungkan akun e-wallet Anda untuk pembayaran yang lebih cepat dan mudah.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Button variant="outline" className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins" onClick={() => handleConnectEWallet("Dana")}>
-                <CreditCard className="h-5 w-5 mr-2" /> Hubungkan Dana
-              </Button>
-              <Button variant="outline" className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins" onClick={() => handleConnectEWallet("Gopay")}>
-                <CreditCard className="h-5 w-5 mr-2" /> Hubungkan Gopay
-              </Button>
-              <Button variant="outline" className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins" onClick={() => handleConnectEWallet("ShopeePay")}>
-                <CreditCard className="h-5 w-5 mr-2" /> Hubungkan ShopeePay
-              </Button>
-              <Button variant="outline" className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins" onClick={() => handleConnectEWallet("OVO")}>
-                <CreditCard className="h-5 w-5 mr-2" /> Hubungkan OVO
-              </Button>
-            </div>
+        {/* E-Wallet Connection Section */}
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-8">
+          <h3 className="text-xl font-playfair font-bold text-gray-900 dark:text-gray-100 mb-4">Hubungkan E-Wallet</h3>
+          <p className="text-gray-700 dark:text-gray-300 font-poppins mb-4">
+            Hubungkan akun e-wallet Anda untuk pembayaran yang lebih cepat dan mudah.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Button variant="outline" className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins" onClick={() => handleConnectEWallet("Dana")}>
+              <CreditCard className="h-5 w-5 mr-2" /> Hubungkan Dana
+            </Button>
+            <Button variant="outline" className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins" onClick={() => handleConnectEWallet("Gopay")}>
+              <CreditCard className="h-5 w-5 mr-2" /> Hubungkan Gopay
+            </Button>
+            <Button variant="outline" className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins" onClick={() => handleConnectEWallet("ShopeePay")}>
+              <CreditCard className="h-5 w-5 mr-2" /> Hubungkan ShopeePay
+            </Button>
+            <Button variant="outline" className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins" onClick={() => handleConnectEWallet("OVO")}>
+              <CreditCard className="h-5 w-5 mr-2" /> Hubungkan OVO
+            </Button>
           </div>
-        )}
+        </div>
 
 
         <div className="space-y-4">
@@ -273,9 +270,6 @@ const ProfilePage: React.FC = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
-      {/* Seller OTP Verification Modal */}
-      <SellerOtpVerification isOpen={isVerifyingSeller} onClose={cancelSellerOtp} />
     </>
   );
 };

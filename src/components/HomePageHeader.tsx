@@ -5,10 +5,9 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Search, Bell, MessageSquare, Camera, Mic, Image } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { showSuccess } from "@/utils/toast";
-import { getUnreadNotificationsCount } from "@/data/notifications";
-import { Badge } from "@/components/ui/badge";
-import { useAuth } from "@/hooks/use-auth"; // Import useAuth
+import { showSuccess } from "@/utils/toast"; // Import showSuccess for toast messages
+import { getUnreadNotificationsCount } from "@/data/notifications"; // Import notification count
+import { Badge } from "@/components/ui/badge"; // Import Badge
 
 const HomePageHeader: React.FC = () => {
   const navigate = useNavigate();
@@ -16,26 +15,29 @@ const HomePageHeader: React.FC = () => {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [unreadNotifications, setUnreadNotifications] = useState(0);
-  const { userRole } = useAuth(); // Use useAuth hook
 
-  // Determine the userId for notifications based on the current role
-  const currentUserId = userRole === "seller" ? "seller1" : "user1"; // Example: "seller1" for seller, "user1" for buyer
+  // For demo, assuming a fixed user ID for notifications
+  const currentUserId = "seller1"; // Or "user1" depending on context
 
   useEffect(() => {
+    // Update notification count periodically or on relevant events
     const updateCount = () => {
       setUnreadNotifications(getUnreadNotificationsCount(currentUserId));
     };
     updateCount();
-    const interval = setInterval(updateCount, 5000);
+    const interval = setInterval(updateCount, 5000); // Update every 5 seconds
     return () => clearInterval(interval);
-  }, [currentUserId]); // Depend on currentUserId
+  }, [currentUserId]);
 
+
+  // Auto-focus search input when navigating to /products
   useEffect(() => {
     if (location.pathname === "/products" && searchInputRef.current) {
       searchInputRef.current.focus();
     }
   }, [location.pathname]);
 
+  // Update search query state if URL search param changes (e.g., from direct link)
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const currentSearch = queryParams.get("search") || "";
@@ -47,9 +49,9 @@ const HomePageHeader: React.FC = () => {
     if (searchQuery.trim()) {
       navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
     } else {
-      navigate("/products");
+      navigate("/products"); // Navigate to products page without a specific search term
     }
-    searchInputRef.current?.blur();
+    searchInputRef.current?.blur(); // Remove focus after search
   };
 
   const handleCameraClick = () => {

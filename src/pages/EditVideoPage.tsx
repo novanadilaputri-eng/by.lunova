@@ -185,7 +185,7 @@ const EditVideoPage: React.FC = () => {
       <div className="container mx-auto p-4 md:p-8">
         <h1 className="text-4xl font-playfair font-bold text-center mb-10 text-gray-900 dark:text-gray-100">
           {isNewVideo ? "Tambah Video Baru" : `Edit Video: ${title}`}
-        </h1>
+        </hh1>
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md max-w-3xl mx-auto">
           <form onSubmit={handleSaveVideo} className="space-y-6">
             <div>

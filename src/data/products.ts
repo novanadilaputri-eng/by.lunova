@@ -5,9 +5,6 @@ const PRODUCTS_STORAGE_KEY = "bylunova_products";
 const commonDescription = "Kemeja wanita kekinian dengan bahan nyaman, cocok untuk aktivitas santai maupun kerja.";
 const commonSizes = ["S", "M", "L", "XL"];
 const commonColors = ["BlackWhite", "Peach", "Ocean Blue", "Pastel Green", "Ivory", "Soft Grey", "Soft Purple"];
-const commonStoreName = "By.Lunova Official";
-const commonStoreReputation = "Platinum Seller";
-
 const colorImageMap = {
   "BlackWhite": "https://images.unsplash.com/photo-1591047139829-f96f700860c6?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Black shirt
   "Peach": "https://images.unsplash.com/photo-1581044777550-4cfa607037dc?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Pink/Peach blouse
@@ -45,7 +42,8 @@ const initialProducts: Product[] = [
     reviewsCount: 120,
     storeName: "Fashionista Store",
     storeReputation: "Gold Seller",
-    isFeatured: true, // Example featured product
+    isFeatured: true,
+    sellerId: "seller1", // Menambahkan sellerId
   },
   {
     id: "2",
@@ -67,6 +65,7 @@ const initialProducts: Product[] = [
     storeName: "Trendy Threads",
     storeReputation: "Platinum Seller",
     isFeatured: false,
+    sellerId: "seller1", // Menambahkan sellerId
   },
   {
     id: "3",
@@ -86,7 +85,8 @@ const initialProducts: Product[] = [
     reviewsCount: 60,
     storeName: "Batik Nusantara",
     storeReputation: "Gold Seller",
-    isFeatured: true, // Example featured product
+    isFeatured: true,
+    sellerId: "seller2", // Menambahkan sellerId
   },
   {
     id: "4",
@@ -109,6 +109,7 @@ const initialProducts: Product[] = [
     storeName: "Daily Wear",
     storeReputation: "Silver Seller",
     isFeatured: false,
+    sellerId: "seller1", // Menambahkan sellerId
   },
   {
     id: "5",
@@ -130,6 +131,7 @@ const initialProducts: Product[] = [
     storeName: "K-Fashion Hub",
     storeReputation: "Gold Seller",
     isFeatured: false,
+    sellerId: "seller2", // Menambahkan sellerId
   },
   // New products
   {
@@ -145,9 +147,10 @@ const initialProducts: Product[] = [
     stock: 50,
     rating: 4.5,
     reviewsCount: 100,
-    storeName: commonStoreName,
-    storeReputation: commonStoreReputation,
+    storeName: "By.Lunova Official",
+    storeReputation: "New Seller",
     isFeatured: false,
+    sellerId: "seller1", // Menambahkan sellerId
   },
   {
     id: "7",
@@ -162,9 +165,10 @@ const initialProducts: Product[] = [
     stock: 50,
     rating: 4.6,
     reviewsCount: 110,
-    storeName: commonStoreName,
-    storeReputation: commonStoreReputation,
+    storeName: "By.Lunova Official",
+    storeReputation: "New Seller",
     isFeatured: false,
+    sellerId: "seller1", // Menambahkan sellerId
   },
   {
     id: "8",
@@ -179,9 +183,10 @@ const initialProducts: Product[] = [
     stock: 50,
     rating: 4.7,
     reviewsCount: 90,
-    storeName: commonStoreName,
-    storeReputation: commonStoreReputation,
+    storeName: "By.Lunova Official",
+    storeReputation: "New Seller",
     isFeatured: false,
+    sellerId: "seller1", // Menambahkan sellerId
   },
   {
     id: "9",
@@ -196,9 +201,10 @@ const initialProducts: Product[] = [
     stock: 50,
     rating: 4.4,
     reviewsCount: 80,
-    storeName: commonStoreName,
-    storeReputation: commonStoreReputation,
+    storeName: "By.Lunova Official",
+    storeReputation: "New Seller",
     isFeatured: false,
+    sellerId: "seller1", // Menambahkan sellerId
   },
   {
     id: "10",
@@ -213,9 +219,10 @@ const initialProducts: Product[] = [
     stock: 50,
     rating: 4.5,
     reviewsCount: 105,
-    storeName: commonStoreName,
-    storeReputation: commonStoreReputation,
+    storeName: "By.Lunova Official",
+    storeReputation: "New Seller",
     isFeatured: false,
+    sellerId: "seller1", // Menambahkan sellerId
   },
   {
     id: "11",
@@ -230,9 +237,10 @@ const initialProducts: Product[] = [
     stock: 50,
     rating: 4.3,
     reviewsCount: 95,
-    storeName: commonStoreName,
-    storeReputation: commonStoreReputation,
+    storeName: "By.Lunova Official",
+    storeReputation: "New Seller",
     isFeatured: false,
+    sellerId: "seller1", // Menambahkan sellerId
   },
   {
     id: "12",
@@ -247,9 +255,10 @@ const initialProducts: Product[] = [
     stock: 50,
     rating: 4.8,
     reviewsCount: 130,
-    storeName: commonStoreName,
-    storeReputation: commonStoreReputation,
+    storeName: "By.Lunova Official",
+    storeReputation: "New Seller",
     isFeatured: false,
+    sellerId: "seller1", // Menambahkan sellerId
   },
 ];
 
@@ -279,7 +288,7 @@ export const addProduct = (newProduct: Omit<Product, 'id' | 'rating' | 'reviewsC
     id: `prod-${Date.now()}`,
     rating: 0,
     reviewsCount: 0,
-    storeName: commonStoreName, // Default for new products
+    storeName: "By.Lunova Official", // Default for new products
     storeReputation: "New Seller", // Default for new products
     isFeatured: false, // Default to not featured
   };
@@ -319,4 +328,9 @@ export const updateProductStats = (productId: string, newRating: number, newRevi
     saveProducts(products);
     console.log(`Product ${productId} stats updated: Rating ${newRating}, Reviews ${newReviewsCount}`);
   }
+};
+
+// Fungsi untuk mendapatkan produk berdasarkan sellerId
+export const getSellerProducts = (sellerId: string) => {
+  return products.filter(p => p.sellerId === sellerId);
 };

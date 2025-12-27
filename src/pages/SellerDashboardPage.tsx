@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import HomePageHeader from "@/components/HomePageHeader";
-import { products as mockProducts, updateProduct as updateMockProduct, addProduct as addMockProduct, deleteProduct as deleteMockProduct } from "@/data/products";
+import { products as mockProducts, getSellerProducts } from "@/data/products";
 import { mockOrders, updateOrderStatus } from "@/data/orders";
 import { PlusCircle, Edit, Trash2, Package, Truck, CheckCircle, Clock, Megaphone, Bell, Banknote } from "lucide-react"; // Import Megaphone, Bell, Banknote
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -38,9 +38,8 @@ const SellerDashboardPage: React.FC = () => {
     setSellerNotifications([...mockNotifications.filter(n => n.userId === currentSellerId)]);
   }, [mockProducts, mockOrders, mockNotifications, currentSellerId]);
 
-
   // Filter products by seller (for demo, assume all mockProducts are from this seller)
-  const sellerProducts = currentProducts.filter(p => p.storeName === "By.Lunova Official");
+  const sellerProducts = getSellerProducts(currentSellerId);
 
   // Filter orders by status for seller view
   const pendingPaymentOrders = currentOrders.filter(order => order.status === "Menunggu Pembayaran");
@@ -52,7 +51,7 @@ const SellerDashboardPage: React.FC = () => {
 
   const handleDeleteProduct = (productId: string) => {
     if (window.confirm(`Apakah Anda yakin ingin menghapus produk ID: ${productId}?`)) {
-      deleteMockProduct(productId); // Simulate deletion
+      deleteProduct(productId); // Simulate deletion
       setCurrentProducts([...mockProducts]); // Update state to reflect changes
       showSuccess(`Produk ID: ${productId} berhasil dihapus.`);
     }
@@ -82,7 +81,8 @@ const SellerDashboardPage: React.FC = () => {
         {/* Seller Notifications */}
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-8">
           <h2 className="text-2xl font-playfair font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-            <Bell className="h-6 w-6 mr-2 text-soft-pink" /> Notifikasi Anda
+            <Bell className="h-6 w-6 mr-2 text-soft-pink" />
+            Notifikasi Anda
           </h2>
           {sellerNotifications.length === 0 ? (
             <p className="text-gray-600 dark:text-gray-400 font-poppins">Tidak ada notifikasi baru.</p>
@@ -109,11 +109,11 @@ const SellerDashboardPage: React.FC = () => {
           <h2 className="text-2xl font-playfair font-bold text-gray-900 dark:text-gray-100">Produk Saya</h2>
           <Button asChild className="bg-soft-pink hover:bg-rose-600 text-white font-poppins">
             <Link to="/seller/products/new">
-              <PlusCircle className="h-4 w-4 mr-2" /> Tambah Produk Baru
+              <PlusCircle className="h-4 w-4 mr-2" />
+              Tambah Produk Baru
             </Link>
           </Button>
         </div>
-
         {sellerProducts.length === 0 ? (
           <div className="text-center p-10 bg-white dark:bg-gray-800 rounded-lg shadow-md">
             <Package className="h-20 w-20 text-gray-400 mx-auto mb-6" />
@@ -126,11 +126,7 @@ const SellerDashboardPage: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-10">
             {sellerProducts.map((product) => (
               <Card key={product.id} className="w-full overflow-hidden rounded-lg shadow-lg border-2 border-beige dark:border-gray-700 bg-white dark:bg-gray-800">
-                <img
-                  src={product.mainImageUrl}
-                  alt={product.name}
-                  className="w-full h-48 object-cover"
-                />
+                <img src={product.mainImageUrl} alt={product.name} className="w-full h-48 object-cover" />
                 <CardContent className="p-4">
                   <h3 className="text-lg font-semibold text-gray-800 font-poppins dark:text-gray-200">{product.name}</h3>
                   <p className="text-sm text-gray-600 font-poppins dark:text-gray-400">Stok: {product.stock}</p>
@@ -144,15 +140,13 @@ const SellerDashboardPage: React.FC = () => {
                 <CardFooter className="p-4 pt-0 flex justify-between space-x-2">
                   <Button asChild variant="outline" className="flex-1 border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins dark:border-gold-rose dark:text-gold-rose dark:hover:bg-gold-rose dark:hover:text-white">
                     <Link to={`/seller/products/edit/${product.id}`}>
-                      <Edit className="h-4 w-4 mr-2" /> Edit
+                      <Edit className="h-4 w-4 mr-2" />
+                      Edit
                     </Link>
                   </Button>
-                  <Button
-                    variant="destructive"
-                    className="flex-1 font-poppins"
-                    onClick={() => handleDeleteProduct(product.id)}
-                  >
-                    <Trash2 className="h-4 w-4 mr-2" /> Hapus
+                  <Button variant="destructive" className="flex-1 font-poppins" onClick={() => handleDeleteProduct(product.id)}>
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Hapus
                   </Button>
                 </CardFooter>
               </Card>
@@ -165,7 +159,8 @@ const SellerDashboardPage: React.FC = () => {
           <h2 className="text-2xl font-playfair font-bold text-gray-900 dark:text-gray-100 mb-4">Manajemen Promosi</h2>
           <Button asChild className="w-full py-3 text-lg bg-gold-rose hover:bg-gold-rose/80 text-white font-poppins">
             <Link to="/seller/promotions">
-              <Megaphone className="h-5 w-5 mr-2" /> Kelola Promosi Anda
+              <Megaphone className="h-5 w-5 mr-2" />
+              Kelola Promosi Anda
             </Link>
           </Button>
         </div>

@@ -14,4 +14,5 @@ export interface Product {
   storeName: string;
   storeReputation: string;
   isFeatured?: boolean; // New property for featured products
+  sellerId: string; // Menambahkan sellerId untuk identifikasi pemilik produk
 }

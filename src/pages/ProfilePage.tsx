@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Package, Heart, Gift, MapPin, Settings, HelpCircle, LogOut,
-  Wallet, Truck, CheckCircle, XCircle, Clock, User as UserIcon, CreditCard // Renamed User to UserIcon to avoid conflict, added CreditCard
+  Wallet, Truck, CheckCircle, User as UserIcon, CreditCard // Renamed User to UserIcon to avoid conflict, added CreditCard
 } from "lucide-react";
 import HomePageHeader from "@/components/HomePageHeader";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";

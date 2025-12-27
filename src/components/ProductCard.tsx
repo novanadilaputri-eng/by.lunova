@@ -12,7 +12,7 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
-    <Card className="w-full max-w-sm overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 border-2 border-beige">
+    <Card className="w-full max-w-sm overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 border-2 border-beige dark:border-gray-700 bg-white dark:bg-gray-800">
       <Link to={`/products/${product.id}`}>
         <img
           src={product.mainImageUrl} // Changed to mainImageUrl
@@ -22,21 +22,21 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       </Link>
       <CardContent className="p-4">
         <Link to={`/products/${product.id}`}>
-          <h3 className="text-lg font-semibold text-gray-800 hover:text-soft-pink transition-colors duration-200 font-poppins">
+          <h3 className="text-lg font-semibold text-gray-800 hover:text-soft-pink transition-colors duration-200 font-poppins dark:text-gray-200 dark:hover:text-gold-rose">
             {product.name}
           </h3>
         </Link>
-        <p className="text-sm text-gray-600 mt-1 font-poppins">{product.category}</p>
+        <p className="text-sm text-gray-600 mt-1 font-poppins dark:text-gray-400">{product.category}</p>
         <div className="flex items-center mt-2">
           <Star className="h-4 w-4 text-yellow-500 fill-yellow-500 mr-1" />
-          <span className="text-sm text-gray-700 font-poppins">
+          <span className="text-sm text-gray-700 font-poppins dark:text-gray-300">
             {product.rating.toFixed(1)} ({product.reviewsCount} ulasan)
           </span>
         </div>
         <p className="text-xl font-bold text-gold-rose mt-2 font-playfair">
           Rp{product.price.toLocaleString("id-ID")}
         </p>
-        <Badge className="mt-2 bg-green-100 text-green-700 hover:bg-green-100">
+        <Badge className="mt-2 bg-green-100 text-green-700 hover:bg-green-100 dark:bg-green-900 dark:text-green-300">
           <Truck className="h-3 w-3 mr-1" /> Gratis Ongkir
         </Badge>
       </CardContent>

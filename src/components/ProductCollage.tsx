@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { PlusCircle, Edit, Trash2, Image as ImageIcon } from 'lucide-react';
+import { PlusCircle, Edit, Trash2, Image as ImageIcon, ZoomIn, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
@@ -18,12 +18,15 @@ const ProductCollage: React.FC = () => {
   const [photos, setPhotos] = useState<CollagePhoto[]>(mockCollagePhotos);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingPhoto, setEditingPhoto] = useState<CollagePhoto | null>(null);
-
   const [imageUrl, setImageUrl] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const [altText, setAltText] = useState("");
   const [productId, setProductId] = useState("");
+  const [selectedPhoto, setSelectedPhoto] = useState<CollagePhoto | null>(null);
+  const [isViewOpen, setIsViewOpen] = useState(false);
+  const [isLiked, setIsLiked] = useState<{[key: string]: boolean}>({});
+  const [likeCount, setLikeCount] = useState<{[key: string]: number}>({});
 
   // For demo, assume current seller is "seller1"
   const currentSellerId = "seller1";
@@ -31,8 +34,16 @@ const ProductCollage: React.FC = () => {
   useEffect(() => {
     // Load initial photos from the persisted mock data
     setPhotos([...mockCollagePhotos]);
-  }, []); // Run only once on mount
+    
+    // Initialize like counts from localStorage
+    const savedLikes = localStorage.getItem('collageLikes');
+    if (savedLikes) {
+      const parsedLikes = JSON.parse(savedLikes);
+      setLikeCount(parsedLikes);
+    }
+  }, []);
 
+  // Run only once on mount
   useEffect(() => {
     if (editingPhoto) {
       setImageUrl(editingPhoto.imageUrl);
@@ -91,13 +102,17 @@ const ProductCollage: React.FC = () => {
     };
 
     if (editingPhoto) {
-      const updated: CollagePhoto = { ...editingPhoto, ...newOrUpdatedPhoto };
+      const updated: CollagePhoto = {
+        ...editingPhoto,
+        ...newOrUpdatedPhoto,
+      };
       updateCollagePhoto(updated);
       showSuccess("Foto kolase berhasil diperbarui!");
     } else {
       addCollagePhoto(newOrUpdatedPhoto);
       showSuccess("Foto kolase baru berhasil ditambahkan!");
     }
+
     setPhotos([...mockCollagePhotos]); // Update local state from persisted mock data
     handleCloseForm();
   };
@@ -110,23 +125,58 @@ const ProductCollage: React.FC = () => {
     }
   };
 
+  const handleViewPhoto = (photo: CollagePhoto) => {
+    setSelectedPhoto(photo);
+    setIsViewOpen(true);
+  };
+
+  const handleCloseView = () => {
+    setIsViewOpen(false);
+    setSelectedPhoto(null);
+  };
+
+  const handleLike = (photoId: string) => {
+    setIsLiked(prev => ({
+      ...prev,
+      [photoId]: !prev[photoId]
+    }));
+
+    const newCount = isLiked[photoId] ? (likeCount[photoId] || 0) - 1 : (likeCount[photoId] || 0) + 1;
+    setLikeCount(prev => ({
+      ...prev,
+      [photoId]: newCount
+    }));
+
+    // Save to localStorage
+    localStorage.setItem('collageLikes', JSON.stringify({
+      ...likeCount,
+      [photoId]: newCount
+    }));
+  };
+
   return (
     <div className="p-4 bg-white rounded-lg shadow-md">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-xl font-bold font-playfair text-gray-900 dark:text-gray-100">Inspirasi Gaya By.Lunova</h3>
         {userRole === "seller" && (
-          <Button onClick={() => handleOpenForm()} className="bg-soft-pink hover:bg-rose-600 text-white font-poppins">
+          <Button 
+            onClick={() => handleOpenForm()} 
+            className="bg-soft-pink hover:bg-rose-600 text-white font-poppins transition-all duration-300 hover:scale-105"
+          >
             <PlusCircle className="h-4 w-4 mr-2" /> Tambah Foto
           </Button>
         )}
       </div>
-
+      
       {photos.length === 0 ? (
         <div className="text-center py-8">
           <ImageIcon className="h-16 w-16 text-gray-400 mx-auto mb-4" />
           <p className="text-lg text-gray-600 font-poppins dark:text-gray-400">Belum ada foto di kolase.</p>
           {userRole === "seller" && (
-            <Button onClick={() => handleOpenForm()} className="mt-4 bg-soft-pink hover:bg-rose-600 text-white font-poppins">
+            <Button 
+              onClick={() => handleOpenForm()} 
+              className="mt-4 bg-soft-pink hover:bg-rose-600 text-white font-poppins transition-all duration-300 hover:scale-105"
+            >
               <PlusCircle className="h-4 w-4 mr-2" /> Tambah Foto Pertama Anda
             </Button>
           )}
@@ -134,22 +184,57 @@ const ProductCollage: React.FC = () => {
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {photos.map((photo) => (
-            <Card key={photo.id} className="overflow-hidden rounded-lg shadow-sm border-2 border-beige dark:border-gray-700">
-              <Link to={photo.productId ? `/products/${photo.productId}` : "#"} className="block">
-                <img
-                  src={photo.imageUrl}
-                  alt={photo.altText}
-                  className="w-full h-40 object-cover"
+            <Card 
+              key={photo.id} 
+              className="overflow-hidden rounded-lg shadow-sm border-2 border-beige dark:border-gray-700 group relative transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
+            >
+              <div 
+                className="relative cursor-pointer"
+                onClick={() => handleViewPhoto(photo)}
+              >
+                <img 
+                  src={photo.imageUrl} 
+                  alt={photo.altText} 
+                  className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110" 
                 />
-              </Link>
+                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
+                  <ZoomIn className="h-8 w-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
+                <div className="absolute top-2 right-2 bg-white bg-opacity-80 rounded-full p-1">
+                  <Heart 
+                    className={`h-4 w-4 ${isLiked[photo.id] ? 'text-red-500 fill-red-500' : 'text-gray-600'}`} 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleLike(photo.id);
+                    }}
+                  />
+                </div>
+                <div className="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded-full">
+                  {likeCount[photo.id] || 0} likes
+                </div>
+              </div>
+              
               <CardContent className="p-2">
                 <p className="text-sm font-poppins text-gray-700 dark:text-gray-300 truncate">{photo.altText}</p>
                 {userRole === "seller" && photo.sellerId === currentSellerId && (
                   <div className="flex justify-end space-x-1 mt-2">
-                    <Button variant="ghost" size="icon" onClick={() => handleOpenForm(photo)} className="h-7 w-7 text-gold-rose hover:bg-gold-rose/20">
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      onClick={() => handleOpenForm(photo)} 
+                      className="h-7 w-7 text-gold-rose hover:bg-gold-rose/20"
+                    >
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(photo.id)} className="h-7 w-7 text-red-500 hover:bg-red-500/20">
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(photo.id);
+                      }} 
+                      className="h-7 w-7 text-red-500 hover:bg-red-500/20"
+                    >
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -172,12 +257,12 @@ const ProductCollage: React.FC = () => {
           <form onSubmit={handleSubmit} className="grid gap-4 py-4">
             <div>
               <Label htmlFor="image-file" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">Unggah Gambar</Label>
-              <Input
-                id="image-file"
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="mt-2 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose"
+              <Input 
+                id="image-file" 
+                type="file" 
+                accept="image/*" 
+                onChange={handleFileChange} 
+                className="mt-2 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose" 
               />
               <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                 Atau masukkan URL gambar di bawah.
@@ -185,54 +270,121 @@ const ProductCollage: React.FC = () => {
             </div>
             <div>
               <Label htmlFor="image-url" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">URL Gambar</Label>
-              <Input
-                id="image-url"
-                type="url"
-                value={imageUrl}
+              <Input 
+                id="image-url" 
+                type="url" 
+                value={imageUrl} 
                 onChange={(e) => {
                   setImageUrl(e.target.value);
                   setImagePreviewUrl(e.target.value);
                   setImageFile(null); // Clear file input if URL is used
-                }}
-                placeholder="https://example.com/image.jpg"
-                className="mt-2 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose"
+                }} 
+                placeholder="https://example.com/image.jpg" 
+                className="mt-2 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose" 
               />
             </div>
             {imagePreviewUrl && (
               <div className="col-span-full flex justify-center mt-2">
-                <img src={imagePreviewUrl} alt="Preview" className="h-32 w-32 object-cover rounded-md border border-soft-pink dark:border-gold-rose" />
+                <img 
+                  src={imagePreviewUrl} 
+                  alt="Preview" 
+                  className="h-32 w-32 object-cover rounded-md border border-soft-pink dark:border-gold-rose" 
+                />
               </div>
             )}
             <div>
               <Label htmlFor="alt-text" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">Teks Alternatif</Label>
-              <Input
-                id="alt-text"
-                value={altText}
-                onChange={(e) => setAltText(e.target.value)}
-                placeholder="Deskripsi singkat gambar"
-                className="mt-2 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose"
-                required
+              <Input 
+                id="alt-text" 
+                value={altText} 
+                onChange={(e) => setAltText(e.target.value)} 
+                placeholder="Deskripsi singkat gambar" 
+                className="mt-2 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose" 
+                required 
               />
             </div>
             <div>
               <Label htmlFor="product-id" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">ID Produk Terkait (Opsional)</Label>
-              <Input
-                id="product-id"
-                value={productId}
-                onChange={(e) => setProductId(e.target.value)}
-                placeholder="e.g., 1, 2, prod-12345"
-                className="mt-2 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose"
+              <Input 
+                id="product-id" 
+                value={productId} 
+                onChange={(e) => setProductId(e.target.value)} 
+                placeholder="e.g., 1, 2, prod-12345" 
+                className="mt-2 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose" 
               />
               <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                 Jika diisi, foto akan mengarah ke halaman detail produk ini.
               </p>
             </div>
             <DialogFooter className="col-span-4 mt-4">
-              <Button type="submit" className="bg-soft-pink hover:bg-rose-600 text-white font-poppins">
+              <Button 
+                type="submit" 
+                className="bg-soft-pink hover:bg-rose-600 text-white font-poppins transition-all duration-300 hover:scale-105"
+              >
                 {editingPhoto ? "Simpan Perubahan" : "Tambah Foto"}
               </Button>
             </DialogFooter>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Photo View Dialog */}
+      <Dialog open={isViewOpen} onOpenChange={setIsViewOpen}>
+        <DialogContent className="sm:max-w-[90vw] sm:max-h-[90vh] bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-0 overflow-hidden">
+          <div className="flex flex-col md:flex-row h-[80vh]">
+            {selectedPhoto && (
+              <>
+                <div className="w-full md:w-2/3 h-1/2 md:h-full relative">
+                  <img 
+                    src={selectedPhoto.imageUrl} 
+                    alt={selectedPhoto.altText} 
+                    className="w-full h-full object-contain"
+                  />
+                  <div className="absolute top-4 right-4 flex items-center bg-white bg-opacity-80 rounded-full p-2">
+                    <Heart 
+                      className={`h-6 w-6 cursor-pointer ${isLiked[selectedPhoto.id] ? 'text-red-500 fill-red-500' : 'text-gray-600'}`} 
+                      onClick={() => handleLike(selectedPhoto.id)}
+                    />
+                    <span className="ml-2 font-poppins">{likeCount[selectedPhoto.id] || 0} likes</span>
+                  </div>
+                </div>
+                <div className="w-full md:w-1/3 h-1/2 md:h-full p-6 flex flex-col justify-between">
+                  <div>
+                    <DialogTitle className="font-playfair text-2xl mb-2">{selectedPhoto.altText}</DialogTitle>
+                    <div className="flex items-center mb-4">
+                      <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" />
+                      <div className="ml-4">
+                        <p className="font-poppins font-medium">By.Lunova Official</p>
+                        <p className="text-sm text-gray-500 font-poppins">Penjual Terpercaya</p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-600 font-poppins mb-4">
+                      Temukan gaya Anda dengan koleksi terbaru kami. Kualitas premium dengan desain yang elegan.
+                    </p>
+                  </div>
+                  <div className="mt-4">
+                    {selectedPhoto.productId ? (
+                      <Button 
+                        asChild 
+                        className="w-full py-3 bg-soft-pink hover:bg-rose-600 text-white font-poppins transition-all duration-300 hover:scale-105"
+                      >
+                        <Link to={`/products/${selectedPhoto.productId}`}>
+                          Lihat Produk
+                        </Link>
+                      </Button>
+                    ) : (
+                      <Button 
+                        className="w-full py-3 bg-soft-pink hover:bg-rose-600 text-white font-poppins transition-all duration-300 hover:scale-105"
+                        onClick={handleCloseView}
+                      >
+                        Tutup
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
         </DialogContent>
       </Dialog>
     </div>

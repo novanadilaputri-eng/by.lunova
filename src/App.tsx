@@ -37,12 +37,14 @@ import MobileProductListingPage from "./pages/MobileProductListingPage";
 import MobileProductDetailPage from "./pages/MobileProductDetailPage";
 // Import halaman notifikasi
 import NotificationPage from "./pages/NotificationPage";
+// Import halaman video detail
+import VideoDetailPage from "./pages/VideoDetailPage";
 
 const queryClient = new QueryClient();
 
 const App = () => {
   const [hasSeenSplashScreen, setHasSeenSplashScreen] = useState(false);
-  
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const seen = localStorage.getItem('hasSeenSplashScreen');
@@ -96,6 +98,7 @@ const App = () => {
                     <Route path="/seller/promotions" element={<SellerPromotionManagementPage />} />
                     <Route path="/live" element={<LunoLivePage />} />
                     <Route path="/videos" element={<VideoListingPage />} />
+                    <Route path="/videos/:id" element={<VideoDetailPage />} />
                     <Route path="/seller/videos/new" element={<EditVideoPage />} />
                     <Route path="/seller/videos/edit/:id" element={<EditVideoPage />} />
                     <Route path="/chat" element={<ChatPage />} />

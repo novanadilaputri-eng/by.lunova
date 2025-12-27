@@ -3,7 +3,6 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import HomePageHeader from "@/components/HomePageHeader";
 import { Video, mockVideos, addVideo, updateVideo } from "@/data/videos";
 import { showSuccess, showError } from "@/utils/toast";
@@ -19,7 +18,7 @@ const EditVideoPage: React.FC = () => {
   const [title, setTitle] = useState("");
   const [thumbnailUrl, setThumbnailUrl] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
-  const [sellerName, setSellerName] = useState("By.Lunova Official"); // Default seller name
+  const [sellerName, setSellerName] = useState("By.Lunova Official");
   const [views, setViews] = useState(0);
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
@@ -28,8 +27,8 @@ const EditVideoPage: React.FC = () => {
 
   useEffect(() => {
     if (userRole !== "seller") {
-      showError("Anda tidak memiliki akses untuk mengelola video.");
-      navigate("/profile");
+      showError("Hanya penjual yang dapat mengelola video.");
+      navigate("/videos");
     }
   }, [userRole, navigate]);
 
@@ -43,12 +42,12 @@ const EditVideoPage: React.FC = () => {
         setSellerName(foundVideo.sellerName);
         setViews(foundVideo.views);
         setThumbnailPreviewUrl(foundVideo.thumbnailUrl);
+        setVideoPreviewUrl(foundVideo.videoUrl);
       } else {
         showError("Video tidak ditemukan.");
         navigate("/videos");
       }
     } else {
-      // Initialize for new video
       setTitle("");
       setThumbnailUrl("");
       setVideoUrl("");
@@ -69,7 +68,6 @@ const EditVideoPage: React.FC = () => {
         const reader = new FileReader();
         reader.onloadend = () => {
           setVideoPreviewUrl(reader.result as string);
-          // Don't set videoUrl here, we'll handle it during submission
         };
         reader.readAsDataURL(file);
       } else {
@@ -89,7 +87,6 @@ const EditVideoPage: React.FC = () => {
         const reader = new FileReader();
         reader.onloadend = () => {
           setThumbnailPreviewUrl(reader.result as string);
-          // Don't set thumbnailUrl here, we'll handle it during submission
         };
         reader.readAsDataURL(file);
       } else {
@@ -108,7 +105,7 @@ const EditVideoPage: React.FC = () => {
       return;
     }
 
-    // Validate that either a file is uploaded or a URL is provided
+    // Validasi input
     const hasVideoFile = videoFile !== null;
     const hasVideoUrl = videoUrl.trim() !== "";
     const hasThumbnailFile = thumbnailFile !== null;
@@ -128,17 +125,13 @@ const EditVideoPage: React.FC = () => {
       let finalVideoUrl = videoUrl;
       let finalThumbnailUrl = thumbnailUrl;
 
-      // Handle video file upload
+      // Jika ada file video yang diunggah, gunakan data URL
       if (hasVideoFile && videoFile) {
-        // In a real app, you would upload the file to a server here
-        // For this demo, we'll use the preview URL
         finalVideoUrl = videoPreviewUrl || videoUrl;
       }
 
-      // Handle thumbnail file upload
+      // Jika ada file thumbnail yang diunggah, gunakan data URL
       if (hasThumbnailFile && thumbnailFile) {
-        // In a real app, you would upload the file to a server here
-        // For this demo, we'll use the preview URL
         finalThumbnailUrl = thumbnailPreviewUrl || thumbnailUrl;
       }
 
@@ -231,16 +224,16 @@ const EditVideoPage: React.FC = () => {
                 className="mt-2 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose"
               />
               <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                (Gunakan URL embed dari platform seperti YouTube, e.g., `https://www.youtube.com/embed/dQw4w9WgXcQ`)
+                (Gunakan URL embed dari platform seperti YouTube)
               </p>
             </div>
 
-            {videoPreviewUrl && (
+            {(videoPreviewUrl || videoUrl) && (
               <Card className="mt-4">
                 <CardContent className="p-4">
                   <h3 className="font-poppins font-medium text-gray-800 dark:text-gray-200 mb-2">Pratinjau Video:</h3>
                   <video 
-                    src={videoPreviewUrl} 
+                    src={videoPreviewUrl || videoUrl} 
                     controls 
                     className="w-full max-h-64 object-contain rounded-md border border-soft-pink dark:border-gold-rose"
                   />
@@ -277,11 +270,11 @@ const EditVideoPage: React.FC = () => {
               />
             </div>
 
-            {thumbnailPreviewUrl && (
+            {(thumbnailPreviewUrl || thumbnailUrl) && (
               <div>
                 <h3 className="font-poppins font-medium text-gray-800 dark:text-gray-200 mb-2">Pratinjau Thumbnail:</h3>
                 <img 
-                  src={thumbnailPreviewUrl} 
+                  src={thumbnailPreviewUrl || thumbnailUrl} 
                   alt="Thumbnail Preview" 
                   className="w-48 h-auto object-cover rounded-md border border-soft-pink dark:border-gold-rose" 
                 />

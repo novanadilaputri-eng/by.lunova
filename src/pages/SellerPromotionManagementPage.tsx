@@ -15,6 +15,7 @@ import { showSuccess, showError } from "@/utils/toast";
 import { Promotion } from "@/types/promotion";
 import { mockPromotions, addPromotion, updatePromotion, deletePromotion } from "@/data/promotions";
 import { useAuth } from "@/hooks/use-auth";
+import { Checkbox } from "@/components/ui/checkbox"; // Import Checkbox
 
 const SellerPromotionManagementPage: React.FC = () => {
   const { userRole } = useAuth();

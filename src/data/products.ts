@@ -5,6 +5,7 @@ const PRODUCTS_STORAGE_KEY = "bylunova_products";
 const commonDescription = "Kemeja wanita kekinian dengan bahan nyaman, cocok untuk aktivitas santai maupun kerja.";
 const commonSizes = ["S", "M", "L", "XL"];
 const commonColors = ["BlackWhite", "Peach", "Ocean Blue", "Pastel Green", "Ivory", "Soft Grey", "Soft Purple"];
+
 const colorImageMap = {
   "BlackWhite": "https://images.unsplash.com/photo-1591047139829-f96f700860c6?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Black shirt
   "Peach": "https://images.unsplash.com/photo-1581044777550-4cfa607037dc?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Pink/Peach blouse
@@ -37,13 +38,13 @@ const initialProducts: Product[] = [
     description: "Blouse katun lembut dengan motif bunga yang elegan, cocok untuk tampilan kasual maupun semi-formal. Tersedia dalam berbagai ukuran dan warna.",
     sizes: ["S", "M", "L", "XL"],
     colors: ["Putih", "Biru", "Pink"],
-    stock: 50,
-    rating: 4.5,
-    reviewsCount: 120,
+    stock: 0, // Mulai dari 0
+    rating: 0, // Mulai dari 0
+    reviewsCount: 0, // Mulai dari 0
     storeName: "Fashionista Store",
     storeReputation: "Gold Seller",
     isFeatured: true,
-    sellerId: "seller1", // Menambahkan sellerId
+    sellerId: "seller1",
   },
   {
     id: "2",
@@ -59,13 +60,13 @@ const initialProducts: Product[] = [
     description: "Kemeja linen oversize yang nyaman dan stylish, sempurna untuk gaya santai. Bahan adem dan tidak mudah kusut.",
     sizes: ["M", "L", "XL"],
     colors: ["Beige", "Hijau Sage", "Hitam"],
-    stock: 30,
-    rating: 4.7,
-    reviewsCount: 85,
+    stock: 0, // Mulai dari 0
+    rating: 0, // Mulai dari 0
+    reviewsCount: 0, // Mulai dari 0
     storeName: "Trendy Threads",
     storeReputation: "Platinum Seller",
     isFeatured: false,
-    sellerId: "seller1", // Menambahkan sellerId
+    sellerId: "seller1",
   },
   {
     id: "3",
@@ -80,13 +81,13 @@ const initialProducts: Product[] = [
     description: "Tunik dengan motif batik kontemporer, memadukan tradisi dan gaya modern. Cocok untuk acara formal maupun semi-formal.",
     sizes: ["S", "M", "L"],
     colors: ["Coklat", "Biru Dongker"],
-    stock: 20,
-    rating: 4.8,
-    reviewsCount: 60,
+    stock: 0, // Mulai dari 0
+    rating: 0, // Mulai dari 0
+    reviewsCount: 0, // Mulai dari 0
     storeName: "Batik Nusantara",
     storeReputation: "Gold Seller",
     isFeatured: true,
-    sellerId: "seller2", // Menambahkan sellerId
+    sellerId: "seller2",
   },
   {
     id: "4",
@@ -103,13 +104,13 @@ const initialProducts: Product[] = [
     description: "Kaos polos basic dari bahan katun combed 30s, sangat nyaman dan cocok untuk sehari-hari. Pilihan warna lengkap.",
     sizes: ["S", "M", "L", "XL"],
     colors: ["Hitam", "Putih", "Abu-abu", "Navy"],
-    stock: 100,
-    rating: 4.3,
-    reviewsCount: 200,
+    stock: 0, // Mulai dari 0
+    rating: 0, // Mulai dari 0
+    reviewsCount: 0, // Mulai dari 0
     storeName: "Daily Wear",
     storeReputation: "Silver Seller",
     isFeatured: false,
-    sellerId: "seller1", // Menambahkan sellerId
+    sellerId: "seller1",
   },
   {
     id: "5",
@@ -125,13 +126,13 @@ const initialProducts: Product[] = [
     description: "Cardigan rajut gaya Korea yang hangat dan modis, cocok untuk melengkapi outfit Anda. Tersedia dalam warna pastel.",
     sizes: ["All Size"],
     colors: ["Cream", "Mint", "Lavender"],
-    stock: 40,
-    rating: 4.6,
-    reviewsCount: 95,
+    stock: 0, // Mulai dari 0
+    rating: 0, // Mulai dari 0
+    reviewsCount: 0, // Mulai dari 0
     storeName: "K-Fashion Hub",
     storeReputation: "Gold Seller",
     isFeatured: false,
-    sellerId: "seller2", // Menambahkan sellerId
+    sellerId: "seller2",
   },
   // New products
   {
@@ -139,126 +140,126 @@ const initialProducts: Product[] = [
     name: "Kemeja Stripe Rempel Feat Body Wanita Atasan",
     category: "Atasan Wanita",
     price: 195000,
-    mainImageUrl: "https://images.unsplash.com/photo-1622470000000-000000000000?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Placeholder for striped shirt
+    mainImageUrl: "https://images.unsplash.com/photo-1622470000000-000000000000?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     colorImages: generateColorImages(commonColors),
     description: commonDescription,
     sizes: commonSizes,
     colors: commonColors,
-    stock: 50,
-    rating: 4.5,
-    reviewsCount: 100,
+    stock: 0, // Mulai dari 0
+    rating: 0, // Mulai dari 0
+    reviewsCount: 0, // Mulai dari 0
     storeName: "By.Lunova Official",
     storeReputation: "New Seller",
     isFeatured: false,
-    sellerId: "seller1", // Menambahkan sellerId
+    sellerId: "seller1",
   },
   {
     id: "7",
     name: "Sasha Fitted Shirt",
     category: "Atasan Wanita",
     price: 210000,
-    mainImageUrl: "https://images.unsplash.com/photo-1603252109303-275144df1862?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Fitted shirt image
+    mainImageUrl: "https://images.unsplash.com/photo-1603252109303-275144df1862?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     colorImages: generateColorImages(commonColors),
     description: commonDescription,
     sizes: commonSizes,
     colors: commonColors,
-    stock: 50,
-    rating: 4.6,
-    reviewsCount: 110,
+    stock: 0, // Mulai dari 0
+    rating: 0, // Mulai dari 0
+    reviewsCount: 0, // Mulai dari 0
     storeName: "By.Lunova Official",
     storeReputation: "New Seller",
     isFeatured: false,
-    sellerId: "seller1", // Menambahkan sellerId
+    sellerId: "seller1",
   },
   {
     id: "8",
     name: "Kemeja Linen Wanita Oversize",
     category: "Atasan Wanita",
     price: 185000,
-    mainImageUrl: "https://images.unsplash.com/photo-1571867552700-22329921294c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Reusing existing image for oversized linen
+    mainImageUrl: "https://images.unsplash.com/photo-1571867552700-22329921294c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     colorImages: generateColorImages(commonColors),
     description: commonDescription,
     sizes: commonSizes,
     colors: commonColors,
-    stock: 50,
-    rating: 4.7,
-    reviewsCount: 90,
+    stock: 0, // Mulai dari 0
+    rating: 0, // Mulai dari 0
+    reviewsCount: 0, // Mulai dari 0
     storeName: "By.Lunova Official",
     storeReputation: "New Seller",
     isFeatured: false,
-    sellerId: "seller1", // Menambahkan sellerId
+    sellerId: "seller1",
   },
   {
     id: "9",
     name: "MSR Elsira Kemeja Wanita Kerja Kantor",
     category: "Atasan Wanita",
     price: 230000,
-    mainImageUrl: "https://images.unsplash.com/photo-1591047139829-f96f700860c6?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Black shirt for office wear
+    mainImageUrl: "https://images.unsplash.com/photo-1591047139829-f96f700860c6?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     colorImages: generateColorImages(commonColors),
     description: commonDescription,
     sizes: commonSizes,
     colors: commonColors,
-    stock: 50,
-    rating: 4.4,
-    reviewsCount: 80,
+    stock: 0, // Mulai dari 0
+    rating: 0, // Mulai dari 0
+    reviewsCount: 0, // Mulai dari 0
     storeName: "By.Lunova Official",
     storeReputation: "New Seller",
     isFeatured: false,
-    sellerId: "seller1", // Menambahkan sellerId
+    sellerId: "seller1",
   },
   {
     id: "10",
     name: "Kemeja Wanita Luna Top",
     category: "Atasan Wanita",
     price: 170000,
-    mainImageUrl: "https://images.unsplash.com/photo-1581044777550-4cfa607037dc?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Pink blouse for stylish top
+    mainImageUrl: "https://images.unsplash.com/photo-1581044777550-4cfa607037dc?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     colorImages: generateColorImages(commonColors),
     description: commonDescription,
     sizes: commonSizes,
     colors: commonColors,
-    stock: 50,
-    rating: 4.5,
-    reviewsCount: 105,
+    stock: 0, // Mulai dari 0
+    rating: 0, // Mulai dari 0
+    reviewsCount: 0, // Mulai dari 0
     storeName: "By.Lunova Official",
     storeReputation: "New Seller",
     isFeatured: false,
-    sellerId: "seller1", // Menambahkan sellerId
+    sellerId: "seller1",
   },
   {
     id: "11",
     name: "Mochi Shirt Kemeja Wanita",
     category: "Atasan Wanita",
     price: 160000,
-    mainImageUrl: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Green shirt for casual wear
+    mainImageUrl: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     colorImages: generateColorImages(commonColors),
     description: commonDescription,
     sizes: commonSizes,
     colors: commonColors,
-    stock: 50,
-    rating: 4.3,
-    reviewsCount: 95,
+    stock: 0, // Mulai dari 0
+    rating: 0, // Mulai dari 0
+    reviewsCount: 0, // Mulai dari 0
     storeName: "By.Lunova Official",
     storeReputation: "New Seller",
     isFeatured: false,
-    sellerId: "seller1", // Menambahkan sellerId
+    sellerId: "seller1",
   },
   {
     id: "12",
     name: "Denim Shirt Julia",
     category: "Atasan Wanita",
     price: 240000,
-    mainImageUrl: "https://images.unsplash.com/photo-1543087900-a4536600639b?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Denim shirt image
+    mainImageUrl: "https://images.unsplash.com/photo-1543087900-a4536600639b?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     colorImages: generateColorImages(commonColors),
     description: commonDescription,
     sizes: commonSizes,
     colors: commonColors,
-    stock: 50,
-    rating: 4.8,
-    reviewsCount: 130,
+    stock: 0, // Mulai dari 0
+    rating: 0, // Mulai dari 0
+    reviewsCount: 0, // Mulai dari 0
     storeName: "By.Lunova Official",
     storeReputation: "New Seller",
     isFeatured: false,
-    sellerId: "seller1", // Menambahkan sellerId
+    sellerId: "seller1",
   },
 ];
 
@@ -292,6 +293,7 @@ export const addProduct = (newProduct: Omit<Product, 'id' | 'rating' | 'reviewsC
     storeReputation: "New Seller", // Default for new products
     isFeatured: false, // Default to not featured
   };
+  
   products.push(productWithDefaults);
   saveProducts(products);
   console.log("Produk baru ditambahkan:", productWithDefaults); // Debug log

@@ -27,17 +27,20 @@ import LunoLivePage from "./pages/LunoLivePage";
 import ChatPage from "./pages/ChatPage";
 import SplashScreen from "./pages/SplashScreen";
 import VideoListingPage from "./pages/VideoListingPage";
-import EditVideoPage from "./pages/EditVideoPage"; // Import new page
+import EditVideoPage from "./pages/EditVideoPage";
 import SellerPromotionManagementPage from "./pages/SellerPromotionManagementPage";
 import { CartProvider } from "./context/CartContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import BottomNavigationBar from "./components/BottomNavigationBar";
+// Import halaman mobile
+import MobileProductListingPage from "./pages/MobileProductListingPage";
+import MobileProductDetailPage from "./pages/MobileProductDetailPage";
 
 const queryClient = new QueryClient();
 
 const App = () => {
   const [hasSeenSplashScreen, setHasSeenSplashScreen] = useState(false);
-
+  
   useEffect(() => {
     if (typeof window !== "undefined") {
       const seen = localStorage.getItem('hasSeenSplashScreen');
@@ -91,9 +94,12 @@ const App = () => {
                     <Route path="/seller/promotions" element={<SellerPromotionManagementPage />} />
                     <Route path="/live" element={<LunoLivePage />} />
                     <Route path="/videos" element={<VideoListingPage />} />
-                    <Route path="/seller/videos/new" element={<EditVideoPage />} /> {/* New route */}
-                    <Route path="/seller/videos/edit/:id" element={<EditVideoPage />} /> {/* New route */}
+                    <Route path="/seller/videos/new" element={<EditVideoPage />} />
+                    <Route path="/seller/videos/edit/:id" element={<EditVideoPage />} />
                     <Route path="/chat" element={<ChatPage />} />
+                    {/* Routing untuk versi mobile */}
+                    <Route path="/m/products" element={<MobileProductListingPage />} />
+                    <Route path="/m/products/:id" element={<MobileProductDetailPage />} />
                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                     <Route path="*" element={<NotFound />} />
                   </Routes>

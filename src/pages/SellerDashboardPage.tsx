@@ -4,22 +4,22 @@ import { Button } from "@/components/ui/button";
 import HomePageHeader from "@/components/HomePageHeader";
 import { products as mockProducts, updateProduct as updateMockProduct, addProduct as addMockProduct, deleteProduct as deleteMockProduct } from "@/data/products";
 import { mockOrders, updateOrderStatus } from "@/data/orders";
-import { PlusCircle, Edit, Trash2, Package, Truck, CheckCircle, Clock, Megaphone, Bell, Banknote, Image as ImageIcon } from "lucide-react"; // Import ImageIcon
+import { PlusCircle, Edit, Trash2, Package, Truck, CheckCircle, Clock, Megaphone, Bell, Banknote } from "lucide-react"; // Import Megaphone, Bell, Banknote
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { showSuccess, showError } from "@/utils/toast";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/hooks/use-auth"; // Import useAuth hook
 import { Order } from "@/types/order";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import SellerOrderItem from "@/components/SellerOrderItem";
-import { mockNotifications, markNotificationAsRead } from "@/data/notifications";
-import SellerBankAccountManagement from "@/components/SellerBankAccountManagement";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"; // Import Tabs components
+import SellerOrderItem from "@/components/SellerOrderItem"; // Import SellerOrderItem
+import { mockNotifications, markNotificationAsRead } from "@/data/notifications"; // Import notifications
+import SellerBankAccountManagement from "@/components/SellerBankAccountManagement"; // Import new component
 
 const SellerDashboardPage: React.FC = () => {
   const { userRole } = useAuth();
   const navigate = useNavigate();
   const [currentProducts, setCurrentProducts] = useState(mockProducts);
   const [currentOrders, setCurrentOrders] = useState(mockOrders);
-  const [sellerNotifications, setSellerNotifications] = useState(mockNotifications.filter(n => n.userId === "seller1"));
+  const [sellerNotifications, setSellerNotifications] = useState(mockNotifications.filter(n => n.userId === "seller1")); // Filter for seller notifications
 
   // For demo, assume current seller is "seller1"
   const currentSellerId = "seller1";
@@ -27,7 +27,7 @@ const SellerDashboardPage: React.FC = () => {
   useEffect(() => {
     if (userRole !== "seller") {
       showError("Anda tidak memiliki akses ke Dashboard Penjual.");
-      navigate("/profile");
+      navigate("/profile"); // Redirect if not a seller
     }
   }, [userRole, navigate]);
 
@@ -50,25 +50,25 @@ const SellerDashboardPage: React.FC = () => {
 
   const handleDeleteProduct = (productId: string) => {
     if (window.confirm(`Apakah Anda yakin ingin menghapus produk ID: ${productId}?`)) {
-      deleteMockProduct(productId);
-      setCurrentProducts([...mockProducts]);
+      deleteMockProduct(productId); // Simulate deletion
+      setCurrentProducts([...mockProducts]); // Update state to reflect changes
       showSuccess(`Produk ID: ${productId} berhasil dihapus.`);
     }
   };
 
   const handleUpdateOrderStatus = (orderId: string, newStatus: Order["status"]) => {
     updateOrderStatus(orderId, newStatus);
-    setCurrentOrders([...mockOrders]);
+    setCurrentOrders([...mockOrders]); // Update state to reflect changes
     showSuccess(`Status pesanan ${orderId} berhasil diperbarui menjadi ${newStatus}.`);
   };
 
   const handleMarkNotificationAsRead = (notificationId: string) => {
     markNotificationAsRead(notificationId);
-    setSellerNotifications([...mockNotifications.filter(n => n.userId === currentSellerId)]);
+    setSellerNotifications([...mockNotifications.filter(n => n.userId === currentSellerId)]); // Refresh notifications
   };
 
   if (userRole !== "seller") {
-    return null;
+    return null; // Or a loading spinner, or a message
   }
 
   return (
@@ -164,16 +164,6 @@ const SellerDashboardPage: React.FC = () => {
           <Button asChild className="w-full py-3 text-lg bg-gold-rose hover:bg-gold-rose/80 text-white font-poppins">
             <Link to="/seller/promotions">
               <Megaphone className="h-5 w-5 mr-2" /> Kelola Promosi Anda
-            </Link>
-          </Button>
-        </div>
-
-        {/* Collage Management Link */}
-        <div className="mb-10">
-          <h2 className="text-2xl font-playfair font-bold text-gray-900 dark:text-gray-100 mb-4">Manajemen Kolase Foto</h2>
-          <Button asChild className="w-full py-3 text-lg bg-gold-rose hover:bg-gold-rose/80 text-white font-poppins">
-            <Link to="/seller/collage-management">
-              <ImageIcon className="h-5 w-5 mr-2" /> Kelola Kolase Foto Produk
             </Link>
           </Button>
         </div>

@@ -98,16 +98,14 @@ const HomePageHeader: React.FC = () => {
           </Button>
         </form>
         <div className="flex items-center space-x-2">
-          <Button asChild variant="ghost" size="icon" className="text-gray-600 hover:text-soft-pink dark:text-gray-400 dark:hover:text-gold-rose relative">
-            <Link to="/profile/notifications"> {/* Link to a notifications page if it exists */}
-              <Bell className="h-5 w-5" />
-              <span className="sr-only">Notifikasi</span>
-              {unreadNotifications > 0 && (
-                <Badge className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center rounded-full bg-red-500 text-white text-xs">
-                  {unreadNotifications}
-                </Badge>
-              )}
-            </Link>
+          <Button variant="ghost" size="icon" className="text-gray-600 hover:text-soft-pink dark:text-gray-400 dark:hover:text-gold-rose relative">
+            <Bell className="h-5 w-5" />
+            <span className="sr-only">Notifikasi</span>
+            {unreadNotifications > 0 && (
+              <Badge className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center rounded-full bg-red-500 text-white text-xs">
+                {unreadNotifications}
+              </Badge>
+            )}
           </Button>
           <Button asChild variant="ghost" size="icon" className="text-gray-600 hover:text-soft-pink dark:text-gray-400 dark:hover:text-gold-rose">
             <Link to="/chat">

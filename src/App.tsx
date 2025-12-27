@@ -27,8 +27,7 @@ import LunoLivePage from "./pages/LunoLivePage";
 import ChatPage from "./pages/ChatPage";
 import SplashScreen from "./pages/SplashScreen";
 import VideoListingPage from "./pages/VideoListingPage";
-import SellerPromotionManagementPage from "./pages/SellerPromotionManagementPage";
-import SellerCollageManagementPage from "./pages/SellerCollageManagementPage"; // Import new page
+import SellerPromotionManagementPage from "./pages/SellerPromotionManagementPage"; // Import new page
 import { CartProvider } from "./context/CartContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import BottomNavigationBar from "./components/BottomNavigationBar";
@@ -84,8 +83,7 @@ const App = () => {
                     <Route path="/seller/dashboard" element={<SellerDashboardPage />} />
                     <Route path="/seller/products/new" element={<EditProductPage />} />
                     <Route path="/seller/products/edit/:id" element={<EditProductPage />} />
-                    <Route path="/seller/promotions" element={<SellerPromotionManagementPage />} />
-                    <Route path="/seller/collage-management" element={<SellerCollageManagementPage />} /> {/* New route */}
+                    <Route path="/seller/promotions" element={<SellerPromotionManagementPage />} /> {/* New route */}
                     <Route path="/live" element={<LunoLivePage />} />
                     <Route path="/videos" element={<VideoListingPage />} />
                     <Route path="/chat" element={<ChatPage />} />

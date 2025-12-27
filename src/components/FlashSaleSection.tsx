@@ -68,7 +68,7 @@ const FlashSaleSection: React.FC = () => {
         {flashSaleProducts.map((product) => (
           <Card key={product.id} className="flex-shrink-0 w-40 bg-white text-gray-900 rounded-lg overflow-hidden shadow-sm">
             <Link to={`/products/${product.id}`}>
-              <img src={product.mainImageUrl} alt={product.name} className="w-full h-28 object-cover" />
+              <img src={product.mainImageUrl} alt={product.name} className="w-full h-28 object-cover" /> {/* Changed to mainImageUrl */}
               <CardContent className="p-2">
                 <p className="text-xs font-medium truncate">{product.name}</p>
                 <div className="flex items-center mt-1">

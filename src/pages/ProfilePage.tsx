@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  Package, Heart, Gift, MapPin, Settings, HelpCircle, LogOut,
-  Wallet, Truck, CheckCircle, User as UserIcon // Removed CreditCard
+import { Package, Heart, Gift, MapPin, Settings, HelpCircle, LogOut, Wallet, Truck, CheckCircle, User as UserIcon // Removed CreditCard
 } from "lucide-react";
 import HomePageHeader from "@/components/HomePageHeader";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
@@ -41,13 +39,14 @@ const ProfilePage: React.FC = () => {
 
   // Calculate order counts
   const pendingPaymentCount = mockOrders.filter(order => order.status === "Menunggu Pembayaran").length;
-  const shippedCount = mockOrders.filter(order =>
-    order.status === "Sedang Dalam Perjalanan" ||
-    order.status === "Menunggu Penjemputan Kurir" ||
+  const shippedCount = mockOrders.filter(order => 
+    order.status === "Sedang Dalam Perjalanan" || 
+    order.status === "Menunggu Penjemputan Kurir" || 
     order.status === "Dikemas"
   ).length;
-  const completedCount = mockOrders.filter(order =>
-    order.status === "Selesai" || order.status === "Telah Sampai"
+  const completedCount = mockOrders.filter(order => 
+    order.status === "Selesai" || 
+    order.status === "Telah Sampai"
   ).length;
 
   // Effect to reset temp states when dialog opens/closes
@@ -95,6 +94,7 @@ const ProfilePage: React.FC = () => {
     } else {
       showSuccess("Profil berhasil diperbarui!");
     }
+
     setIsEditDialogOpen(false);
   };
 
@@ -108,7 +108,6 @@ const ProfilePage: React.FC = () => {
       <HomePageHeader />
       <div className="container mx-auto p-4 md:p-8">
         <h1 className="text-4xl font-playfair font-bold text-center mb-10 text-gray-900 dark:text-gray-100">Akun Saya</h1>
-
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-8 flex flex-col items-center">
           <Avatar className="h-24 w-24 mb-4 border-4 border-soft-pink">
             <AvatarImage src={profilePicture} alt={username} />
@@ -125,28 +124,39 @@ const ProfilePage: React.FC = () => {
           </Button>
           <div className="mt-4 flex space-x-2">
             {userRole === "buyer" && (
-              <Button onClick={() => setIsWhatsAppVerificationOpen(true)} className="bg-gold-rose hover:bg-gold-rose/80 text-white font-poppins">
+              <Button 
+                onClick={() => setIsWhatsAppVerificationOpen(true)} 
+                className="bg-gold-rose hover:bg-gold-rose/80 text-white font-poppins"
+              >
                 Login sebagai Penjual
               </Button>
             )}
             {userRole === "seller" && (
-              <Button onClick={loginAsBuyer} className="bg-soft-pink hover:bg-rose-600 text-white font-poppins">
+              <Button 
+                onClick={loginAsBuyer} 
+                className="bg-soft-pink hover:bg-rose-600 text-white font-poppins"
+              >
                 Login sebagai Pembeli
               </Button>
             )}
             {!userRole && (
               <>
-                <Button onClick={loginAsBuyer} className="bg-soft-pink hover:bg-rose-600 text-white font-poppins">
+                <Button 
+                  onClick={loginAsBuyer} 
+                  className="bg-soft-pink hover:bg-rose-600 text-white font-poppins"
+                >
                   Login sebagai Pembeli
                 </Button>
-                <Button onClick={() => setIsWhatsAppVerificationOpen(true)} className="bg-gold-rose hover:bg-gold-rose/80 text-white font-poppins">
+                <Button 
+                  onClick={() => setIsWhatsAppVerificationOpen(true)} 
+                  className="bg-gold-rose hover:bg-gold-rose/80 text-white font-poppins"
+                >
                   Login sebagai Penjual
                 </Button>
               </>
             )}
           </div>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
           <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
             <h3 className="text-xl font-playfair font-bold text-gray-900 dark:text-gray-100 mb-4">Pesanan Saya</h3>
@@ -169,7 +179,6 @@ const ProfilePage: React.FC = () => {
               </Link>
             </div>
           </div>
-
           <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
             <h3 className="text-xl font-playfair font-bold text-gray-900 dark:text-gray-100 mb-4">LunoPoints & Voucher</h3>
             <div className="flex items-center justify-between mb-4">
@@ -181,9 +190,7 @@ const ProfilePage: React.FC = () => {
             </Button>
           </div>
         </div>
-
         {/* E-Wallet Connection Section - Removed as requested */}
-
         <div className="space-y-4">
           <ProfileMenuItem icon={Heart} label="Wishlist" to="/profile/wishlist" />
           <ProfileMenuItem icon={Gift} label="Voucher Saya" to="/profile/vouchers" />
@@ -193,13 +200,15 @@ const ProfilePage: React.FC = () => {
           {userRole === "seller" && (
             <ProfileMenuItem icon={UserIcon} label="Dashboard Penjual" to="/seller/dashboard" />
           )}
-          <Button onClick={handleLogout} className="w-full flex items-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
+          <Button
+            onClick={handleLogout}
+            className="w-full flex items-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+          >
             <LogOut className="h-5 w-5 mr-4" />
             <span className="font-poppins">Logout</span>
           </Button>
         </div>
       </div>
-
       {/* Edit Profile Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="sm:max-w-[425px] bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
@@ -235,18 +244,25 @@ const ProfilePage: React.FC = () => {
             </div>
             {filePreviewUrl && (
               <div className="col-span-full flex justify-center mt-2">
-                <img src={filePreviewUrl} alt="Preview" className="h-24 w-24 rounded-full object-cover border border-soft-pink dark:border-gold-rose" />
+                <img
+                  src={filePreviewUrl}
+                  alt="Preview"
+                  className="h-24 w-24 rounded-full object-cover border border-soft-pink dark:border-gold-rose"
+                />
               </div>
             )}
           </div>
           <DialogFooter>
-            <Button type="button" onClick={handleSaveProfile} className="bg-soft-pink hover:bg-rose-600 text-white font-poppins">
+            <Button
+              type="button"
+              onClick={handleSaveProfile}
+              className="bg-soft-pink hover:bg-rose-600 text-white font-poppins"
+            >
               Simpan Perubahan
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
       {/* WhatsApp Verification Dialog */}
       <WhatsAppVerificationDialog
         isOpen={isWhatsAppVerificationOpen}

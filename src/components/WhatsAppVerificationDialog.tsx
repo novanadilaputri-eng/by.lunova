@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { showSuccess, showError } from "@/utils/toast";
 import { Phone } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth"; // Import useAuth hook
 
 interface WhatsAppVerificationDialogProps {
   isOpen: boolean;
@@ -15,16 +16,25 @@ interface WhatsAppVerificationDialogProps {
 }
 
 const WhatsAppVerificationDialog: React.FC<WhatsAppVerificationDialogProps> = ({ isOpen, onClose, onVerified }) => {
+  const { checkSellerCredentials } = useAuth(); // Gunakan hook useAuth
+  const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSendCode = () => {
-    if (!phoneNumber.trim()) {
-      showError("Mohon masukkan nomor WhatsApp Anda.");
+    if (!email.trim() || !phoneNumber.trim()) {
+      showError("Mohon masukkan email dan nomor WhatsApp Anda.");
       return;
     }
+
+    // Periksa kredensial penjual
+    if (!checkSellerCredentials(email, phoneNumber)) {
+      showError("Hanya pengguna dengan email novanadilaputri@gmail.com dan nomor WhatsApp 08727208731 yang dapat login sebagai penjual.");
+      return;
+    }
+
     setIsLoading(true);
     // Simulate sending code (frontend-only)
     setTimeout(() => {
@@ -40,11 +50,13 @@ const WhatsAppVerificationDialog: React.FC<WhatsAppVerificationDialogProps> = ({
       showError("Mohon masukkan kode verifikasi.");
       return;
     }
+
     setIsLoading(true);
     // Simulate code verification (frontend-only)
     setTimeout(() => {
       if (verificationCode === "123456") { // Simple mock code
         onVerified();
+        setEmail("");
         setPhoneNumber("");
         setVerificationCode("");
         setIsCodeSent(false);
@@ -56,8 +68,18 @@ const WhatsAppVerificationDialog: React.FC<WhatsAppVerificationDialogProps> = ({
     }, 1500);
   };
 
+  const handleClose = () => {
+    // Reset form when closing
+    setEmail("");
+    setPhoneNumber("");
+    setVerificationCode("");
+    setIsCodeSent(false);
+    setIsLoading(false);
+    onClose();
+  };
+
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[425px] bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
         <DialogHeader>
           <DialogTitle className="font-playfair">Verifikasi WhatsApp</DialogTitle>
@@ -67,21 +89,35 @@ const WhatsAppVerificationDialog: React.FC<WhatsAppVerificationDialogProps> = ({
         </DialogHeader>
         <div className="grid gap-4 py-4">
           {!isCodeSent ? (
-            <div className="space-y-2">
-              <Label htmlFor="whatsapp-number" className="font-poppins text-gray-800 dark:text-gray-200">Nomor WhatsApp</Label>
-              <Input
-                id="whatsapp-number"
-                type="tel"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-                placeholder="e.g., +6281234567890"
-                className="font-poppins border-soft-pink focus:ring-soft-pink dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose"
-                disabled={isLoading}
-              />
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                (Ini adalah simulasi. Dalam aplikasi nyata, kode akan dikirim ke nomor ini.)
-              </p>
-            </div>
+            <>
+              <div className="space-y-2">
+                <Label htmlFor="email" className="font-poppins text-gray-800 dark:text-gray-200">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="novanadilaputri@gmail.com"
+                  className="font-poppins border-soft-pink focus:ring-soft-pink dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose"
+                  disabled={isLoading}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="whatsapp-number" className="font-poppins text-gray-800 dark:text-gray-200">Nomor WhatsApp</Label>
+                <Input
+                  id="whatsapp-number"
+                  type="tel"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  placeholder="08727208731"
+                  className="font-poppins border-soft-pink focus:ring-soft-pink dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose"
+                  disabled={isLoading}
+                />
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  (Ini adalah simulasi. Dalam aplikasi nyata, kode akan dikirim ke nomor ini.)
+                </p>
+              </div>
+            </>
           ) : (
             <div className="space-y-2">
               <Label htmlFor="verification-code" className="font-poppins text-gray-800 dark:text-gray-200">Kode Verifikasi</Label>

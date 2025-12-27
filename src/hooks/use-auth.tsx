@@ -9,6 +9,8 @@ interface AuthContextType {
   loginAsSeller: () => void; // This will now be triggered after WhatsApp verification
   logout: () => void;
   simulateWhatsAppLogin: () => void; // New function to trigger WhatsApp flow
+  // Tambahkan fungsi untuk memeriksa kredensial penjual
+  checkSellerCredentials: (email: string, phone: string) => boolean;
 }
 
 // For demo purposes, we'll use localStorage to persist the role
@@ -54,5 +56,21 @@ export const useAuth = (): AuthContextType => {
     console.log("Simulating WhatsApp login flow...");
   };
 
-  return { userRole, loginAsBuyer, loginAsSeller, logout, simulateWhatsAppLogin };
+  // Fungsi untuk memeriksa kredensial penjual
+  const checkSellerCredentials = (email: string, phone: string) => {
+    // Hanya email dan nomor WhatsApp tertentu yang dapat login sebagai penjual
+    const allowedEmail = "novanadilaputri@gmail.com";
+    const allowedPhone = "08727208731";
+    
+    return email === allowedEmail && phone === allowedPhone;
+  };
+
+  return {
+    userRole,
+    loginAsBuyer,
+    loginAsSeller,
+    logout,
+    simulateWhatsAppLogin,
+    checkSellerCredentials
+  };
 };

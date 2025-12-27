@@ -69,7 +69,7 @@ const EditVideoPage: React.FC = () => {
         const reader = new FileReader();
         reader.onloadend = () => {
           setVideoPreviewUrl(reader.result as string);
-          setVideoUrl(reader.result as string); // Update videoUrl state for submission
+          // Don't set videoUrl here, we'll handle it during submission
         };
         reader.readAsDataURL(file);
       } else {
@@ -78,7 +78,6 @@ const EditVideoPage: React.FC = () => {
     } else {
       setVideoFile(null);
       setVideoPreviewUrl(isNewVideo ? null : mockVideos.find(v => v.id === id)?.videoUrl || null);
-      setVideoUrl(isNewVideo ? "" : mockVideos.find(v => v.id === id)?.videoUrl || "");
     }
   };
 
@@ -90,7 +89,7 @@ const EditVideoPage: React.FC = () => {
         const reader = new FileReader();
         reader.onloadend = () => {
           setThumbnailPreviewUrl(reader.result as string);
-          setThumbnailUrl(reader.result as string); // Update thumbnailUrl state for submission
+          // Don't set thumbnailUrl here, we'll handle it during submission
         };
         reader.readAsDataURL(file);
       } else {
@@ -99,60 +98,85 @@ const EditVideoPage: React.FC = () => {
     } else {
       setThumbnailFile(null);
       setThumbnailPreviewUrl(isNewVideo ? null : mockVideos.find(v => v.id === id)?.thumbnailUrl || null);
-      setThumbnailUrl(isNewVideo ? "" : mockVideos.find(v => v.id === id)?.thumbnailUrl || "");
     }
   };
 
-  const handleSaveVideo = (e: React.FormEvent) => {
+  const handleSaveVideo = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) {
       showError("Mohon masukkan judul video.");
       return;
     }
 
-    // Jika tidak ada file video baru dan tidak ada URL video, tampilkan error
-    if (!videoFile && !videoUrl.trim()) {
+    // Validate that either a file is uploaded or a URL is provided
+    const hasVideoFile = videoFile !== null;
+    const hasVideoUrl = videoUrl.trim() !== "";
+    const hasThumbnailFile = thumbnailFile !== null;
+    const hasThumbnailUrl = thumbnailUrl.trim() !== "";
+
+    if (!hasVideoFile && !hasVideoUrl) {
       showError("Mohon unggah file video atau masukkan URL video.");
       return;
     }
 
-    // Jika tidak ada file thumbnail baru dan tidak ada URL thumbnail, tampilkan error
-    if (!thumbnailFile && !thumbnailUrl.trim()) {
+    if (!hasThumbnailFile && !hasThumbnailUrl) {
       showError("Mohon unggah file thumbnail atau masukkan URL thumbnail.");
       return;
     }
 
-    const videoData: Omit<Video, 'id' | 'uploadDate'> = {
-      title: title.trim(),
-      thumbnailUrl: thumbnailUrl.trim() || (thumbnailPreviewUrl || ""),
-      videoUrl: videoUrl.trim() || (videoPreviewUrl || ""),
-      sellerName: sellerName.trim(),
-      views: views,
-    };
+    try {
+      let finalVideoUrl = videoUrl;
+      let finalThumbnailUrl = thumbnailUrl;
 
-    if (isNewVideo) {
-      const newVideo = addVideo({ 
-        ...videoData, 
-        uploadDate: new Date().toISOString().split('T')[0] 
-      });
-      showSuccess(`Video "${newVideo.title}" berhasil ditambahkan!`);
-    } else {
-      const existingVideo = mockVideos.find(v => v.id === id);
-      if (existingVideo) {
-        const updatedVideo: Video = {
-          ...existingVideo,
-          ...videoData,
-          id: id!,
-        };
-        updateVideo(updatedVideo);
-        showSuccess(`Video "${updatedVideo.title}" berhasil diperbarui!`);
+      // Handle video file upload
+      if (hasVideoFile && videoFile) {
+        // In a real app, you would upload the file to a server here
+        // For this demo, we'll use the preview URL
+        finalVideoUrl = videoPreviewUrl || videoUrl;
       }
+
+      // Handle thumbnail file upload
+      if (hasThumbnailFile && thumbnailFile) {
+        // In a real app, you would upload the file to a server here
+        // For this demo, we'll use the preview URL
+        finalThumbnailUrl = thumbnailPreviewUrl || thumbnailUrl;
+      }
+
+      const videoData: Omit<Video, 'id' | 'uploadDate'> = {
+        title: title.trim(),
+        thumbnailUrl: finalThumbnailUrl.trim(),
+        videoUrl: finalVideoUrl.trim(),
+        sellerName: sellerName.trim(),
+        views: views,
+      };
+
+      if (isNewVideo) {
+        const newVideo = addVideo({ 
+          ...videoData, 
+          uploadDate: new Date().toISOString().split('T')[0] 
+        });
+        showSuccess(`Video "${newVideo.title}" berhasil ditambahkan!`);
+      } else {
+        const existingVideo = mockVideos.find(v => v.id === id);
+        if (existingVideo) {
+          const updatedVideo: Video = {
+            ...existingVideo,
+            ...videoData,
+            id: id!,
+          };
+          updateVideo(updatedVideo);
+          showSuccess(`Video "${updatedVideo.title}" berhasil diperbarui!`);
+        }
+      }
+      navigate("/videos");
+    } catch (error) {
+      showError("Terjadi kesalahan saat menyimpan video.");
+      console.error("Error saving video:", error);
     }
-    navigate("/videos");
   };
 
   if (userRole !== "seller") {
-    return null; // Or a loading spinner
+    return null;
   }
 
   return (
@@ -275,7 +299,7 @@ const EditVideoPage: React.FC = () => {
                 onChange={(e) => setSellerName(e.target.value)}
                 placeholder="Nama Penjual"
                 className="mt-2 bg-gray-100 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose"
-                readOnly // For demo, seller name is fixed
+                readOnly
               />
             </div>
 

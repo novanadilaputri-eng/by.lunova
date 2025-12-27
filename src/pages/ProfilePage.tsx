@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Package, Heart, Gift, MapPin, Settings, HelpCircle, LogOut, Wallet, Truck, CheckCircle, User as UserIcon // Removed CreditCard
-} from "lucide-react";
+import { Package, Heart, Gift, MapPin, Settings, HelpCircle, LogOut, Wallet, Truck, CheckCircle, User as UserIcon, Bell } from "lucide-react";
 import HomePageHeader from "@/components/HomePageHeader";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -195,10 +194,14 @@ const ProfilePage: React.FC = () => {
           <ProfileMenuItem icon={Heart} label="Wishlist" to="/profile/wishlist" />
           <ProfileMenuItem icon={Gift} label="Voucher Saya" to="/profile/vouchers" />
           <ProfileMenuItem icon={MapPin} label="Alamat Saya" to="/profile/addresses" />
+          <ProfileMenuItem icon={Bell} label="Pemberitahuan" to="/notifications" />
           <ProfileMenuItem icon={Settings} label="Pengaturan Aplikasi" to="/profile/settings" />
           <ProfileMenuItem icon={HelpCircle} label="Pusat Bantuan" to="/profile/help" />
           {userRole === "seller" && (
-            <ProfileMenuItem icon={UserIcon} label="Dashboard Penjual" to="/seller/dashboard" />
+            <>
+              <ProfileMenuItem icon={UserIcon} label="Dashboard Penjual" to="/seller/dashboard" />
+              <ProfileMenuItem icon={Package} label="Tambah Produk" to="/seller/products/new" />
+            </>
           )}
           <Button
             onClick={handleLogout}

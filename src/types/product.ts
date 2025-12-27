@@ -13,4 +13,5 @@ export interface Product {
   reviewsCount: number;
   storeName: string;
   storeReputation: string;
+  isFeatured?: boolean; // New property for featured products
 }

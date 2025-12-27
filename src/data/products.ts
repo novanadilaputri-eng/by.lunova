@@ -43,6 +43,7 @@ export let products: Product[] = [
     reviewsCount: 120,
     storeName: "Fashionista Store",
     storeReputation: "Gold Seller",
+    isFeatured: true, // Example featured product
   },
   {
     id: "2",
@@ -63,6 +64,7 @@ export let products: Product[] = [
     reviewsCount: 85,
     storeName: "Trendy Threads",
     storeReputation: "Platinum Seller",
+    isFeatured: false,
   },
   {
     id: "3",
@@ -82,6 +84,7 @@ export let products: Product[] = [
     reviewsCount: 60,
     storeName: "Batik Nusantara",
     storeReputation: "Gold Seller",
+    isFeatured: true, // Example featured product
   },
   {
     id: "4",
@@ -103,6 +106,7 @@ export let products: Product[] = [
     reviewsCount: 200,
     storeName: "Daily Wear",
     storeReputation: "Silver Seller",
+    isFeatured: false,
   },
   {
     id: "5",
@@ -123,6 +127,7 @@ export let products: Product[] = [
     reviewsCount: 95,
     storeName: "K-Fashion Hub",
     storeReputation: "Gold Seller",
+    isFeatured: false,
   },
   // New products
   {
@@ -140,6 +145,7 @@ export let products: Product[] = [
     reviewsCount: 100,
     storeName: commonStoreName,
     storeReputation: commonStoreReputation,
+    isFeatured: false,
   },
   {
     id: "7",
@@ -156,6 +162,7 @@ export let products: Product[] = [
     reviewsCount: 110,
     storeName: commonStoreName,
     storeReputation: commonStoreReputation,
+    isFeatured: false,
   },
   {
     id: "8",
@@ -172,6 +179,7 @@ export let products: Product[] = [
     reviewsCount: 90,
     storeName: commonStoreName,
     storeReputation: commonStoreReputation,
+    isFeatured: false,
   },
   {
     id: "9",
@@ -188,6 +196,7 @@ export let products: Product[] = [
     reviewsCount: 80,
     storeName: commonStoreName,
     storeReputation: commonStoreReputation,
+    isFeatured: false,
   },
   {
     id: "10",
@@ -204,6 +213,7 @@ export let products: Product[] = [
     reviewsCount: 105,
     storeName: commonStoreName,
     storeReputation: commonStoreReputation,
+    isFeatured: false,
   },
   {
     id: "11",
@@ -220,6 +230,7 @@ export let products: Product[] = [
     reviewsCount: 95,
     storeName: commonStoreName,
     storeReputation: commonStoreReputation,
+    isFeatured: false,
   },
   {
     id: "12",
@@ -236,6 +247,7 @@ export let products: Product[] = [
     reviewsCount: 130,
     storeName: commonStoreName,
     storeReputation: commonStoreReputation,
+    isFeatured: false,
   },
 ];
 
@@ -247,6 +259,7 @@ export const addProduct = (newProduct: Omit<Product, 'id' | 'rating' | 'reviewsC
     reviewsCount: 0,
     storeName: commonStoreName, // Default for new products
     storeReputation: "New Seller", // Default for new products
+    isFeatured: false, // Default to not featured
   };
   products.push(productWithDefaults);
   return productWithDefaults;

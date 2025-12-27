@@ -6,6 +6,7 @@ import ShortcutMenu from "@/components/ShortcutMenu";
 import FlashSaleSection from "@/components/FlashSaleSection";
 import RecommendationSection from "@/components/RecommendationSection";
 import OOTDBoard from "@/components/OOTDBoard";
+import SellerPromotionDisplay from "@/components/SellerPromotionDisplay"; // Import new component
 import { products as mockProducts } from '@/data/products';
 
 const Index = () => {
@@ -15,8 +16,11 @@ const Index = () => {
     "https://images.unsplash.com/photo-1607082348824-0a968821957e?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   ];
 
-  // For demo, just use a slice of mock products for recommendations
-  const recommendedProducts = mockProducts.slice(0, 4);
+  // Prioritize featured products for recommendations
+  const featuredProducts = mockProducts.filter(p => p.isFeatured);
+  const nonFeaturedProducts = mockProducts.filter(p => !p.isFeatured);
+  const recommendedProducts = [...featuredProducts, ...nonFeaturedProducts].slice(0, 4);
+
 
   return (
     <div className="min-h-screen bg-beige">
@@ -32,6 +36,7 @@ const Index = () => {
           {/* Removed the 'Mulai Belanja Sekarang' button */}
         </div>
 
+        <SellerPromotionDisplay /> {/* Display seller promotions */}
         <CarouselBanner images={bannerImages} />
         <ShortcutMenu />
         <FlashSaleSection />

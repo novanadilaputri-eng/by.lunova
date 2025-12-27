@@ -26,7 +26,8 @@ import LunoPointsPage from "./pages/LunoPointsPage";
 import LunoLivePage from "./pages/LunoLivePage";
 import ChatPage from "./pages/ChatPage";
 import SplashScreen from "./pages/SplashScreen";
-import VideoListingPage from "./pages/VideoListingPage"; // Import VideoListingPage
+import VideoListingPage from "./pages/VideoListingPage";
+import SellerPromotionManagementPage from "./pages/SellerPromotionManagementPage"; // Import new page
 import { CartProvider } from "./context/CartContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import BottomNavigationBar from "./components/BottomNavigationBar";
@@ -82,8 +83,9 @@ const App = () => {
                     <Route path="/seller/dashboard" element={<SellerDashboardPage />} />
                     <Route path="/seller/products/new" element={<EditProductPage />} />
                     <Route path="/seller/products/edit/:id" element={<EditProductPage />} />
+                    <Route path="/seller/promotions" element={<SellerPromotionManagementPage />} /> {/* New route */}
                     <Route path="/live" element={<LunoLivePage />} />
-                    <Route path="/videos" element={<VideoListingPage />} /> {/* New Video Route */}
+                    <Route path="/videos" element={<VideoListingPage />} />
                     <Route path="/chat" element={<ChatPage />} />
                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                     <Route path="*" element={<NotFound />} />

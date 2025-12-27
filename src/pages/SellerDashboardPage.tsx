@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import HomePageHeader from "@/components/HomePageHeader";
 import { products as mockProducts, updateProduct as updateMockProduct, addProduct as addMockProduct, deleteProduct as deleteMockProduct } from "@/data/products";
 import { mockOrders, updateOrderStatus } from "@/data/orders";
-import { PlusCircle, Edit, Trash2, Package, Truck, CheckCircle, Clock } from "lucide-react";
+import { PlusCircle, Edit, Trash2, Package, Truck, CheckCircle, Clock, Megaphone } from "lucide-react"; // Import Megaphone
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { showSuccess, showError } from "@/utils/toast";
 import { useAuth } from "@/hooks/use-auth"; // Import useAuth hook
@@ -207,6 +207,9 @@ const SellerDashboardPage: React.FC = () => {
                   <p className="text-md font-bold text-gold-rose mt-1 font-playfair">
                     Rp{product.price.toLocaleString("id-ID")}
                   </p>
+                  {product.isFeatured && (
+                    <span className="text-xs font-semibold text-soft-pink dark:text-gold-rose mt-1 block">Produk Unggulan</span>
+                  )}
                 </CardContent>
                 <CardFooter className="p-4 pt-0 flex justify-between space-x-2">
                   <Button asChild variant="outline" className="flex-1 border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins dark:border-gold-rose dark:text-gold-rose dark:hover:bg-gold-rose dark:hover:text-white">
@@ -226,6 +229,16 @@ const SellerDashboardPage: React.FC = () => {
             ))}
           </div>
         )}
+
+        {/* Promotion Management Link */}
+        <div className="mb-10">
+          <h2 className="text-2xl font-playfair font-bold text-gray-900 dark:text-gray-100 mb-4">Manajemen Promosi</h2>
+          <Button asChild className="w-full py-3 text-lg bg-gold-rose hover:bg-gold-rose/80 text-white font-poppins">
+            <Link to="/seller/promotions">
+              <Megaphone className="h-5 w-5 mr-2" /> Kelola Promosi Anda
+            </Link>
+          </Button>
+        </div>
 
         {/* Order Management */}
         <h2 className="text-2xl font-playfair font-bold text-gray-900 dark:text-gray-100 mb-6">Manajemen Pesanan</h2>

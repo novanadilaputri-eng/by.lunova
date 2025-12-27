@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch"; // Import Switch
 import HomePageHeader from "@/components/HomePageHeader";
 import { products as mockProducts, addProduct, updateProduct } from "@/data/products"; // Import CRUD functions
 import { showSuccess, showError } from "@/utils/toast";
@@ -27,6 +28,7 @@ const EditProductPage: React.FC = () => {
   const [colors, setColors] = useState<string[]>([]);
   const [sizes, setSizes] = useState<string[]>([]);
   const [colorImages, setColorImages] = useState<{ color: string; imageUrl: string }[]>([]);
+  const [isFeatured, setIsFeatured] = useState(false); // New state for isFeatured
 
   useEffect(() => {
     if (!isNewProduct) {
@@ -42,6 +44,7 @@ const EditProductPage: React.FC = () => {
         setColors(foundProduct.colors);
         setSizes(foundProduct.sizes);
         setColorImages(foundProduct.colorImages);
+        setIsFeatured(foundProduct.isFeatured || false); // Set isFeatured state
       } else {
         showError("Produk tidak ditemukan.");
         navigate("/seller/dashboard");
@@ -59,6 +62,7 @@ const EditProductPage: React.FC = () => {
       setColors([]);
       setSizes([]);
       setColorImages([]);
+      setIsFeatured(false); // Default for new product
     }
   }, [id, isNewProduct, navigate]);
 
@@ -96,6 +100,7 @@ const EditProductPage: React.FC = () => {
       colors,
       sizes,
       colorImages,
+      isFeatured, // Include isFeatured
     };
 
     if (isNewProduct) {
@@ -335,6 +340,20 @@ const EditProductPage: React.FC = () => {
                   </div>
                 ))}
               </div>
+            </div>
+
+            {/* Is Featured Switch */}
+            <div className="flex items-center justify-between border-t pt-6 border-gray-200 dark:border-gray-700">
+              <div className="flex items-center">
+                <Label htmlFor="is-featured-switch" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">Produk Unggulan</Label>
+                <p className="text-sm text-gray-500 dark:text-gray-400 ml-2">(Tampilkan produk ini di bagian khusus)</p>
+              </div>
+              <Switch
+                id="is-featured-switch"
+                checked={isFeatured}
+                onCheckedChange={setIsFeatured}
+                className="data-[state=checked]:bg-soft-pink"
+              />
             </div>
 
             <Button type="submit" className="w-full py-3 text-lg bg-soft-pink hover:bg-rose-600 text-white font-poppins">

@@ -27,15 +27,18 @@ import LunoLivePage from "./pages/LunoLivePage";
 import ChatPage from "./pages/ChatPage";
 import SplashScreen from "./pages/SplashScreen";
 import VideoListingPage from "./pages/VideoListingPage";
-import SellerPromotionManagementPage from "./pages/SellerPromotionManagementPage"; // Import new page
+import SellerPromotionManagementPage from "./pages/SellerPromotionManagementPage";
+import SellerOtpVerification from "./components/SellerOtpVerification"; // Import SellerOtpVerification
 import { CartProvider } from "./context/CartContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import BottomNavigationBar from "./components/BottomNavigationBar";
+import { useAuth } from "./hooks/use-auth"; // Import useAuth
 
 const queryClient = new QueryClient();
 
 const App = () => {
   const [hasSeenSplashScreen, setHasSeenSplashScreen] = useState(false);
+  const { isVerifyingSeller, cancelSellerOtp } = useAuth(); // Use useAuth here
 
   useEffect(() => {
     const seen = localStorage.getItem('hasSeenSplashScreen');
@@ -83,7 +86,7 @@ const App = () => {
                     <Route path="/seller/dashboard" element={<SellerDashboardPage />} />
                     <Route path="/seller/products/new" element={<EditProductPage />} />
                     <Route path="/seller/products/edit/:id" element={<EditProductPage />} />
-                    <Route path="/seller/promotions" element={<SellerPromotionManagementPage />} /> {/* New route */}
+                    <Route path="/seller/promotions" element={<SellerPromotionManagementPage />} />
                     <Route path="/live" element={<LunoLivePage />} />
                     <Route path="/videos" element={<VideoListingPage />} />
                     <Route path="/chat" element={<ChatPage />} />
@@ -92,6 +95,8 @@ const App = () => {
                   </Routes>
                 </div>
                 <BottomNavigationBar />
+                {/* Render SellerOtpVerification outside Routes so it can overlay any page */}
+                <SellerOtpVerification isOpen={isVerifyingSeller} onClose={cancelSellerOtp} />
               </>
             </BrowserRouter>
           </CartProvider>

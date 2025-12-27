@@ -79,6 +79,9 @@ const CheckoutPage: React.FC = () => {
     });
 
     showSuccess("Pesanan Anda berhasil dibuat!");
+    if (paymentMethod !== "COD" && paymentMethod !== "Menunggu Pembayaran") {
+      showSuccess("Pembayaran Anda akan langsung masuk ke rekening penjual.");
+    }
     clearCart(); // Clear cart after successful order
     navigate("/order-confirmation");
   };
@@ -184,6 +187,7 @@ const CheckoutPage: React.FC = () => {
 
                 <Label className="font-poppins font-semibold text-gray-700 mt-4">E-Wallet</Label>
                 <div className="grid grid-cols-2 gap-2 ml-4">
+                  {/* Limiting to 2 E-Wallet options */}
                   <div className="flex items-center">
                     <RadioGroupItem value="Dana" id="payment-dana" className="border-soft-pink data-[state=checked]:bg-soft-pink" />
                     <Label htmlFor="payment-dana" className="ml-2 font-poppins">Dana</Label>
@@ -191,10 +195,6 @@ const CheckoutPage: React.FC = () => {
                   <div className="flex items-center">
                     <RadioGroupItem value="Gopay" id="payment-gopay" className="border-soft-pink data-[state=checked]:bg-soft-pink" />
                     <Label htmlFor="payment-gopay" className="ml-2 font-poppins">Gopay</Label>
-                  </div>
-                  <div className="flex items-center">
-                    <RadioGroupItem value="ShopeePay" id="payment-shopeepay" className="border-soft-pink data-[state=checked]:bg-soft-pink" />
-                    <Label htmlFor="payment-shopeepay" className="ml-2 font-poppins">ShopeePay</Label>
                   </div>
                 </div>
 

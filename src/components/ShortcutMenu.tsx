@@ -16,9 +16,7 @@ const shortcutItems: ShortcutItem[] = [
   { icon: Tag, label: "Dress", to: "/products?category=Dress" },
   { icon: Square, label: "Hijab", to: "/products?category=Hijab" },
   { icon: Pocket, label: "Celana", to: "/products?category=Celana" },
-  { icon: Footprints, label: "Sepatu", to: "/products?category=Sepatu" },
-  { icon: ShoppingBag, label: "Tas", to: "/products?category=Tas" },
-  { icon: Gem, label: "Aksesoris", to: "/products?category=Aksesoris" },
+  // Removed Sepatu, Tas, Aksesoris as requested
   { icon: Sparkles, label: "Promo Harian", to: "/products?promo=true" },
 ];
 

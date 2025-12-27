@@ -163,6 +163,8 @@ const SellerBankAccountManagement: React.FC<SellerBankAccountManagementProps> = 
                   <SelectItem value="BNI">BNI</SelectItem>
                   <SelectItem value="CIMB Niaga">CIMB Niaga</SelectItem>
                   <SelectItem value="Permata Bank">Permata Bank</SelectItem>
+                  <SelectItem value="Dana">Dana (E-Wallet)</SelectItem> {/* Added Dana */}
+                  <SelectItem value="Bank BTN">Bank BTN</SelectItem> {/* Added Bank BTN */}
                 </SelectContent>
               </Select>
             </div>

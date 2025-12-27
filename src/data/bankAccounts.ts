@@ -19,6 +19,22 @@ const initialBankAccounts: BankAccount[] = [
     accountHolderName: "PT By.Lunova Indonesia",
     isMain: false,
   },
+  {
+    id: "bank3",
+    sellerId: "seller1",
+    bankName: "Dana",
+    accountNumber: "081234567890", // Example phone number for e-wallet
+    accountHolderName: "PT By.Lunova Indonesia",
+    isMain: false,
+  },
+  {
+    id: "bank4",
+    sellerId: "seller1",
+    bankName: "Bank BTN",
+    accountNumber: "1122334455",
+    accountHolderName: "PT By.Lunova Indonesia",
+    isMain: false,
+  },
 ];
 
 // Helper to load data from localStorage

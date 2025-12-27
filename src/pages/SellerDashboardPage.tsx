@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import HomePageHeader from "@/components/HomePageHeader";
-import { products as mockProducts, getSellerProducts, deleteProduct } from "@/data/products"; // Tambahkan deleteProduct ke import
+import { products as mockProducts, getSellerProducts, deleteProduct } from "@/data/products";
 import { mockOrders, updateOrderStatus } from "@/data/orders";
 import { PlusCircle, Edit, Trash2, Package, Truck, CheckCircle, Clock, Megaphone, Bell, Banknote } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -47,7 +47,7 @@ const SellerDashboardPage: React.FC = () => {
 
   const handleDeleteProduct = (productId: string) => {
     if (window.confirm(`Apakah Anda yakin ingin menghapus produk ID: ${productId}?`)) {
-      deleteProduct(productId); // Gunakan fungsi deleteProduct yang diimpor
+      deleteProduct(productId);
       setCurrentProducts([...mockProducts]);
       showSuccess(`Produk ID: ${productId} berhasil dihapus.`);
     }
@@ -108,10 +108,11 @@ const SellerDashboardPage: React.FC = () => {
 
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-playfair font-bold text-gray-900 dark:text-gray-100">Produk Saya</h2>
-          <Button asChild className="bg-soft-pink hover:bg-rose-600 text-white font-poppins">
-            <Link to="/seller/products/new">
-              <PlusCircle className="h-4 w-4 mr-2" /> Tambah Produk Baru
-            </Link>
+          <Button 
+            onClick={() => navigate("/seller/products/new")} 
+            className="bg-soft-pink hover:bg-rose-600 text-white font-poppins"
+          >
+            <PlusCircle className="h-4 w-4 mr-2" /> Tambah Produk Baru
           </Button>
         </div>
         
@@ -119,8 +120,11 @@ const SellerDashboardPage: React.FC = () => {
           <div className="text-center p-10 bg-white dark:bg-gray-800 rounded-lg shadow-md">
             <Package className="h-20 w-20 text-gray-400 mx-auto mb-6" />
             <p className="text-xl text-gray-600 font-poppins dark:text-gray-400 mb-6">Anda belum memiliki produk di toko.</p>
-            <Button asChild className="px-8 py-3 text-lg bg-soft-pink hover:bg-rose-600 text-white font-poppins">
-              <Link to="/seller/products/new">Tambah Produk Pertama Anda</Link>
+            <Button 
+              onClick={() => navigate("/seller/products/new")} 
+              className="px-8 py-3 text-lg bg-soft-pink hover:bg-rose-600 text-white font-poppins"
+            >
+              Tambah Produk Pertama Anda
             </Button>
           </div>
         ) : (
@@ -140,13 +144,11 @@ const SellerDashboardPage: React.FC = () => {
                 </CardContent>
                 <CardFooter className="p-4 pt-0 flex justify-between space-x-2">
                   <Button 
-                    asChild 
+                    onClick={() => navigate(`/seller/products/edit/${product.id}`)} 
                     variant="outline" 
                     className="flex-1 border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins dark:border-gold-rose dark:text-gold-rose dark:hover:bg-gold-rose dark:hover:text-white"
                   >
-                    <Link to={`/seller/products/edit/${product.id}`}>
-                      <Edit className="h-4 w-4 mr-2" /> Edit
-                    </Link>
+                    <Edit className="h-4 w-4 mr-2" /> Edit
                   </Button>
                   <Button 
                     variant="destructive" 
@@ -163,10 +165,11 @@ const SellerDashboardPage: React.FC = () => {
 
         <div className="mb-10">
           <h2 className="text-2xl font-playfair font-bold text-gray-900 dark:text-gray-100 mb-4">Manajemen Promosi</h2>
-          <Button asChild className="w-full py-3 text-lg bg-gold-rose hover:bg-gold-rose/80 text-white font-poppins">
-            <Link to="/seller/promotions">
-              <Megaphone className="h-5 w-5 mr-2" /> Kelola Promosi Anda
-            </Link>
+          <Button 
+            onClick={() => navigate("/seller/promotions")} 
+            className="w-full py-3 text-lg bg-gold-rose hover:bg-gold-rose/80 text-white font-poppins"
+          >
+            <Megaphone className="h-5 w-5 mr-2" /> Kelola Promosi Anda
           </Button>
         </div>
 
@@ -259,8 +262,12 @@ const SellerDashboardPage: React.FC = () => {
         </div>
         
         <div className="text-center mt-8">
-          <Button asChild variant="outline" className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins dark:border-gold-rose dark:text-gold-rose dark:hover:bg-gold-rose dark:hover:text-white">
-            <Link to="/profile">Kembali ke Akun Saya</Link>
+          <Button 
+            onClick={() => navigate("/profile")} 
+            variant="outline" 
+            className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins dark:border-gold-rose dark:text-gold-rose dark:hover:bg-gold-rose dark:hover:text-white"
+          >
+            Kembali ke Akun Saya
           </Button>
         </div>
       </div>

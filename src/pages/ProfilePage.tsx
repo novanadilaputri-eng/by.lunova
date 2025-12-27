@@ -4,16 +4,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Package, Heart, Gift, MapPin, Settings, HelpCircle, LogOut,
-  Wallet, Truck, CheckCircle, XCircle, Clock, User as UserIcon, CreditCard // Renamed User to UserIcon to avoid conflict, added CreditCard
+  Wallet, Truck, CheckCircle, XCircle, Clock, User as UserIcon, CreditCard
 } from "lucide-react";
 import HomePageHeader from "@/components/HomePageHeader";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { showSuccess, showError } from "@/utils/toast";
-import { mockOrders } from "@/data/orders"; // Import mockOrders
-import { useAuth } from "@/hooks/use-auth"; // Import useAuth hook
-import WhatsAppVerificationDialog from "@/components/WhatsAppVerificationDialog"; // Import new component
+import { mockOrders } from "@/data/orders";
+import { useAuth } from "@/hooks/use-auth";
+import WhatsAppVerificationDialog from "@/components/WhatsAppVerificationDialog";
 
 interface ProfileMenuItemProps {
   icon: React.ElementType;
@@ -31,13 +31,13 @@ const ProfileMenuItem: React.FC<ProfileMenuItemProps> = ({ icon: Icon, label, to
 
 const ProfilePage: React.FC = () => {
   const { userRole, loginAsBuyer, loginAsSeller, logout } = useAuth();
-  const [username, setUsername] = useState(() => localStorage.getItem("profileUsername") || "LunovaUser123"); // Initialize from localStorage
-  const [profilePicture, setProfilePicture] = useState(() => localStorage.getItem("profilePictureUrl") || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); // Initialize from localStorage
+  const [username, setUsername] = useState(() => localStorage.getItem("profileUsername") || "LunovaUser123");
+  const [profilePicture, setProfilePicture] = useState(() => localStorage.getItem("profilePictureUrl") || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [isWhatsAppVerificationOpen, setIsWhatsAppVerificationOpen] = useState(false); // New state for WhatsApp dialog
+  const [isWhatsAppVerificationOpen, setIsWhatsAppVerificationOpen] = useState(false);
   const [tempUsername, setTempUsername] = useState(username);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(profilePicture); // Initialize preview with current profile picture
+  const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(profilePicture);
 
   // Calculate order counts
   const pendingPaymentCount = mockOrders.filter(order => order.status === "Menunggu Pembayaran").length;
@@ -54,8 +54,8 @@ const ProfilePage: React.FC = () => {
   useEffect(() => {
     if (isEditDialogOpen) {
       setTempUsername(username);
-      setFilePreviewUrl(profilePicture); // Initialize preview with current profile picture
-      setSelectedFile(null); // Clear any previously selected file
+      setFilePreviewUrl(profilePicture);
+      setSelectedFile(null);
     }
   }, [isEditDialogOpen, username, profilePicture]);
 
@@ -70,7 +70,7 @@ const ProfilePage: React.FC = () => {
       reader.readAsDataURL(file);
     } else {
       setSelectedFile(null);
-      setFilePreviewUrl(profilePicture); // Revert to current profile picture if file cleared
+      setFilePreviewUrl(profilePicture);
     }
   };
 
@@ -81,16 +81,15 @@ const ProfilePage: React.FC = () => {
     }
 
     setUsername(tempUsername);
-    localStorage.setItem("profileUsername", tempUsername); // Persist username
+    localStorage.setItem("profileUsername", tempUsername);
 
     if (selectedFile) {
       setProfilePicture(filePreviewUrl!);
-      localStorage.setItem("profilePictureUrl", filePreviewUrl!); // Persist new profile picture
+      localStorage.setItem("profilePictureUrl", filePreviewUrl!);
       showSuccess("Profil berhasil diperbarui! (Foto akan diunggah ke server di aplikasi nyata)");
     } else if (filePreviewUrl !== profilePicture) {
-      // If user cleared the file input and it was previously a file, or changed the URL input
-      setProfilePicture(filePreviewUrl || ""); // If filePreviewUrl is null, it means cleared
-      localStorage.setItem("profilePictureUrl", filePreviewUrl || ""); // Persist cleared/changed URL
+      setProfilePicture(filePreviewUrl || "");
+      localStorage.setItem("profilePictureUrl", filePreviewUrl || "");
       showSuccess("Profil berhasil diperbarui!");
     } else {
       showSuccess("Profil berhasil diperbarui!");
@@ -279,7 +278,7 @@ const ProfilePage: React.FC = () => {
         isOpen={isWhatsAppVerificationOpen}
         onClose={() => setIsWhatsAppVerificationOpen(false)}
         onVerified={() => {
-          loginAsSeller(); // Log in as seller after successful (simulated) verification
+          loginAsSeller();
           setIsWhatsAppVerificationOpen(false);
           showSuccess("Verifikasi WhatsApp berhasil! Anda sekarang login sebagai Penjual.");
         }}

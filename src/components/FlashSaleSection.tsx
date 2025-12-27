@@ -13,18 +13,22 @@ interface FlashSaleProduct extends Product {
 }
 
 const getFlashSaleProducts = (): FlashSaleProduct[] => {
-  // For demo, just take a few products and add discount info
-  return mockProducts.slice(0, 3).map(p => ({
-    ...p,
-    originalPrice: p.price * 1.5, // Example: 50% off
-    discountPercentage: 30 + Math.floor(Math.random() * 20), // Random discount 30-50%
-    price: p.price * (1 - (30 + Math.floor(Math.random() * 20)) / 100),
-  }));
+  // Filter for featured products and apply discount
+  return mockProducts.filter(p => p.isFeatured).slice(0, 3).map(p => {
+    const discountPercentage = 30 + Math.floor(Math.random() * 20); // Random discount 30-50%
+    const originalPrice = p.price / (1 - discountPercentage / 100); // Calculate original price based on current price and discount
+    return {
+      ...p,
+      originalPrice: Math.round(originalPrice), // Round to nearest integer
+      discountPercentage: discountPercentage,
+      price: Math.round(p.price), // Ensure current price is rounded
+    };
+  });
 };
 
 const FlashSaleSection: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
-  const flashSaleProducts = getFlashSaleProducts();
+  const flashSaleProducts = getFlashSaleProducts(); // This will now use featured products
 
   useEffect(() => {
     const calculateTimeLeft = () => {

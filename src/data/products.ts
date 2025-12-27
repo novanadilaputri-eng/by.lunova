@@ -283,3 +283,12 @@ export const reduceProductStock = (productId: string, quantity: number) => {
     console.log(`Stok produk ${productId} berkurang menjadi ${products[productIndex].stock}`);
   }
 };
+
+export const updateProductStats = (productId: string, newRating: number, newReviewsCount: number) => {
+  const productIndex = products.findIndex(p => p.id === productId);
+  if (productIndex !== -1) {
+    products[productIndex].rating = newRating;
+    products[productIndex].reviewsCount = newReviewsCount;
+    console.log(`Product ${productId} stats updated: Rating ${newRating}, Reviews ${newReviewsCount}`);
+  }
+};

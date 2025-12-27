@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Review, reviews as mockReviews } from "@/data/reviews";
+import { products, updateProductStats } from "@/data/products"; // Import products and updateProductStats
 import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -39,7 +40,16 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ productId }) => {
       date: new Date().toISOString().split('T')[0], // YYYY-MM-DD
     };
 
-    setCurrentReviews((prev) => [newReview, ...prev]);
+    const updatedReviews = [newReview, ...currentReviews];
+    setCurrentReviews(updatedReviews);
+
+    // Update product stats
+    const totalRating = updatedReviews.reduce((sum, review) => sum + review.rating, 0);
+    const newAverageRating = totalRating / updatedReviews.length;
+    const newReviewsCount = updatedReviews.length;
+
+    updateProductStats(productId, newAverageRating, newReviewsCount); // Update the global products data
+
     showSuccess("Ulasan Anda berhasil ditambahkan!");
     setUserName("");
     setUserComment("");

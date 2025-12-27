@@ -5,7 +5,7 @@ import { Package, Truck, CheckCircle, XCircle, Clock, Wallet } from "lucide-reac
 import HomePageHeader from "@/components/HomePageHeader";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { mockOrders, updateOrderStatus as updateMockOrderStatus } from "@/data/orders"; // Import mockOrders and update function
+import { mockOrders, updateOrderStatus as updateMockOrderStatus, addOrder } from "@/data/orders"; // Import mockOrders and update function
 import { Order, OrderStatus } from "@/types/order";
 import { showSuccess, showError } from "@/utils/toast";
 

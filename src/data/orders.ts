@@ -114,3 +114,8 @@ export const updateOrderStatus = (orderId: string, newStatus: Order["status"]) =
     // In a real app, you'd persist this to a database
   }
 };
+
+export const addOrder = (newOrder: Order) => {
+  mockOrders.unshift(newOrder); // Add new order to the beginning
+  return newOrder;
+};

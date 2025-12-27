@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Package, Heart, Gift, MapPin, Settings, HelpCircle, LogOut,
-  Wallet, Truck, CheckCircle, XCircle, Clock, User as UserIcon // Renamed User to UserIcon to avoid conflict
+  Wallet, Truck, CheckCircle, XCircle, Clock, User as UserIcon, CreditCard // Renamed User to UserIcon to avoid conflict, added CreditCard
 } from "lucide-react";
 import HomePageHeader from "@/components/HomePageHeader";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
@@ -102,6 +102,10 @@ const ProfilePage: React.FC = () => {
     // Optionally redirect to login page
   };
 
+  const handleConnectEWallet = (walletType: string) => {
+    showError(`Fitur koneksi E-Wallet ${walletType} memerlukan integrasi backend. (Frontend-only)`);
+  };
+
   return (
     <>
       <HomePageHeader />
@@ -180,6 +184,29 @@ const ProfilePage: React.FC = () => {
             </Button>
           </div>
         </div>
+
+        {/* E-Wallet Connection Section */}
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-8">
+          <h3 className="text-xl font-playfair font-bold text-gray-900 dark:text-gray-100 mb-4">Hubungkan E-Wallet</h3>
+          <p className="text-gray-700 dark:text-gray-300 font-poppins mb-4">
+            Hubungkan akun e-wallet Anda untuk pembayaran yang lebih cepat dan mudah.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Button variant="outline" className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins" onClick={() => handleConnectEWallet("Dana")}>
+              <CreditCard className="h-5 w-5 mr-2" /> Hubungkan Dana
+            </Button>
+            <Button variant="outline" className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins" onClick={() => handleConnectEWallet("Gopay")}>
+              <CreditCard className="h-5 w-5 mr-2" /> Hubungkan Gopay
+            </Button>
+            <Button variant="outline" className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins" onClick={() => handleConnectEWallet("ShopeePay")}>
+              <CreditCard className="h-5 w-5 mr-2" /> Hubungkan ShopeePay
+            </Button>
+            <Button variant="outline" className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins" onClick={() => handleConnectEWallet("OVO")}>
+              <CreditCard className="h-5 w-5 mr-2" /> Hubungkan OVO
+            </Button>
+          </div>
+        </div>
+
 
         <div className="space-y-4">
           <ProfileMenuItem icon={Heart} label="Wishlist" to="/profile/wishlist" />

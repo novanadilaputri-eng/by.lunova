@@ -10,6 +10,9 @@ import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/context/CartContext";
 import { showSuccess, showError } from "@/utils/toast";
 import HomePageHeader from "@/components/HomePageHeader";
+import { reduceProductStock } from "@/data/products"; // Import reduceProductStock
+import { addNotification } from "@/data/notifications"; // Import addNotification
+import { addOrder } from "@/data/orders"; // Import addOrder
 
 const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
@@ -30,7 +33,48 @@ const CheckoutPage: React.FC = () => {
       showError("Mohon lengkapi semua detail pengiriman dan pembayaran.");
       return;
     }
+    if (cartItems.length === 0) {
+      showError("Keranjang belanja Anda kosong.");
+      return;
+    }
+
     // Simulate order placement
+    const newOrderId = `BYLNV-${Date.now()}`;
+    const newOrder = addOrder({
+      id: newOrderId,
+      userId: "user1", // Placeholder user ID
+      orderDate: new Date().toISOString(),
+      status: paymentMethod === "COD" ? "Pesanan Dibuat" : "Menunggu Pembayaran",
+      items: cartItems.map(item => ({
+        productId: item.product.id,
+        name: item.product.name,
+        imageUrl: item.product.mainImageUrl,
+        price: item.product.price,
+        size: item.size,
+        color: item.color,
+        quantity: item.quantity,
+      })),
+      totalAmount: totalAmount,
+      shippingAddress: deliveryAddress,
+      paymentMethod: paymentMethod,
+      courier: courierOption,
+    });
+
+    // Reduce product stock for each item in the cart
+    cartItems.forEach(item => {
+      reduceProductStock(item.product.id, item.quantity);
+    });
+
+    // Add notification for seller
+    addNotification({
+      userId: "seller1", // Assuming a fixed seller ID for demo
+      type: "order",
+      message: `Pesanan baru masuk! #${newOrder.id}`,
+      isRead: false,
+      timestamp: new Date().toISOString(),
+      link: `/seller/dashboard`,
+    });
+
     showSuccess("Pesanan Anda berhasil dibuat!");
     clearCart(); // Clear cart after successful order
     navigate("/order-confirmation");

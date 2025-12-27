@@ -275,3 +275,11 @@ export const updateProduct = (updatedProduct: Product) => {
 export const deleteProduct = (productId: string) => {
   products = products.filter(p => p.id !== productId);
 };
+
+export const reduceProductStock = (productId: string, quantity: number) => {
+  const productIndex = products.findIndex(p => p.id === productId);
+  if (productIndex !== -1) {
+    products[productIndex].stock = Math.max(0, products[productIndex].stock - quantity);
+    console.log(`Stok produk ${productId} berkurang menjadi ${products[productIndex].stock}`);
+  }
+};

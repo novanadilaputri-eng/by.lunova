@@ -4,133 +4,24 @@ import { Button } from "@/components/ui/button";
 import HomePageHeader from "@/components/HomePageHeader";
 import { products as mockProducts, updateProduct as updateMockProduct, addProduct as addMockProduct, deleteProduct as deleteMockProduct } from "@/data/products";
 import { mockOrders, updateOrderStatus } from "@/data/orders";
-import { PlusCircle, Edit, Trash2, Package, Truck, CheckCircle, Clock, Megaphone } from "lucide-react"; // Import Megaphone
+import { PlusCircle, Edit, Trash2, Package, Truck, CheckCircle, Clock, Megaphone, Bell, Banknote } from "lucide-react"; // Import Megaphone, Bell, Banknote
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { showSuccess, showError } from "@/utils/toast";
 import { useAuth } from "@/hooks/use-auth"; // Import useAuth hook
 import { Order } from "@/types/order";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"; // Import Tabs components
-
-interface SellerOrderItemProps {
-  order: Order;
-  onUpdateStatus: (orderId: string, newStatus: Order["status"]) => void;
-}
-
-const SellerOrderItem: React.FC<SellerOrderItemProps> = ({ order, onUpdateStatus }) => {
-  const firstItem = order.items[0];
-  const otherItemsCount = order.items.length - 1;
-
-  const formatDate = (dateString: string) => {
-    const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' };
-    return new Date(dateString).toLocaleDateString('id-ID', options);
-  };
-
-  return (
-    <Card className="w-full overflow-hidden rounded-lg shadow-lg border-2 border-beige dark:border-gray-700 bg-white dark:bg-gray-800">
-      <CardContent className="p-4">
-        <div className="flex items-center justify-between mb-3">
-          <span className="font-poppins font-semibold text-sm text-gray-800 dark:text-gray-200">
-            Pesanan #{order.id}
-          </span>
-          <span className="text-xs text-gray-500 font-poppins dark:text-gray-400">
-            {formatDate(order.orderDate)}
-          </span>
-        </div>
-
-        <div className="flex items-center space-x-4">
-          <img
-            src={firstItem.imageUrl}
-            alt={firstItem.name}
-            className="w-16 h-16 object-cover rounded-md flex-shrink-0"
-          />
-          <div className="flex-grow">
-            <h3 className="text-md font-poppins font-semibold text-gray-800 dark:text-gray-200 line-clamp-2">
-              {firstItem.name}
-            </h3>
-            <p className="text-sm text-gray-600 font-poppins dark:text-gray-400">
-              {firstItem.quantity}x {firstItem.size}, {firstItem.color}
-            </p>
-            {otherItemsCount > 0 && (
-              <p className="text-sm text-gray-500 font-poppins dark:text-gray-400">+{otherItemsCount} produk lainnya</p>
-            )}
-          </div>
-        </div>
-
-        <div className="flex justify-between items-center mt-4 pt-3 border-t border-beige dark:border-gray-700">
-          <span className="text-sm font-poppins text-gray-700 dark:text-gray-300">Total:</span>
-          <span className="text-lg font-playfair font-bold text-gold-rose">
-            Rp{order.totalAmount.toLocaleString("id-ID")}
-          </span>
-        </div>
-      </CardContent>
-      <CardFooter className="p-4 pt-0 flex flex-col space-y-2">
-        <span className="text-sm font-poppins text-gray-700 dark:text-gray-300">Status: <span className="font-semibold text-soft-pink">{order.status}</span></span>
-        <div className="flex gap-2 w-full">
-          {order.status === "Menunggu Pembayaran" && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onUpdateStatus(order.id, "Diproses")}
-              className="flex-1 border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins"
-            >
-              <CheckCircle className="h-4 w-4 mr-1" /> Konfirmasi Bayar
-            </Button>
-          )}
-          {order.status === "Diproses" && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onUpdateStatus(order.id, "Dikemas")}
-              className="flex-1 border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins"
-            >
-              <Package className="h-4 w-4 mr-1" /> Kemas Pesanan
-            </Button>
-          )}
-          {order.status === "Dikemas" && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onUpdateStatus(order.id, "Menunggu Penjemputan Kurir")}
-              className="flex-1 border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins"
-            >
-              <Truck className="h-4 w-4 mr-1" /> Siap Dikirim
-            </Button>
-          )}
-          {order.status === "Menunggu Penjemputan Kurir" && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onUpdateStatus(order.id, "Sedang Dalam Perjalanan")}
-              className="flex-1 border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins"
-            >
-              <Truck className="h-4 w-4 mr-1" /> Dalam Pengiriman
-            </Button>
-          )}
-          {(order.status === "Sedang Dalam Perjalanan" || order.status === "Telah Sampai") && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onUpdateStatus(order.id, "Selesai")}
-              className="flex-1 border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins"
-            >
-              <CheckCircle className="h-4 w-4 mr-1" /> Tandai Selesai
-            </Button>
-          )}
-          <Button asChild variant="ghost" size="sm" className="flex-1 text-gray-600 dark:text-gray-400 hover:text-soft-pink dark:hover:text-gold-rose">
-            <Link to={`/profile/orders/${order.id}`}>Detail</Link>
-          </Button>
-        </div>
-      </CardFooter>
-    </Card>
-  );
-};
-
+import SellerOrderItem from "@/components/SellerOrderItem"; // Import SellerOrderItem
+import { mockNotifications, markNotificationAsRead } from "@/data/notifications"; // Import notifications
 
 const SellerDashboardPage: React.FC = () => {
   const { userRole } = useAuth();
   const navigate = useNavigate();
   const [currentProducts, setCurrentProducts] = useState(mockProducts);
   const [currentOrders, setCurrentOrders] = useState(mockOrders);
+  const [sellerNotifications, setSellerNotifications] = useState(mockNotifications.filter(n => n.userId === "seller1")); // Filter for seller notifications
+
+  // For demo, assume current seller is "seller1"
+  const currentSellerId = "seller1";
 
   useEffect(() => {
     if (userRole !== "seller") {
@@ -138,6 +29,12 @@ const SellerDashboardPage: React.FC = () => {
       navigate("/profile"); // Redirect if not a seller
     }
   }, [userRole, navigate]);
+
+  // Update notifications when mockNotifications change
+  useEffect(() => {
+    setSellerNotifications(mockNotifications.filter(n => n.userId === currentSellerId));
+  }, [mockNotifications, currentSellerId]);
+
 
   // Filter products by seller (for demo, assume all mockProducts are from this seller)
   const sellerProducts = currentProducts.filter(p => p.storeName === "By.Lunova Official");
@@ -164,6 +61,15 @@ const SellerDashboardPage: React.FC = () => {
     showSuccess(`Status pesanan ${orderId} berhasil diperbarui menjadi ${newStatus}.`);
   };
 
+  const handleMarkNotificationAsRead = (notificationId: string) => {
+    markNotificationAsRead(notificationId);
+    setSellerNotifications([...mockNotifications.filter(n => n.userId === currentSellerId)]); // Refresh notifications
+  };
+
+  const handleManageBankAccount = () => {
+    showError("Fitur manajemen rekening bank memerlukan integrasi backend. (Frontend-only)");
+  };
+
   if (userRole !== "seller") {
     return null; // Or a loading spinner, or a message
   }
@@ -173,6 +79,31 @@ const SellerDashboardPage: React.FC = () => {
       <HomePageHeader />
       <div className="container mx-auto p-4 md:p-8">
         <h1 className="text-4xl font-playfair font-bold text-center mb-10 text-gray-900 dark:text-gray-100">Dashboard Penjual</h1>
+
+        {/* Seller Notifications */}
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-8">
+          <h2 className="text-2xl font-playfair font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
+            <Bell className="h-6 w-6 mr-2 text-soft-pink" /> Notifikasi Anda
+          </h2>
+          {sellerNotifications.length === 0 ? (
+            <p className="text-gray-600 dark:text-gray-400 font-poppins">Tidak ada notifikasi baru.</p>
+          ) : (
+            <div className="space-y-3">
+              {sellerNotifications.map(notif => (
+                <div key={notif.id} className={`flex items-center p-3 rounded-lg ${notif.isRead ? "bg-gray-50 dark:bg-gray-700" : "bg-beige dark:bg-gray-600 border border-soft-pink"}`}>
+                  <span className={`flex-grow text-gray-800 dark:text-gray-200 font-poppins ${notif.isRead ? "text-gray-600" : "font-semibold"}`}>
+                    {notif.message}
+                  </span>
+                  {!notif.isRead && (
+                    <Button variant="ghost" size="sm" onClick={() => handleMarkNotificationAsRead(notif.id)} className="text-soft-pink hover:text-rose-600 dark:text-gold-rose dark:hover:text-amber-400">
+                      Tandai Sudah Dibaca
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
         {/* Product Management */}
         <div className="flex justify-between items-center mb-6">
@@ -237,6 +168,14 @@ const SellerDashboardPage: React.FC = () => {
             <Link to="/seller/promotions">
               <Megaphone className="h-5 w-5 mr-2" /> Kelola Promosi Anda
             </Link>
+          </Button>
+        </div>
+
+        {/* Bank Account Management */}
+        <div className="mb-10">
+          <h2 className="text-2xl font-playfair font-bold text-gray-900 dark:text-gray-100 mb-4">Rekening Bank Saya</h2>
+          <Button onClick={handleManageBankAccount} className="w-full py-3 text-lg bg-soft-pink hover:bg-rose-600 text-white font-poppins">
+            <Banknote className="h-5 w-5 mr-2" /> Kelola Rekening Bank
           </Button>
         </div>
 

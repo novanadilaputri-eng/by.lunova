@@ -285,6 +285,7 @@ export const addProduct = (newProduct: Omit<Product, 'id' | 'rating' | 'reviewsC
   };
   products.push(productWithDefaults);
   saveProducts(products);
+  console.log("Produk baru ditambahkan:", productWithDefaults); // Debug log
   return productWithDefaults;
 };
 

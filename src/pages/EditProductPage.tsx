@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,16 +11,17 @@ import { products as mockProducts, addProduct, updateProduct } from "@/data/prod
 import { showSuccess, showError } from "@/utils/toast";
 import { Product } from "@/types/product";
 import { Trash2 } from "lucide-react";
+import { saveProductDraft, loadProductDraft, clearProductDraft, ProductDraft } from "@/utils/draftStorage"; // Import draft utilities
 
 const EditProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const isNewProduct = id === "new";
-
+  
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState<number>(0);
-  const [stock, setStock] = useState<number>(0);
+  const [price, setPrice] = useState<number | string>(0);
+  const [stock, setStock] = useState<number | string>(0);
   const [category, setCategory] = useState("");
   const [mainImageUrl, setMainImageUrl] = useState("");
   const [mainImageFile, setMainImageFile] = useState<File | null>(null);
@@ -29,8 +30,38 @@ const EditProductPage: React.FC = () => {
   const [sizes, setSizes] = useState<string[]>([]);
   const [colorImages, setColorImages] = useState<{ color: string; imageUrl: string }[]>([]);
   const [isFeatured, setIsFeatured] = useState(false); // New state for isFeatured
+  
+  // Ref untuk tracking apakah sedang menyimpan
+  const isSavingRef = useRef(false);
 
   useEffect(() => {
+    // Cek apakah ada draft tersimpan saat komponen dimuat
+    const draft = loadProductDraft();
+    if (draft && !isNewProduct) {
+      // Jika ini adalah edit produk yang ada dan ada draft, tawarkan untuk memuatnya
+      const shouldLoadDraft = window.confirm("Ditemukan draft tersimpan. Apakah Anda ingin memuatnya?");
+      if (shouldLoadDraft) {
+        loadDraftData(draft);
+        showSuccess("Draft berhasil dimuat!");
+      } else {
+        loadProductData();
+      }
+    } else {
+      loadProductData();
+    }
+    
+    // Setup interval untuk menyimpan draft setiap 30 detik
+    const draftInterval = setInterval(() => {
+      if (!isSavingRef.current) {
+        saveDraft();
+      }
+    }, 30000); // 30 detik
+    
+    // Bersihkan interval saat komponen di-unmount
+    return () => clearInterval(draftInterval);
+  }, [id, isNewProduct]);
+
+  const loadProductData = () => {
     if (!isNewProduct) {
       const foundProduct = mockProducts.find((p) => p.id === id);
       if (foundProduct) {
@@ -64,7 +95,40 @@ const EditProductPage: React.FC = () => {
       setColorImages([]);
       setIsFeatured(false); // Default for new product
     }
-  }, [id, isNewProduct, navigate]);
+  };
+
+  const loadDraftData = (draft: ProductDraft) => {
+    setName(draft.name);
+    setDescription(draft.description);
+    setPrice(draft.price);
+    setStock(draft.stock);
+    setCategory(draft.category);
+    setMainImageUrl(draft.mainImageUrl);
+    setMainImagePreviewUrl(draft.mainImageUrl);
+    setColors(draft.colors);
+    setSizes(draft.sizes);
+    setColorImages(draft.colorImages);
+    setIsFeatured(draft.isFeatured);
+  };
+
+  const saveDraft = () => {
+    const draft: ProductDraft = {
+      id: isNewProduct ? undefined : id,
+      name,
+      description,
+      price,
+      stock,
+      category,
+      mainImageUrl,
+      colors,
+      sizes,
+      colorImages,
+      isFeatured
+    };
+    
+    saveProductDraft(draft);
+    console.log("Draft tersimpan:", draft);
+  };
 
   const handleMainImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -85,16 +149,21 @@ const EditProductPage: React.FC = () => {
 
   const handleSaveProduct = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !description || price <= 0 || stock <= 0 || !category || !mainImageUrl) {
+    
+    // Tandai bahwa sedang menyimpan
+    isSavingRef.current = true;
+    
+    if (!name || !description || (typeof price === 'number' && price <= 0) || (typeof stock === 'number' && stock <= 0) || !category || !mainImageUrl) {
       showError("Mohon lengkapi semua bidang yang wajib diisi.");
+      isSavingRef.current = false;
       return;
     }
 
     const productData: Omit<Product, 'id' | 'rating' | 'reviewsCount' | 'storeName' | 'storeReputation'> = {
       name,
       description,
-      price,
-      stock,
+      price: typeof price === 'string' ? parseFloat(price) : price,
+      stock: typeof stock === 'string' ? parseInt(stock) : stock,
       category,
       mainImageUrl,
       colors,
@@ -103,30 +172,39 @@ const EditProductPage: React.FC = () => {
       isFeatured, // Include isFeatured
     };
 
-    if (isNewProduct) {
-      const newProduct = addProduct(productData);
-      showSuccess(`Produk "${newProduct.name}" berhasil ditambahkan!`);
-    } else {
-      const existingProduct = mockProducts.find(p => p.id === id);
-      if (existingProduct) {
-        const updatedProduct: Product = {
-          ...existingProduct,
-          ...productData,
-          id: id!,
-        };
-        updateProduct(updatedProduct);
-        showSuccess(`Produk "${updatedProduct.name}" berhasil diperbarui!`);
+    try {
+      if (isNewProduct) {
+        const newProduct = addProduct(productData);
+        showSuccess(`Produk "${newProduct.name}" berhasil ditambahkan!`);
+      } else {
+        const existingProduct = mockProducts.find(p => p.id === id);
+        if (existingProduct) {
+          const updatedProduct: Product = {
+            ...existingProduct,
+            ...productData,
+            id: id!,
+          };
+          updateProduct(updatedProduct);
+          showSuccess(`Produk "${updatedProduct.name}" berhasil diperbarui!`);
+        }
       }
+      
+      // Hapus draft setelah berhasil menyimpan
+      clearProductDraft();
+    } catch (error) {
+      showError("Terjadi kesalahan saat menyimpan produk.");
+      console.error(error);
+    } finally {
+      // Reset flag setelah selesai menyimpan
+      isSavingRef.current = false;
+      navigate("/seller/dashboard");
     }
-
-    navigate("/seller/dashboard");
   };
 
   const handleColorChange = (index: number, newColor: string) => {
     const newColors = [...colors];
     newColors[index] = newColor;
     setColors(newColors);
-
     const newColorImages = [...colorImages];
     if (newColorImages[index]) {
       newColorImages[index].color = newColor;
@@ -170,6 +248,19 @@ const EditProductPage: React.FC = () => {
     setSizes(sizes.filter((_, i) => i !== index));
   };
 
+  // Fungsi untuk menyimpan draft secara manual
+  const handleSaveDraft = () => {
+    saveDraft();
+    showSuccess("Draft berhasil disimpan!");
+  };
+
+  // Fungsi untuk menghapus draft
+  const handleClearDraft = () => {
+    if (window.confirm("Apakah Anda yakin ingin menghapus draft?")) {
+      clearProductDraft();
+      showSuccess("Draft berhasil dihapus!");
+    }
+  };
 
   return (
     <>
@@ -178,11 +269,32 @@ const EditProductPage: React.FC = () => {
         <h1 className="text-4xl font-playfair font-bold text-center mb-10 text-gray-900 dark:text-gray-100">
           {isNewProduct ? "Tambah Produk Baru" : `Edit Produk: ${name}`}
         </h1>
-
+        
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md max-w-3xl mx-auto">
+          <div className="flex justify-end mb-4 space-x-2">
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={handleSaveDraft}
+              className="border-gold-rose text-gold-rose hover:bg-gold-rose hover:text-white font-poppins"
+            >
+              Simpan Draft
+            </Button>
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={handleClearDraft}
+              className="border-red-500 text-red-500 hover:bg-red-500 hover:text-white font-poppins"
+            >
+              Hapus Draft
+            </Button>
+          </div>
+          
           <form onSubmit={handleSaveProduct} className="space-y-6">
             <div>
-              <Label htmlFor="product-name" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">Nama Produk</Label>
+              <Label htmlFor="product-name" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">
+                Nama Produk
+              </Label>
               <Input
                 id="product-name"
                 type="text"
@@ -193,9 +305,10 @@ const EditProductPage: React.FC = () => {
                 required
               />
             </div>
-
             <div>
-              <Label htmlFor="product-description" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">Deskripsi Produk</Label>
+              <Label htmlFor="product-description" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">
+                Deskripsi Produk
+              </Label>
               <Textarea
                 id="product-description"
                 value={description}
@@ -206,36 +319,40 @@ const EditProductPage: React.FC = () => {
                 required
               />
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="product-price" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">Harga (Rp)</Label>
+                <Label htmlFor="product-price" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">
+                  Harga (Rp)
+                </Label>
                 <Input
                   id="product-price"
                   type="number"
                   value={price}
-                  onChange={(e) => setPrice(Number(e.target.value))}
+                  onChange={(e) => setPrice(e.target.value === "" ? "" : Number(e.target.value))}
                   min="0"
                   className="mt-2 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose"
                   required
                 />
               </div>
               <div>
-                <Label htmlFor="product-stock" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">Stok</Label>
+                <Label htmlFor="product-stock" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">
+                  Stok
+                </Label>
                 <Input
                   id="product-stock"
                   type="number"
                   value={stock}
-                  onChange={(e) => setStock(Number(e.target.value))}
+                  onChange={(e) => setStock(e.target.value === "" ? "" : Number(e.target.value))}
                   min="0"
                   className="mt-2 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose"
                   required
                 />
               </div>
             </div>
-
             <div>
-              <Label htmlFor="product-category" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">Kategori</Label>
+              <Label htmlFor="product-category" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">
+                Kategori
+              </Label>
               <Select value={category} onValueChange={setCategory}>
                 <SelectTrigger id="product-category" className="w-full mt-2 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose">
                   <SelectValue placeholder="Pilih Kategori" />
@@ -251,9 +368,10 @@ const EditProductPage: React.FC = () => {
                 </SelectContent>
               </Select>
             </div>
-
             <div>
-              <Label htmlFor="main-image-file" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">Gambar Utama Produk</Label>
+              <Label htmlFor="main-image-file" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">
+                Gambar Utama Produk
+              </Label>
               <Input
                 id="main-image-file"
                 type="file"
@@ -262,18 +380,29 @@ const EditProductPage: React.FC = () => {
                 className="mt-2 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose"
               />
               {mainImagePreviewUrl && (
-                <img src={mainImagePreviewUrl} alt="Preview Gambar Utama" className="mt-4 w-32 h-32 object-cover rounded-md border border-soft-pink dark:border-gold-rose" />
+                <img
+                  src={mainImagePreviewUrl}
+                  alt="Preview Gambar Utama"
+                  className="mt-4 w-32 h-32 object-cover rounded-md border border-soft-pink dark:border-gold-rose"
+                />
               )}
               <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
                 (Dalam aplikasi nyata, file akan diunggah ke server dan URL akan disimpan.)
               </p>
             </div>
-
             {/* Color Variants */}
             <div>
               <div className="flex justify-between items-center mb-3">
-                <Label className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">Varian Warna & Gambar</Label>
-                <Button type="button" variant="outline" size="sm" onClick={handleAddColor} className="border-gold-rose text-gold-rose hover:bg-gold-rose hover:text-white font-poppins dark:border-gold-rose dark:text-gold-rose dark:hover:bg-gold-rose dark:hover:text-white">
+                <Label className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">
+                  Varian Warna & Gambar
+                </Label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleAddColor}
+                  className="border-gold-rose text-gold-rose hover:bg-gold-rose hover:text-white font-poppins dark:border-gold-rose dark:text-gold-rose dark:hover:bg-gold-rose dark:hover:text-white"
+                >
                   Tambah Warna
                 </Button>
               </div>
@@ -281,7 +410,9 @@ const EditProductPage: React.FC = () => {
                 {colors.map((color, index) => (
                   <div key={index} className="flex items-end space-x-2">
                     <div className="flex-1">
-                      <Label htmlFor={`color-${index}`} className="sr-only">Warna</Label>
+                      <Label htmlFor={`color-${index}`} className="sr-only">
+                        Warna
+                      </Label>
                       <Input
                         id={`color-${index}`}
                         type="text"
@@ -292,7 +423,9 @@ const EditProductPage: React.FC = () => {
                       />
                     </div>
                     <div className="flex-1">
-                      <Label htmlFor={`color-image-${index}`} className="sr-only">URL Gambar Warna</Label>
+                      <Label htmlFor={`color-image-${index}`} className="sr-only">
+                        URL Gambar Warna
+                      </Label>
                       <Input
                         id={`color-image-${index}`}
                         type="url"
@@ -303,7 +436,11 @@ const EditProductPage: React.FC = () => {
                       />
                     </div>
                     {colorImages[index]?.imageUrl && (
-                      <img src={colorImages[index].imageUrl} alt={`Preview ${color}`} className="h-10 w-10 object-cover rounded-md border border-soft-pink dark:border-gold-rose" />
+                      <img
+                        src={colorImages[index].imageUrl}
+                        alt={`Preview ${color}`}
+                        className="h-10 w-10 object-cover rounded-md border border-soft-pink dark:border-gold-rose"
+                      />
                     )}
                     <Button type="button" variant="destructive" size="icon" onClick={() => handleRemoveColor(index)}>
                       <Trash2 className="h-4 w-4" />
@@ -315,12 +452,19 @@ const EditProductPage: React.FC = () => {
                 (Untuk gambar varian warna, saat ini menggunakan URL. Dalam aplikasi nyata, ini juga bisa diimplementasikan dengan unggah file.)
               </p>
             </div>
-
             {/* Size Variants */}
             <div>
               <div className="flex justify-between items-center mb-3">
-                <Label className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">Varian Ukuran</Label>
-                <Button type="button" variant="outline" size="sm" onClick={handleAddSize} className="border-gold-rose text-gold-rose hover:bg-gold-rose hover:text-white font-poppins dark:border-gold-rose dark:text-gold-rose dark:hover:bg-gold-rose dark:hover:text-white">
+                <Label className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">
+                  Varian Ukuran
+                </Label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleAddSize}
+                  className="border-gold-rose text-gold-rose hover:bg-gold-rose hover:text-white font-poppins dark:border-gold-rose dark:text-gold-rose dark:hover:bg-gold-rose dark:hover:text-white"
+                >
                   Tambah Ukuran
                 </Button>
               </div>
@@ -341,11 +485,12 @@ const EditProductPage: React.FC = () => {
                 ))}
               </div>
             </div>
-
             {/* Is Featured Switch */}
             <div className="flex items-center justify-between border-t pt-6 border-gray-200 dark:border-gray-700">
               <div className="flex items-center">
-                <Label htmlFor="is-featured-switch" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">Produk Unggulan</Label>
+                <Label htmlFor="is-featured-switch" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">
+                  Produk Unggulan
+                </Label>
                 <p className="text-sm text-gray-500 dark:text-gray-400 ml-2">(Tampilkan produk ini di bagian khusus)</p>
               </div>
               <Switch
@@ -355,15 +500,17 @@ const EditProductPage: React.FC = () => {
                 className="data-[state=checked]:bg-soft-pink"
               />
             </div>
-
             <Button type="submit" className="w-full py-3 text-lg bg-soft-pink hover:bg-rose-600 text-white font-poppins">
               {isNewProduct ? "Tambah Produk" : "Simpan Perubahan"}
             </Button>
           </form>
         </div>
-
         <div className="text-center mt-8">
-          <Button asChild variant="outline" className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins dark:border-gold-rose dark:text-gold-rose dark:hover:bg-gold-rose dark:hover:text-white">
+          <Button
+            asChild
+            variant="outline"
+            className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins dark:border-gold-rose dark:text-gold-rose dark:hover:bg-gold-rose dark:hover:text-white"
+          >
             <Link to="/seller/dashboard">Kembali ke Dashboard</Link>
           </Button>
         </div>

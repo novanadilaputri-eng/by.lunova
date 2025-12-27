@@ -23,6 +23,9 @@ const generateColorImages = (colors: string[]) => {
   }));
 };
 
+// Daftar ID produk yang akan dihapus
+const PRODUCTS_TO_REMOVE = ["3", "5"];
+
 const initialProducts: Product[] = [
   {
     id: "1",
@@ -38,9 +41,9 @@ const initialProducts: Product[] = [
     description: "Blouse katun lembut dengan motif bunga yang elegan, cocok untuk tampilan kasual maupun semi-formal. Tersedia dalam berbagai ukuran dan warna.",
     sizes: ["S", "M", "L", "XL"],
     colors: ["Putih", "Biru", "Pink"],
-    stock: 0, // Mulai dari 0
-    rating: 0, // Mulai dari 0
-    reviewsCount: 0, // Mulai dari 0
+    stock: 50,
+    rating: 4.8,
+    reviewsCount: 24,
     storeName: "Fashionista Store",
     storeReputation: "Gold Seller",
     isFeatured: true,
@@ -60,9 +63,9 @@ const initialProducts: Product[] = [
     description: "Kemeja linen oversize yang nyaman dan stylish, sempurna untuk gaya santai. Bahan adem dan tidak mudah kusut.",
     sizes: ["M", "L", "XL"],
     colors: ["Beige", "Hijau Sage", "Hitam"],
-    stock: 0, // Mulai dari 0
-    rating: 0, // Mulai dari 0
-    reviewsCount: 0, // Mulai dari 0
+    stock: 30,
+    rating: 4.6,
+    reviewsCount: 18,
     storeName: "Trendy Threads",
     storeReputation: "Platinum Seller",
     isFeatured: false,
@@ -83,9 +86,9 @@ const initialProducts: Product[] = [
     description: "Kaos polos basic dari bahan katun combed 30s, sangat nyaman dan cocok untuk sehari-hari. Pilihan warna lengkap.",
     sizes: ["S", "M", "L", "XL"],
     colors: ["Hitam", "Putih", "Abu-abu", "Navy"],
-    stock: 0, // Mulai dari 0
-    rating: 0, // Mulai dari 0
-    reviewsCount: 0, // Mulai dari 0
+    stock: 100,
+    rating: 4.5,
+    reviewsCount: 32,
     storeName: "Daily Wear",
     storeReputation: "Silver Seller",
     isFeatured: false,
@@ -102,9 +105,9 @@ const initialProducts: Product[] = [
     description: commonDescription,
     sizes: commonSizes,
     colors: commonColors,
-    stock: 0, // Mulai dari 0
-    rating: 0, // Mulai dari 0
-    reviewsCount: 0, // Mulai dari 0
+    stock: 25,
+    rating: 4.7,
+    reviewsCount: 15,
     storeName: "By.Lunova Official",
     storeReputation: "New Seller",
     isFeatured: false,
@@ -120,9 +123,9 @@ const initialProducts: Product[] = [
     description: commonDescription,
     sizes: commonSizes,
     colors: commonColors,
-    stock: 0, // Mulai dari 0
-    rating: 0, // Mulai dari 0
-    reviewsCount: 0, // Mulai dari 0
+    stock: 20,
+    rating: 4.4,
+    reviewsCount: 12,
     storeName: "By.Lunova Official",
     storeReputation: "New Seller",
     isFeatured: false,
@@ -138,9 +141,9 @@ const initialProducts: Product[] = [
     description: commonDescription,
     sizes: commonSizes,
     colors: commonColors,
-    stock: 0, // Mulai dari 0
-    rating: 0, // Mulai dari 0
-    reviewsCount: 0, // Mulai dari 0
+    stock: 35,
+    rating: 4.6,
+    reviewsCount: 19,
     storeName: "By.Lunova Official",
     storeReputation: "New Seller",
     isFeatured: false,
@@ -156,12 +159,12 @@ const initialProducts: Product[] = [
     description: commonDescription,
     sizes: commonSizes,
     colors: commonColors,
-    stock: 0, // Mulai dari 0
-    rating: 0, // Mulai dari 0
-    reviewsCount: 0, // Mulai dari 0
+    stock: 15,
+    rating: 4.8,
+    reviewsCount: 22,
     storeName: "By.Lunova Official",
     storeReputation: "New Seller",
-    isFeatured: false,
+    isFeatured: true,
     sellerId: "seller1",
   },
   {
@@ -174,9 +177,9 @@ const initialProducts: Product[] = [
     description: commonDescription,
     sizes: commonSizes,
     colors: commonColors,
-    stock: 0, // Mulai dari 0
-    rating: 0, // Mulai dari 0
-    reviewsCount: 0, // Mulai dari 0
+    stock: 40,
+    rating: 4.3,
+    reviewsCount: 17,
     storeName: "By.Lunova Official",
     storeReputation: "New Seller",
     isFeatured: false,
@@ -192,9 +195,9 @@ const initialProducts: Product[] = [
     description: commonDescription,
     sizes: commonSizes,
     colors: commonColors,
-    stock: 0, // Mulai dari 0
-    rating: 0, // Mulai dari 0
-    reviewsCount: 0, // Mulai dari 0
+    stock: 30,
+    rating: 4.5,
+    reviewsCount: 14,
     storeName: "By.Lunova Official",
     storeReputation: "New Seller",
     isFeatured: false,
@@ -210,9 +213,9 @@ const initialProducts: Product[] = [
     description: commonDescription,
     sizes: commonSizes,
     colors: commonColors,
-    stock: 0, // Mulai dari 0
-    rating: 0, // Mulai dari 0
-    reviewsCount: 0, // Mulai dari 0
+    stock: 20,
+    rating: 4.7,
+    reviewsCount: 20,
     storeName: "By.Lunova Official",
     storeReputation: "New Seller",
     isFeatured: false,
@@ -225,7 +228,13 @@ const loadProducts = (): Product[] => {
   if (typeof window !== "undefined") {
     const storedProducts = localStorage.getItem(PRODUCTS_STORAGE_KEY);
     if (storedProducts) {
-      return JSON.parse(storedProducts);
+      try {
+        const parsedProducts = JSON.parse(storedProducts);
+        // Filter out products that should be removed
+        return parsedProducts.filter((p: Product) => !PRODUCTS_TO_REMOVE.includes(p.id));
+      } catch (e) {
+        console.error("Error parsing stored products, using initial products", e);
+      }
     }
   }
   return initialProducts;
@@ -234,9 +243,28 @@ const loadProducts = (): Product[] => {
 // Helper to save data to localStorage
 const saveProducts = (currentProducts: Product[]) => {
   if (typeof window !== "undefined") {
-    localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(currentProducts));
+    // Filter out products that should be removed sebelum menyimpan
+    const filteredProducts = currentProducts.filter(p => !PRODUCTS_TO_REMOVE.includes(p.id));
+    localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(filteredProducts));
   }
 };
+
+// Bersihkan produk yang dihapus dari localStorage jika ada
+if (typeof window !== "undefined") {
+  const storedProducts = localStorage.getItem(PRODUCTS_STORAGE_KEY);
+  if (storedProducts) {
+    try {
+      const parsedProducts = JSON.parse(storedProducts);
+      const filteredProducts = parsedProducts.filter((p: Product) => !PRODUCTS_TO_REMOVE.includes(p.id));
+      if (filteredProducts.length !== parsedProducts.length) {
+        localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(filteredProducts));
+        console.log("Removed old products from localStorage");
+      }
+    } catch (e) {
+      console.error("Error cleaning stored products", e);
+    }
+  }
+}
 
 export let products: Product[] = loadProducts();
 

@@ -8,18 +8,23 @@ import HomePageHeader from "@/components/HomePageHeader";
 import { Video, mockVideos, addVideo, updateVideo } from "@/data/videos";
 import { showSuccess, showError } from "@/utils/toast";
 import { useAuth } from "@/hooks/use-auth";
+import { Card, CardContent } from "@/components/ui/card";
 
 const EditVideoPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { userRole } = useAuth();
   const isNewVideo = id === "new";
-
+  
   const [title, setTitle] = useState("");
   const [thumbnailUrl, setThumbnailUrl] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
   const [sellerName, setSellerName] = useState("By.Lunova Official"); // Default seller name
   const [views, setViews] = useState(0);
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
+  const [videoPreviewUrl, setVideoPreviewUrl] = useState<string | null>(null);
+  const [thumbnailPreviewUrl, setThumbnailPreviewUrl] = useState<string | null>(null);
 
   useEffect(() => {
     if (userRole !== "seller") {
@@ -37,6 +42,7 @@ const EditVideoPage: React.FC = () => {
         setVideoUrl(foundVideo.videoUrl);
         setSellerName(foundVideo.sellerName);
         setViews(foundVideo.views);
+        setThumbnailPreviewUrl(foundVideo.thumbnailUrl);
       } else {
         showError("Video tidak ditemukan.");
         navigate("/videos");
@@ -48,26 +54,87 @@ const EditVideoPage: React.FC = () => {
       setVideoUrl("");
       setSellerName("By.Lunova Official");
       setViews(0);
+      setVideoFile(null);
+      setThumbnailFile(null);
+      setVideoPreviewUrl(null);
+      setThumbnailPreviewUrl(null);
     }
   }, [id, isNewVideo, navigate]);
 
+  const handleVideoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      if (file.type.startsWith("video/")) {
+        setVideoFile(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setVideoPreviewUrl(reader.result as string);
+          setVideoUrl(reader.result as string); // Update videoUrl state for submission
+        };
+        reader.readAsDataURL(file);
+      } else {
+        showError("File yang dipilih bukan video. Mohon pilih file video.");
+      }
+    } else {
+      setVideoFile(null);
+      setVideoPreviewUrl(isNewVideo ? null : mockVideos.find(v => v.id === id)?.videoUrl || null);
+      setVideoUrl(isNewVideo ? "" : mockVideos.find(v => v.id === id)?.videoUrl || "");
+    }
+  };
+
+  const handleThumbnailFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      if (file.type.startsWith("image/")) {
+        setThumbnailFile(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setThumbnailPreviewUrl(reader.result as string);
+          setThumbnailUrl(reader.result as string); // Update thumbnailUrl state for submission
+        };
+        reader.readAsDataURL(file);
+      } else {
+        showError("File yang dipilih bukan gambar. Mohon pilih file gambar.");
+      }
+    } else {
+      setThumbnailFile(null);
+      setThumbnailPreviewUrl(isNewVideo ? null : mockVideos.find(v => v.id === id)?.thumbnailUrl || null);
+      setThumbnailUrl(isNewVideo ? "" : mockVideos.find(v => v.id === id)?.thumbnailUrl || "");
+    }
+  };
+
   const handleSaveVideo = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !thumbnailUrl.trim() || !videoUrl.trim()) {
-      showError("Mohon lengkapi semua bidang wajib.");
+    if (!title.trim()) {
+      showError("Mohon masukkan judul video.");
+      return;
+    }
+
+    // Jika tidak ada file video baru dan tidak ada URL video, tampilkan error
+    if (!videoFile && !videoUrl.trim()) {
+      showError("Mohon unggah file video atau masukkan URL video.");
+      return;
+    }
+
+    // Jika tidak ada file thumbnail baru dan tidak ada URL thumbnail, tampilkan error
+    if (!thumbnailFile && !thumbnailUrl.trim()) {
+      showError("Mohon unggah file thumbnail atau masukkan URL thumbnail.");
       return;
     }
 
     const videoData: Omit<Video, 'id' | 'uploadDate'> = {
       title: title.trim(),
-      thumbnailUrl: thumbnailUrl.trim(),
-      videoUrl: videoUrl.trim(),
+      thumbnailUrl: thumbnailUrl.trim() || (thumbnailPreviewUrl || ""),
+      videoUrl: videoUrl.trim() || (videoPreviewUrl || ""),
       sellerName: sellerName.trim(),
       views: views,
     };
 
     if (isNewVideo) {
-      const newVideo = addVideo({ ...videoData, uploadDate: new Date().toISOString().split('T')[0] });
+      const newVideo = addVideo({ 
+        ...videoData, 
+        uploadDate: new Date().toISOString().split('T')[0] 
+      });
       showSuccess(`Video "${newVideo.title}" berhasil ditambahkan!`);
     } else {
       const existingVideo = mockVideos.find(v => v.id === id);
@@ -81,7 +148,6 @@ const EditVideoPage: React.FC = () => {
         showSuccess(`Video "${updatedVideo.title}" berhasil diperbarui!`);
       }
     }
-
     navigate("/videos");
   };
 
@@ -96,11 +162,12 @@ const EditVideoPage: React.FC = () => {
         <h1 className="text-4xl font-playfair font-bold text-center mb-10 text-gray-900 dark:text-gray-100">
           {isNewVideo ? "Tambah Video Baru" : `Edit Video: ${title}`}
         </h1>
-
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md max-w-3xl mx-auto">
           <form onSubmit={handleSaveVideo} className="space-y-6">
             <div>
-              <Label htmlFor="video-title" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">Judul Video</Label>
+              <Label htmlFor="video-title" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">
+                Judul Video
+              </Label>
               <Input
                 id="video-title"
                 type="text"
@@ -113,23 +180,24 @@ const EditVideoPage: React.FC = () => {
             </div>
 
             <div>
-              <Label htmlFor="thumbnail-url" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">URL Thumbnail</Label>
+              <Label className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">
+                Unggah Video
+              </Label>
               <Input
-                id="thumbnail-url"
-                type="url"
-                value={thumbnailUrl}
-                onChange={(e) => setThumbnailUrl(e.target.value)}
-                placeholder="https://example.com/thumbnail.jpg"
+                type="file"
+                accept="video/*"
+                onChange={handleVideoFileChange}
                 className="mt-2 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose"
-                required
               />
-              {thumbnailUrl && (
-                <img src={thumbnailUrl} alt="Thumbnail Preview" className="mt-4 w-48 h-auto object-cover rounded-md border border-soft-pink dark:border-gold-rose" />
-              )}
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                Pilih file video dari perangkat Anda atau masukkan URL di bawah
+              </p>
             </div>
 
             <div>
-              <Label htmlFor="video-url" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">URL Video (Embed)</Label>
+              <Label htmlFor="video-url" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">
+                URL Video (Embed)
+              </Label>
               <Input
                 id="video-url"
                 type="url"
@@ -137,15 +205,69 @@ const EditVideoPage: React.FC = () => {
                 onChange={(e) => setVideoUrl(e.target.value)}
                 placeholder="https://www.youtube.com/embed/VIDEO_ID"
                 className="mt-2 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose"
-                required
               />
               <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                 (Gunakan URL embed dari platform seperti YouTube, e.g., `https://www.youtube.com/embed/dQw4w9WgXcQ`)
               </p>
             </div>
 
+            {videoPreviewUrl && (
+              <Card className="mt-4">
+                <CardContent className="p-4">
+                  <h3 className="font-poppins font-medium text-gray-800 dark:text-gray-200 mb-2">Pratinjau Video:</h3>
+                  <video 
+                    src={videoPreviewUrl} 
+                    controls 
+                    className="w-full max-h-64 object-contain rounded-md border border-soft-pink dark:border-gold-rose"
+                  />
+                </CardContent>
+              </Card>
+            )}
+
             <div>
-              <Label htmlFor="seller-name" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">Nama Penjual</Label>
+              <Label className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">
+                Unggah Thumbnail
+              </Label>
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={handleThumbnailFileChange}
+                className="mt-2 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose"
+              />
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                Pilih gambar thumbnail dari perangkat Anda atau masukkan URL di bawah
+              </p>
+            </div>
+
+            <div>
+              <Label htmlFor="thumbnail-url" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">
+                URL Thumbnail
+              </Label>
+              <Input
+                id="thumbnail-url"
+                type="url"
+                value={thumbnailUrl}
+                onChange={(e) => setThumbnailUrl(e.target.value)}
+                placeholder="https://example.com/thumbnail.jpg"
+                className="mt-2 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose"
+              />
+            </div>
+
+            {thumbnailPreviewUrl && (
+              <div>
+                <h3 className="font-poppins font-medium text-gray-800 dark:text-gray-200 mb-2">Pratinjau Thumbnail:</h3>
+                <img 
+                  src={thumbnailPreviewUrl} 
+                  alt="Thumbnail Preview" 
+                  className="w-48 h-auto object-cover rounded-md border border-soft-pink dark:border-gold-rose" 
+                />
+              </div>
+            )}
+
+            <div>
+              <Label htmlFor="seller-name" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">
+                Nama Penjual
+              </Label>
               <Input
                 id="seller-name"
                 type="text"
@@ -158,7 +280,9 @@ const EditVideoPage: React.FC = () => {
             </div>
 
             <div>
-              <Label htmlFor="views" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">Jumlah Tayangan (Opsional)</Label>
+              <Label htmlFor="views" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">
+                Jumlah Tayangan (Opsional)
+              </Label>
               <Input
                 id="views"
                 type="number"
@@ -169,14 +293,20 @@ const EditVideoPage: React.FC = () => {
               />
             </div>
 
-            <Button type="submit" className="w-full py-3 text-lg bg-soft-pink hover:bg-rose-600 text-white font-poppins">
+            <Button 
+              type="submit" 
+              className="w-full py-3 text-lg bg-soft-pink hover:bg-rose-600 text-white font-poppins"
+            >
               {isNewVideo ? "Tambah Video" : "Simpan Perubahan"}
             </Button>
           </form>
         </div>
-
         <div className="text-center mt-8">
-          <Button asChild variant="outline" className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins dark:border-gold-rose dark:text-gold-rose dark:hover:bg-gold-rose dark:hover:text-white">
+          <Button 
+            asChild 
+            variant="outline" 
+            className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins dark:border-gold-rose dark:text-gold-rose dark:hover:bg-gold-rose dark:hover:text-white"
+          >
             <Link to="/videos">Kembali ke Daftar Video</Link>
           </Button>
         </div>

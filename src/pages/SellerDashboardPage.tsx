@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import HomePageHeader from "@/components/HomePageHeader";
-import { products as mockProducts, getSellerProducts, deleteProduct } from "@/data/products";
+import { products as mockProducts, getSellerProducts } from "@/data/products";
+import { deleteProduct } from "@/data/products"; // Impor fungsi deleteProduct secara eksplisit
 import { mockOrders, updateOrderStatus } from "@/data/orders";
 import { PlusCircle, Edit, Trash2, Package, Truck, CheckCircle, Clock, Megaphone, Bell, Banknote } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -47,9 +48,14 @@ const SellerDashboardPage: React.FC = () => {
 
   const handleDeleteProduct = (productId: string) => {
     if (window.confirm(`Apakah Anda yakin ingin menghapus produk ID: ${productId}?`)) {
-      deleteProduct(productId);
-      setCurrentProducts([...mockProducts]);
-      showSuccess(`Produk ID: ${productId} berhasil dihapus.`);
+      try {
+        deleteProduct(productId); // Gunakan fungsi deleteProduct yang diimpor
+        setCurrentProducts([...mockProducts]);
+        showSuccess(`Produk ID: ${productId} berhasil dihapus.`);
+      } catch (error) {
+        showError("Gagal menghapus produk. Silakan coba lagi.");
+        console.error("Error deleting product:", error);
+      }
     }
   };
 
@@ -153,7 +159,10 @@ const SellerDashboardPage: React.FC = () => {
                   <Button 
                     variant="destructive" 
                     className="flex-1 font-poppins" 
-                    onClick={() => handleDeleteProduct(product.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteProduct(product.id);
+                    }}
                   >
                     <Trash2 className="h-4 w-4 mr-2" /> Hapus
                   </Button>

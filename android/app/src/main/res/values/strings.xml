@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">glowing-tardigrade-twirl</string>
+    <string name="title_activity_main">glowing-tardigrade-twirl</string>
+    <string name="package_name">com.example.glowingtardigradetwirl</string>
+    <string name="custom_url_scheme">com.example.glowingtardigradetwirl</string>
+</resources>

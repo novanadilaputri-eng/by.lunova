@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { PlusCircle, Edit, Trash2, Image as ImageIcon, Heart, Sparkles } from 'lucide-react';
+import { PlusCircle, Edit, Trash2, Image as ImageIcon, Heart, Sparkles, ZoomIn, ZoomOut, RotateCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
@@ -28,6 +28,7 @@ const ProductCollage: React.FC = () => {
   const [isLiked, setIsLiked] = useState<{[key: string]: boolean}>({});
   const [likeCount, setLikeCount] = useState<{[key: string]: number}>({});
   const [zoomLevel, setZoomLevel] = useState(1);
+  const [rotation, setRotation] = useState(0);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
@@ -45,9 +46,8 @@ const ProductCollage: React.FC = () => {
       const parsedLikes = JSON.parse(savedLikes);
       setLikeCount(parsedLikes);
     }
-  }, []);
+  }, []); // Run only once on mount
 
-  // Run only once on mount
   useEffect(() => {
     if (editingPhoto) {
       setImageUrl(editingPhoto.imageUrl);
@@ -133,6 +133,7 @@ const ProductCollage: React.FC = () => {
     setSelectedPhoto(photo);
     setIsViewOpen(true);
     setZoomLevel(1);
+    setRotation(0);
     setPosition({ x: 0, y: 0 });
   };
 
@@ -140,6 +141,7 @@ const ProductCollage: React.FC = () => {
     setIsViewOpen(false);
     setSelectedPhoto(null);
     setZoomLevel(1);
+    setRotation(0);
     setPosition({ x: 0, y: 0 });
   };
 
@@ -148,13 +150,13 @@ const ProductCollage: React.FC = () => {
       ...prev,
       [photoId]: !prev[photoId]
     }));
-
+    
     const newCount = isLiked[photoId] ? (likeCount[photoId] || 0) - 1 : (likeCount[photoId] || 0) + 1;
     setLikeCount(prev => ({
       ...prev,
       [photoId]: newCount
     }));
-
+    
     // Save to localStorage
     localStorage.setItem('collageLikes', JSON.stringify({
       ...likeCount,
@@ -172,7 +174,12 @@ const ProductCollage: React.FC = () => {
 
   const handleResetZoom = () => {
     setZoomLevel(1);
+    setRotation(0);
     setPosition({ x: 0, y: 0 });
+  };
+
+  const handleRotate = () => {
+    setRotation(prev => (prev + 90) % 360);
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -246,7 +253,7 @@ const ProductCollage: React.FC = () => {
                 <img 
                   src={photo.imageUrl} 
                   alt={photo.altText} 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
                   <p className="text-white text-sm font-poppins truncate">{photo.altText}</p>
@@ -257,14 +264,13 @@ const ProductCollage: React.FC = () => {
                     onClick={(e) => {
                       e.stopPropagation();
                       handleLike(photo.id);
-                    }}
+                    }} 
                   />
                 </div>
                 <div className="absolute bottom-2 left-2 bg-black/50 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">
                   {likeCount[photo.id] || 0} likes
                 </div>
               </div>
-              
               <CardContent className="p-2">
                 <p className="text-xs font-poppins text-gray-700 dark:text-gray-300 truncate text-center">{photo.altText}</p>
                 {userRole === "seller" && photo.sellerId === currentSellerId && (
@@ -272,7 +278,7 @@ const ProductCollage: React.FC = () => {
                     <Button 
                       variant="ghost" 
                       size="icon" 
-                      onClick={() => handleOpenForm(photo)} 
+                      onClick={() => handleOpenForm(photo)}
                       className="h-7 w-7 text-gold-rose hover:bg-gold-rose/20"
                     >
                       <Edit className="h-4 w-4" />
@@ -283,7 +289,7 @@ const ProductCollage: React.FC = () => {
                       onClick={(e) => {
                         e.stopPropagation();
                         handleDelete(photo.id);
-                      }} 
+                      }}
                       className="h-7 w-7 text-red-500 hover:bg-red-500/20"
                     >
                       <Trash2 className="h-4 w-4" />
@@ -300,72 +306,87 @@ const ProductCollage: React.FC = () => {
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
         <DialogContent className="sm:max-w-[500px] bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
           <div className="grid gap-4 py-4">
-            <h2 className="text-xl font-playfair font-bold text-center">{editingPhoto ? "Edit Foto Kolase" : "Tambah Foto Baru ke Kolase"}</h2>
+            <h2 className="text-xl font-playfair font-bold text-center">
+              {editingPhoto ? "Edit Foto Kolase" : "Tambah Foto Baru ke Kolase"}
+            </h2>
             <p className="text-sm text-gray-600 font-poppins text-center dark:text-gray-400">
               Tambahkan atau perbarui foto untuk kolase inspirasi gaya Anda.
             </p>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <Label htmlFor="image-file" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">Unggah Gambar</Label>
-                <Input 
-                  id="image-file" 
-                  type="file" 
-                  accept="image/*" 
-                  onChange={handleFileChange} 
-                  className="mt-2 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose" 
+                <Label htmlFor="image-file" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">
+                  Unggah Gambar
+                </Label>
+                <Input
+                  id="image-file"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="mt-2 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose"
                 />
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                   Atau masukkan URL gambar di bawah.
                 </p>
               </div>
+              
               <div>
-                <Label htmlFor="image-url" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">URL Gambar</Label>
-                <Input 
-                  id="image-url" 
-                  type="url" 
-                  value={imageUrl} 
+                <Label htmlFor="image-url" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">
+                  URL Gambar
+                </Label>
+                <Input
+                  id="image-url"
+                  type="url"
+                  value={imageUrl}
                   onChange={(e) => {
                     setImageUrl(e.target.value);
                     setImagePreviewUrl(e.target.value);
                     setImageFile(null); // Clear file input if URL is used
-                  }} 
-                  placeholder="https://example.com/image.jpg" 
-                  className="mt-2 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose" 
+                  }}
+                  placeholder="https://example.com/image.jpg"
+                  className="mt-2 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose"
                 />
               </div>
+              
               {imagePreviewUrl && (
                 <div className="flex justify-center">
                   <img 
                     src={imagePreviewUrl} 
                     alt="Preview" 
-                    className="h-32 w-32 object-cover rounded-md border-2 border-soft-pink shadow-md" 
+                    className="h-32 w-32 object-cover rounded-md border-2 border-soft-pink shadow-md"
                   />
                 </div>
               )}
+              
               <div>
-                <Label htmlFor="alt-text" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">Teks Alternatif</Label>
-                <Input 
-                  id="alt-text" 
-                  value={altText} 
-                  onChange={(e) => setAltText(e.target.value)} 
-                  placeholder="Deskripsi singkat gambar" 
-                  className="mt-2 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose" 
-                  required 
+                <Label htmlFor="alt-text" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">
+                  Teks Alternatif
+                </Label>
+                <Input
+                  id="alt-text"
+                  value={altText}
+                  onChange={(e) => setAltText(e.target.value)}
+                  placeholder="Deskripsi singkat gambar"
+                  className="mt-2 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose"
+                  required
                 />
               </div>
+              
               <div>
-                <Label htmlFor="product-id" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">ID Produk Terkait (Opsional)</Label>
-                <Input 
-                  id="product-id" 
-                  value={productId} 
-                  onChange={(e) => setProductId(e.target.value)} 
-                  placeholder="e.g., 1, 2, prod-12345" 
-                  className="mt-2 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose" 
+                <Label htmlFor="product-id" className="text-base font-poppins font-medium text-gray-800 dark:text-gray-200">
+                  ID Produk Terkait (Opsional)
+                </Label>
+                <Input
+                  id="product-id"
+                  value={productId}
+                  onChange={(e) => setProductId(e.target.value)}
+                  placeholder="e.g., 1, 2, prod-12345"
+                  className="mt-2 border-soft-pink focus:ring-soft-pink font-poppins dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose"
                 />
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                   Jika diisi, foto akan mengarah ke halaman detail produk ini.
                 </p>
               </div>
+              
               <div className="flex justify-end mt-4">
                 <Button 
                   type="submit" 
@@ -388,36 +409,16 @@ const ProductCollage: React.FC = () => {
                 <div className="flex justify-between items-center p-4 bg-black/50">
                   <h3 className="text-xl font-playfair font-bold">{selectedPhoto.altText}</h3>
                   <div className="flex space-x-2">
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      onClick={handleZoomOut}
-                      className="text-white hover:bg-white/20"
-                    >
-                      -
+                    <Button variant="ghost" size="sm" onClick={handleZoomOut} className="text-white hover:bg-white/20">
+                      <ZoomOut className="h-4 w-4" />
                     </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      onClick={handleResetZoom}
-                      className="text-white hover:bg-white/20"
-                    >
-                      Reset
+                    <Button variant="ghost" size="sm" onClick={handleResetZoom} className="text-white hover:bg-white/20">
+                      <RotateCw className="h-4 w-4" />
                     </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      onClick={handleZoomIn}
-                      className="text-white hover:bg-white/20"
-                    >
-                      +
+                    <Button variant="ghost" size="sm" onClick={handleZoomIn} className="text-white hover:bg-white/20">
+                      <ZoomIn className="h-4 w-4" />
                     </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      onClick={handleCloseView}
-                      className="text-white hover:bg-white/20"
-                    >
+                    <Button variant="ghost" size="sm" onClick={handleCloseView} className="text-white hover:bg-white/20">
                       Tutup
                     </Button>
                   </div>
@@ -435,8 +436,8 @@ const ProductCollage: React.FC = () => {
                     src={selectedPhoto.imageUrl} 
                     alt={selectedPhoto.altText} 
                     className="max-w-none transition-transform duration-200"
-                    style={{
-                      transform: `scale(${zoomLevel}) translate(${position.x}px, ${position.y}px)`,
+                    style={{ 
+                      transform: `scale(${zoomLevel}) rotate(${rotation}deg) translate(${position.x}px, ${position.y}px)`,
                       cursor: isDragging ? 'grabbing' : 'grab'
                     }}
                   />
@@ -450,21 +451,16 @@ const ProductCollage: React.FC = () => {
                       <p className="text-sm text-gray-300 font-poppins">Penjual Terpercaya</p>
                     </div>
                   </div>
-                  
                   <div className="flex items-center space-x-4">
                     <div className="flex items-center">
                       <Heart 
                         className={`h-5 w-5 cursor-pointer ${isLiked[selectedPhoto.id] ? 'text-red-500 fill-red-500' : 'text-white'}`} 
-                        onClick={() => handleLike(selectedPhoto.id)}
+                        onClick={() => handleLike(selectedPhoto.id)} 
                       />
                       <span className="ml-2 font-poppins">{likeCount[selectedPhoto.id] || 0} likes</span>
                     </div>
-                    
                     {selectedPhoto.productId ? (
-                      <Button 
-                        asChild 
-                        className="bg-soft-pink hover:bg-rose-600 text-white font-poppins"
-                      >
+                      <Button asChild className="bg-soft-pink hover:bg-rose-600 text-white font-poppins">
                         <Link to={`/products/${selectedPhoto.productId}`}>
                           Lihat Produk
                         </Link>

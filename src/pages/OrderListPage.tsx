@@ -35,15 +35,18 @@ const OrderListPage: React.FC = () => {
     if (!statusFilter) {
       return userOrders; // Show all orders
     }
-    
+
     return userOrders.filter(order => {
       switch (statusFilter) {
         case "pending-payment":
           return order.status === "Menunggu Pembayaran";
         case "shipped":
-          return order.status === "Sedang Dalam Perjalanan" || order.status === "Menunggu Penjemputan Kurir" || order.status === "Dikemas";
+          return order.status === "Sedang Dalam Perjalanan" || 
+                 order.status === "Menunggu Penjemputan Kurir" || 
+                 order.status === "Dikemas";
         case "completed":
-          return order.status === "Selesai" || order.status === "Telah Sampai";
+          return order.status === "Selesai" || 
+                 order.status === "Telah Sampai";
         case "cancelled":
           return order.status === "Dibatalkan";
         default:
@@ -59,6 +62,7 @@ const OrderListPage: React.FC = () => {
         <h1 className="text-4xl font-playfair font-bold text-center mb-10 text-gray-900">
           {getStatusTitle(statusFilter)}
         </h1>
+        
         {filteredOrders.length === 0 ? (
           <div className="text-center p-10 bg-white rounded-lg shadow-md">
             <Package className="h-20 w-20 text-gray-400 mx-auto mb-6" />
@@ -74,8 +78,13 @@ const OrderListPage: React.FC = () => {
             ))}
           </div>
         )}
+
         <div className="text-center mt-8">
-          <Button asChild variant="outline" className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins">
+          <Button 
+            asChild 
+            variant="outline" 
+            className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins"
+          >
             <Link to="/profile">Kembali ke Akun Saya</Link>
           </Button>
         </div>

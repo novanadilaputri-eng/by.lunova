@@ -21,7 +21,6 @@ const SellerDashboardPage: React.FC = () => {
   const [currentProducts, setCurrentProducts] = useState(mockProducts);
   const [currentOrders, setCurrentOrders] = useState(mockOrders);
   const [sellerNotifications, setSellerNotifications] = useState(mockNotifications.filter(n => n.userId === "seller1"));
-
   const currentSellerId = "seller1";
 
   useEffect(() => {
@@ -38,7 +37,7 @@ const SellerDashboardPage: React.FC = () => {
   }, [mockProducts, mockOrders, mockNotifications, currentSellerId]);
 
   const sellerProducts = getSellerProducts(currentSellerId);
-
+  
   const pendingPaymentOrders = currentOrders.filter(order => order.status === "Menunggu Pembayaran");
   const processedOrders = currentOrders.filter(order => order.status === "Diproses");
   const packedOrders = currentOrders.filter(order => order.status === "Dikemas");
@@ -158,7 +157,7 @@ const SellerDashboardPage: React.FC = () => {
                   </Button>
                   <Button 
                     variant="destructive" 
-                    className="flex-1 font-poppins" 
+                    className="flex-1 font-poppins"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleDeleteProduct(product.id);
@@ -269,7 +268,7 @@ const SellerDashboardPage: React.FC = () => {
           <p className="text-gray-600 dark:text-gray-400 font-poppins">Grafik penjualan dan omzet akan ditampilkan di sini.</p>
           <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">(Fitur ini akan dikembangkan lebih lanjut)</p>
         </div>
-        
+
         <div className="text-center mt-8">
           <Button 
             onClick={() => navigate("/profile")} 

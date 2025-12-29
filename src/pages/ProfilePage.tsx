@@ -8,9 +8,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { showSuccess, showError } from "@/utils/toast";
-import { mockOrders } from "@/data/orders"; // Import mockOrders
-import { useAuth } from "@/hooks/use-auth"; // Import useAuth hook
-import WhatsAppVerificationDialog from "@/components/WhatsAppVerificationDialog"; // Import new component
+import { mockOrders } from "@/data/orders";
+import { useAuth } from "@/hooks/use-auth";
+import WhatsAppVerificationDialog from "@/components/WhatsAppVerificationDialog";
 
 interface ProfileMenuItemProps {
   icon: React.ElementType;
@@ -28,15 +28,14 @@ const ProfileMenuItem: React.FC<ProfileMenuItemProps> = ({ icon: Icon, label, to
 
 const ProfilePage: React.FC = () => {
   const { userRole, loginAsBuyer, loginAsSeller, logout } = useAuth();
-  const [username, setUsername] = useState(() => localStorage.getItem("profileUsername") || "Pengguna"); // Initialize from localStorage
-  const [profilePicture, setProfilePicture] = useState(() => localStorage.getItem("profilePictureUrl") || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); // Initialize from localStorage
+  const [username, setUsername] = useState(() => localStorage.getItem("profileUsername") || "Pengguna");
+  const [profilePicture, setProfilePicture] = useState(() => localStorage.getItem("profilePictureUrl") || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [isWhatsAppVerificationOpen, setIsWhatsAppVerificationOpen] = useState(false); // New state for WhatsApp dialog
+  const [isWhatsAppVerificationOpen, setIsWhatsAppVerificationOpen] = useState(false);
   const [tempUsername, setTempUsername] = useState(username);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(profilePicture); // Initialize preview with current profile picture
+  const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(profilePicture);
 
-  // Calculate order counts
   const pendingPaymentCount = mockOrders.filter(order => order.status === "Menunggu Pembayaran").length;
   const shippedCount = mockOrders.filter(order => 
     order.status === "Sedang Dalam Perjalanan" || 
@@ -48,12 +47,11 @@ const ProfilePage: React.FC = () => {
     order.status === "Telah Sampai"
   ).length;
 
-  // Effect to reset temp states when dialog opens/closes
   useEffect(() => {
     if (isEditDialogOpen) {
       setTempUsername(username);
-      setFilePreviewUrl(profilePicture); // Initialize preview with current profile picture
-      setSelectedFile(null); // Clear any previously selected file
+      setFilePreviewUrl(profilePicture);
+      setSelectedFile(null);
     }
   }, [isEditDialogOpen, username, profilePicture]);
 
@@ -68,7 +66,7 @@ const ProfilePage: React.FC = () => {
       reader.readAsDataURL(file);
     } else {
       setSelectedFile(null);
-      setFilePreviewUrl(profilePicture); // Revert to current profile picture if file cleared
+      setFilePreviewUrl(profilePicture);
     }
   };
 
@@ -78,16 +76,15 @@ const ProfilePage: React.FC = () => {
       return;
     }
     setUsername(tempUsername);
-    localStorage.setItem("profileUsername", tempUsername); // Persist username
+    localStorage.setItem("profileUsername", tempUsername);
 
     if (selectedFile) {
       setProfilePicture(filePreviewUrl!);
-      localStorage.setItem("profilePictureUrl", filePreviewUrl!); // Persist new profile picture
+      localStorage.setItem("profilePictureUrl", filePreviewUrl!);
       showSuccess("Profil berhasil diperbarui! (Foto akan diunggah ke server di aplikasi nyata)");
     } else if (filePreviewUrl !== profilePicture) {
-      // If user cleared the file input and it was previously a file, or changed the URL input
-      setProfilePicture(filePreviewUrl || ""); // If filePreviewUrl is null, it means cleared
-      localStorage.setItem("profilePictureUrl", filePreviewUrl || ""); // Persist cleared/changed URL
+      setProfilePicture(filePreviewUrl || "");
+      localStorage.setItem("profilePictureUrl", filePreviewUrl || "");
       showSuccess("Profil berhasil diperbarui!");
     } else {
       showSuccess("Profil berhasil diperbarui!");
@@ -97,7 +94,6 @@ const ProfilePage: React.FC = () => {
 
   const handleLogout = () => {
     logout();
-    // Optionally redirect to login page
   };
 
   return (
@@ -111,7 +107,6 @@ const ProfilePage: React.FC = () => {
             <AvatarFallback className="bg-soft-pink/20 text-soft-pink text-3xl font-playfair">{username.charAt(0)}</AvatarFallback>
           </Avatar>
           <h2 className="text-2xl font-playfair font-bold text-gray-900 dark:text-gray-100">{username}</h2>
-          <p className="text-md text-gray-600 font-poppins dark:text-gray-400">lunova.user@example.com</p>
           <Button variant="outline" className="mt-4 border-gold-rose text-gold-rose hover:bg-gold-rose hover:text-white font-poppins dark:border-gold-rose dark:text-gold-rose dark:hover:bg-gold-rose dark:hover:text-white" onClick={() => setIsEditDialogOpen(true)}>
             Edit Profil
           </Button>
@@ -173,8 +168,6 @@ const ProfilePage: React.FC = () => {
           </div>
         </div>
 
-        {/* E-Wallet Connection Section - Removed as requested */}
-
         <div className="space-y-4">
           <ProfileMenuItem icon={Heart} label="Wishlist" to="/profile/wishlist" />
           <ProfileMenuItem icon={Gift} label="Voucher Saya" to="/profile/vouchers" />
@@ -195,7 +188,6 @@ const ProfilePage: React.FC = () => {
         </div>
       </div>
 
-      {/* Edit Profile Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="sm:max-w-[425px] bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
           <DialogHeader>
@@ -242,12 +234,11 @@ const ProfilePage: React.FC = () => {
         </DialogContent>
       </Dialog>
 
-      {/* WhatsApp Verification Dialog */}
       <WhatsAppVerificationDialog
         isOpen={isWhatsAppVerificationOpen}
         onClose={() => setIsWhatsAppVerificationOpen(false)}
         onVerified={() => {
-          loginAsSeller(); // Log in as seller after successful (simulated) verification
+          loginAsSeller();
           setIsWhatsAppVerificationOpen(false);
           showSuccess("Verifikasi WhatsApp berhasil! Anda sekarang login sebagai Penjual.");
         }}

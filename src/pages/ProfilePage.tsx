@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Package, Heart, Gift, MapPin, Settings, HelpCircle, LogOut, Wallet, Truck, CheckCircle, User as UserIcon, Bell } from "lucide-react";
+import { Package, Heart, Gift, MapPin, Settings, HelpCircle, LogOut, Wallet, Truck, CheckCircle, User as UserIcon, Bell, MessageCircle } from "lucide-react";
 import HomePageHeader from "@/components/HomePageHeader";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -84,6 +84,12 @@ const ProfilePage: React.FC = () => {
     logout();
   };
 
+  const handleWhatsAppClick = () => {
+    const phoneNumber = '+6281234567890';
+    const message = 'Halo admin By.Lunova, saya ingin bertanya tentang...';
+    window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
+  };
+
   return (
     <>
       <HomePageHeader />
@@ -163,6 +169,16 @@ const ProfilePage: React.FC = () => {
           <ProfileMenuItem icon={Bell} label="Pemberitahuan" to="/notifications" />
           <ProfileMenuItem icon={Settings} label="Pengaturan Aplikasi" to="/profile/settings" />
           <ProfileMenuItem icon={HelpCircle} label="Pusat Bantuan" to="/profile/help" />
+          
+          {/* Tombol kontak admin via WhatsApp */}
+          <div 
+            className="flex items-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:bg-beige dark:hover:bg-gray-700 transition-colors cursor-pointer"
+            onClick={handleWhatsAppClick}
+          >
+            <MessageCircle className="h-5 w-5 text-green-500 mr-4" />
+            <span className="font-poppins text-gray-800 dark:text-gray-200">Hubungi Admin via WhatsApp</span>
+          </div>
+          
           {userRole === "seller" && (
             <ProfileMenuItem icon={UserIcon} label="Dashboard Penjual" to="/seller/dashboard" />
           )}

@@ -8,12 +8,19 @@ import SellerPromotionDisplay from "@/components/SellerPromotionDisplay";
 import ProductCollage from "@/components/ProductCollage";
 import { products as mockProducts } from '@/data/products';
 import { Button } from "@/components/ui/button";
+import { MessageCircle } from "lucide-react";
 
 const Index = () => {
   // Prioritize featured products for recommendations
   const featuredProducts = mockProducts.filter(p => p.isFeatured);
   const nonFeaturedProducts = mockProducts.filter(p => !p.isFeatured);
   const recommendedProducts = [...featuredProducts, ...nonFeaturedProducts].slice(0, 4);
+
+  const handleWhatsAppClick = () => {
+    const phoneNumber = '+6281234567890';
+    const message = 'Halo admin By.Lunova, saya ingin bertanya tentang...';
+    window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
+  };
 
   return (
     <div className="min-h-screen bg-beige dark:bg-gray-900">
@@ -47,6 +54,18 @@ const Index = () => {
         <RecommendationSection title="Rekomendasi Fashion Hari Ini" products={recommendedProducts} />
         <OOTDBoard />
       </div>
+      
+      {/* Tombol WhatsApp di halaman beranda */}
+      <div className="fixed bottom-24 right-4 z-50">
+        <Button
+          onClick={handleWhatsAppClick}
+          className="bg-green-500 hover:bg-green-600 text-white rounded-full w-14 h-14 shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
+          aria-label="Hubungi Admin via WhatsApp"
+        >
+          <MessageCircle className="h-8 w-8" />
+        </Button>
+      </div>
+      
       <MadeWithDyad />
     </div>
   );

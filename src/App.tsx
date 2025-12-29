@@ -32,6 +32,7 @@ import SellerPromotionManagementPage from "./pages/SellerPromotionManagementPage
 import { CartProvider } from "./context/CartContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import BottomNavigationBar from "./components/BottomNavigationBar";
+import WhatsAppContact from "./components/WhatsAppContact";
 
 // Import halaman mobile
 import MobileProductListingPage from "./pages/MobileProductListingPage";
@@ -117,6 +118,7 @@ const App = () => {
                   </Routes>
                 </div>
                 <BottomNavigationBar />
+                <WhatsAppContact />
               </>
             </BrowserRouter>
           </CartProvider>

@@ -17,7 +17,7 @@ const Index = () => {
   const recommendedProducts = [...featuredProducts, ...nonFeaturedProducts].slice(0, 4);
 
   const handleWhatsAppClick = () => {
-    const phoneNumber = '6281234567890'; // Format internasional tanpa tanda +
+    const phoneNumber = '6285226426591'; // Format internasional tanpa tanda +
     const message = 'Halo admin By.Lunova, saya ingin bertanya tentang...';
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');

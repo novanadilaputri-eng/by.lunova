@@ -4,8 +4,8 @@ import { MessageCircle } from 'lucide-react';
 
 const WhatsAppContact: React.FC = () => {
   const handleWhatsAppClick = () => {
-    // Nomor WhatsApp admin (ganti dengan nomor yang sebenarnya)
-    const phoneNumber = '6281234567890'; // Format internasional tanpa tanda +
+    // Nomor WhatsApp admin yang benar
+    const phoneNumber = '6285226426591'; // Format internasional tanpa tanda +
     const message = 'Halo admin By.Lunova, saya ingin bertanya tentang...';
     
     // Membuka WhatsApp Web dengan pesan otomatis

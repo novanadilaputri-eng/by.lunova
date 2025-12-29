@@ -6,7 +6,7 @@ import { HelpCircle, Mail, Phone, MessageSquare, MessageCircle } from "lucide-re
 
 const HelpPage: React.FC = () => {
   const handleWhatsAppClick = () => {
-    const phoneNumber = '6285226426591'; // Format internasional tanpa tanda +
+    const phoneNumber = '6285226426592'; // Format internasional tanpa tanda +
     const message = 'Halo admin By.Lunova, saya ingin bertanya tentang...';
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
@@ -35,7 +35,7 @@ const HelpPage: React.FC = () => {
               <Phone className="h-6 w-6 text-soft-pink mr-4" />
               <div>
                 <p className="font-poppins font-semibold text-gray-800">Hubungi Kami</p>
-                <p className="text-gray-700">+62 852-2642-6591</p>
+                <p className="text-gray-700">+62 852-2642-6592</p>
               </div>
             </div>
             

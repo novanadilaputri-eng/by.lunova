@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import HomePageHeader from "@/components/HomePageHeader";
 import { products as mockProducts, getSellerProducts } from "@/data/products";
-import { deleteProduct } from "@/data/products"; // Impor fungsi deleteProduct secara eksplisit
+import { deleteProduct } from "@/data/products";
 import { mockOrders, updateOrderStatus } from "@/data/orders";
 import { PlusCircle, Edit, Trash2, Package, Truck, CheckCircle, Clock, Megaphone, Bell, Banknote } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -48,7 +48,7 @@ const SellerDashboardPage: React.FC = () => {
   const handleDeleteProduct = (productId: string) => {
     if (window.confirm(`Apakah Anda yakin ingin menghapus produk ID: ${productId}?`)) {
       try {
-        deleteProduct(productId); // Gunakan fungsi deleteProduct yang diimpor
+        deleteProduct(productId);
         setCurrentProducts([...mockProducts]);
         showSuccess(`Produk ID: ${productId} berhasil dihapus.`);
       } catch (error) {

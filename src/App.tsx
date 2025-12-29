@@ -97,7 +97,6 @@ const App = () => {
                     <Route path="/profile/help" element={<HelpPage />} />
                     <Route path="/profile/lunopoints" element={<LunoPointsPage />} />
                     <Route path="/seller/dashboard" element={<SellerDashboardPage />} />
-                    <Route path="/seller/products" element={<SellerProductManagementPage />} />
                     <Route path="/seller/products/new" element={<EditProductPage />} />
                     <Route path="/seller/products/edit/:id" element={<EditProductPage />} />
                     <Route path="/seller/flash-sale" element={<SellerFlashSaleManagementPage />} />

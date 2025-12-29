@@ -164,10 +164,7 @@ const ProfilePage: React.FC = () => {
           <ProfileMenuItem icon={Settings} label="Pengaturan Aplikasi" to="/profile/settings" />
           <ProfileMenuItem icon={HelpCircle} label="Pusat Bantuan" to="/profile/help" />
           {userRole === "seller" && (
-            <>
-              <ProfileMenuItem icon={UserIcon} label="Dashboard Penjual" to="/seller/dashboard" />
-              <ProfileMenuItem icon={Package} label="Tambah Produk" to="/seller/products/new" />
-            </>
+            <ProfileMenuItem icon={UserIcon} label="Dashboard Penjual" to="/seller/dashboard" />
           )}
           <Button onClick={handleLogout} className="w-full flex items-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
             <LogOut className="h-5 w-5 mr-4" />

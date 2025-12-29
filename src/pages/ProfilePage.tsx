@@ -8,7 +8,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { showSuccess, showError } from "@/utils/toast";
-import { mockOrders } from "@/data/orders";
 import { useAuth } from "@/hooks/use-auth";
 import WhatsAppVerificationDialog from "@/components/WhatsAppVerificationDialog";
 
@@ -35,17 +34,6 @@ const ProfilePage: React.FC = () => {
   const [tempUsername, setTempUsername] = useState(username);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(profilePicture);
-
-  const pendingPaymentCount = mockOrders.filter(order => order.status === "Menunggu Pembayaran").length;
-  const shippedCount = mockOrders.filter(order => 
-    order.status === "Sedang Dalam Perjalanan" || 
-    order.status === "Menunggu Penjemputan Kurir" || 
-    order.status === "Dikemas"
-  ).length;
-  const completedCount = mockOrders.filter(order => 
-    order.status === "Selesai" || 
-    order.status === "Telah Sampai"
-  ).length;
 
   useEffect(() => {
     if (isEditDialogOpen) {
@@ -140,19 +128,19 @@ const ProfilePage: React.FC = () => {
             <div className="grid grid-cols-2 gap-2">
               <Link to="/profile/orders" className="flex flex-col items-center p-3 bg-beige dark:bg-gray-700 rounded-lg hover:bg-soft-pink/20 transition-colors">
                 <Package className="h-6 w-6 text-soft-pink mb-1" />
-                <span className="text-sm font-poppins text-gray-700 dark:text-gray-300">Semua ({mockOrders.length})</span>
+                <span className="text-sm font-poppins text-gray-700 dark:text-gray-300">Semua (0)</span>
               </Link>
               <Link to="/profile/orders?status=pending-payment" className="flex flex-col items-center p-3 bg-beige dark:bg-gray-700 rounded-lg hover:bg-soft-pink/20 transition-colors">
                 <Wallet className="h-6 w-6 text-soft-pink mb-1" />
-                <span className="text-sm font-poppins text-gray-700 dark:text-gray-300">Belum Bayar ({pendingPaymentCount})</span>
+                <span className="text-sm font-poppins text-gray-700 dark:text-gray-300">Belum Bayar (0)</span>
               </Link>
               <Link to="/profile/orders?status=shipped" className="flex flex-col items-center p-3 bg-beige dark:bg-gray-700 rounded-lg hover:bg-soft-pink/20 transition-colors">
                 <Truck className="h-6 w-6 text-soft-pink mb-1" />
-                <span className="text-sm font-poppins text-gray-700 dark:text-gray-300">Dikirim ({shippedCount})</span>
+                <span className="text-sm font-poppins text-gray-700 dark:text-gray-300">Dikirim (0)</span>
               </Link>
               <Link to="/profile/orders?status=completed" className="flex flex-col items-center p-3 bg-beige dark:bg-gray-700 rounded-lg hover:bg-soft-pink/20 transition-colors">
                 <CheckCircle className="h-6 w-6 text-soft-pink mb-1" />
-                <span className="text-sm font-poppins text-gray-700 dark:text-gray-300">Selesai ({completedCount})</span>
+                <span className="text-sm font-poppins text-gray-700 dark:text-gray-300">Selesai (0)</span>
               </Link>
             </div>
           </div>

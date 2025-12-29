@@ -40,6 +40,10 @@ import MobileProductDetailPage from "./pages/MobileProductDetailPage";
 // Import halaman notifikasi
 import NotificationPage from "./pages/NotificationPage";
 
+// Import halaman manajemen produk dan flash sale
+import SellerProductManagementPage from "./pages/SellerProductManagementPage";
+import SellerFlashSaleManagementPage from "./pages/SellerFlashSaleManagementPage";
+
 const queryClient = new QueryClient();
 
 const App = () => {
@@ -93,8 +97,10 @@ const App = () => {
                     <Route path="/profile/help" element={<HelpPage />} />
                     <Route path="/profile/lunopoints" element={<LunoPointsPage />} />
                     <Route path="/seller/dashboard" element={<SellerDashboardPage />} />
+                    <Route path="/seller/products" element={<SellerProductManagementPage />} />
                     <Route path="/seller/products/new" element={<EditProductPage />} />
                     <Route path="/seller/products/edit/:id" element={<EditProductPage />} />
+                    <Route path="/seller/flash-sale" element={<SellerFlashSaleManagementPage />} />
                     <Route path="/seller/promotions" element={<SellerPromotionManagementPage />} />
                     <Route path="/live" element={<LunoLivePage />} />
                     <Route path="/videos" element={<VideoListingPage />} />

@@ -2,13 +2,12 @@ import { MadeWithDyad } from "@/components/made-with-dyad";
 import { Link } from "react-router-dom";
 import HomePageHeader from "@/components/HomePageHeader";
 import ShortcutMenu from "@/components/ShortcutMenu";
-import FlashSaleSection from "@/components/FlashSaleSection";
 import RecommendationSection from "@/components/RecommendationSection";
 import OOTDBoard from "@/components/OOTDBoard";
 import SellerPromotionDisplay from "@/components/SellerPromotionDisplay";
 import ProductCollage from "@/components/ProductCollage";
 import { products as mockProducts } from '@/data/products';
-import { Button } from "@/components/ui/button"; // Import Button component
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   // Prioritize featured products for recommendations
@@ -16,19 +15,19 @@ const Index = () => {
   const nonFeaturedProducts = mockProducts.filter(p => !p.isFeatured);
   const recommendedProducts = [...featuredProducts, ...nonFeaturedProducts].slice(0, 4);
 
-
   return (
     <div className="min-h-screen bg-beige dark:bg-gray-900">
       <HomePageHeader />
-      <div className="container mx-auto p-4 space-y-8 md:space-y-12"> {/* Increased space-y for better separation */}
-        <div className="relative text-center py-16 md:py-24 bg-gradient-to-br from-soft-pink to-gold-rose rounded-3xl shadow-2xl text-white overflow-hidden"> {/* More rounded, stronger shadow, overflow hidden for decorative elements */}
+      <div className="container mx-auto p-4 space-y-8 md:space-y-12">
+        {/* Increased space-y for better separation */}
+        <div className="relative text-center py-16 md:py-24 bg-gradient-to-br from-soft-pink to-gold-rose rounded-3xl shadow-2xl text-white overflow-hidden">
+          {/* More rounded, stronger shadow, overflow hidden for decorative elements */}
           {/* Decorative elements inspired by SplashScreen */}
           <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
             <div className="absolute top-1/4 left-1/4 w-48 h-48 bg-white rounded-full transform rotate-45 -translate-x-1/2 -translate-y-1/2 animate-float"></div>
             <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-white rounded-full transform -rotate-30 translate-x-1/2 translate-y-1/2 animate-slow-spin"></div>
             <div className="absolute top-1/2 left-1/2 w-32 h-32 bg-white rounded-full transform -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
           </div>
-
           <h1 className="text-5xl md:text-7xl font-playfair font-extrabold mb-4 leading-tight relative z-10 drop-shadow-lg">
             Selamat Datang di By.Lunova!
           </h1>
@@ -41,11 +40,10 @@ const Index = () => {
             </Button>
           </Link>
         </div>
-
+        
         <SellerPromotionDisplay />
         <ProductCollage />
         <ShortcutMenu />
-        <FlashSaleSection />
         <RecommendationSection title="Rekomendasi Fashion Hari Ini" products={recommendedProducts} />
         <OOTDBoard />
       </div>

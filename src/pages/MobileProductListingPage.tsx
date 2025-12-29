@@ -7,19 +7,17 @@ import { Label } from "@/components/ui/label";
 import HomePageHeader from "@/components/HomePageHeader";
 import { Button } from "@/components/ui/button";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Search, Camera, Mic, Image } from "lucide-react";
+import { Search, Mic, Image } from "lucide-react";
 import { showSuccess } from "@/utils/toast";
 
 const MobileProductListingPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const searchInputRef = useRef<HTMLInputElement>(null);
-  
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCategory, setFilterCategory] = useState("all");
-  const [sortBy, setSortBy] = useState("popularity"); // popularity, price-asc, price-desc
+  const [sortBy, setSortBy] = useState("popularity");
 
-  // Update searchTerm from URL query params and auto-focus
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const currentSearch = queryParams.get("search") || "";
@@ -31,7 +29,6 @@ const MobileProductListingPage: React.FC = () => {
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Update URL with new search term
     const queryParams = new URLSearchParams(location.search);
     if (searchTerm.trim()) {
       queryParams.set("search", searchTerm.trim());
@@ -39,11 +36,7 @@ const MobileProductListingPage: React.FC = () => {
       queryParams.delete("search");
     }
     navigate(`?${queryParams.toString()}`);
-    searchInputRef.current?.blur(); // Remove focus after search
-  };
-
-  const handleCameraClick = () => {
-    showSuccess("Fitur kamera untuk pencarian akan segera hadir!");
+    searchInputRef.current?.blur();
   };
 
   const handleMicClick = () => {
@@ -67,7 +60,6 @@ const MobileProductListingPage: React.FC = () => {
       if (sortBy === "price-desc") {
         return b.price - a.price;
       }
-      // Default to popularity (higher rating, more reviews)
       if (a.rating !== b.rating) {
         return b.rating - a.rating;
       }
@@ -82,24 +74,18 @@ const MobileProductListingPage: React.FC = () => {
       <HomePageHeader />
       <div className="container mx-auto p-2">
         <h1 className="text-xl font-playfair font-bold text-center mb-4 text-gray-900">Cari Produk Fashion</h1>
-        
-        {/* Search bar and media input buttons */}
         <form onSubmit={handleSearchSubmit} className="flex mx-auto max-w-md flex items-center space-x-1 mb-4">
           <div className="relative flex-1">
             <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 dark:text-gray-400" />
-            <Input
-              ref={searchInputRef}
-              type="text"
-              placeholder="Cari produk fashion..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-8 pr-2 py-1 rounded-full bg-white border-gray-200 focus-visible:ring-soft-pink text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 dark:focus-visible:ring-gold-rose"
+            <Input 
+              ref={searchInputRef} 
+              type="text" 
+              placeholder="Cari produk fashion..." 
+              value={searchTerm} 
+              onChange={(e) => setSearchTerm(e.target.value)} 
+              className="pl-8 pr-2 py-1 rounded-full bg-white border-gray-200 focus-visible:ring-soft-pink text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 dark:focus-visible:ring-gold-rose" 
             />
           </div>
-          <Button type="button" variant="ghost" size="icon" onClick={handleCameraClick} className="text-gray-600 hover:text-soft-pink dark:text-gray-400 dark:hover:text-gold-rose p-1">
-            <Camera className="h-4 w-4" />
-            <span className="sr-only">Cari dengan Kamera</span>
-          </Button>
           <Button type="button" variant="ghost" size="icon" onClick={handleMicClick} className="text-gray-600 hover:text-soft-pink dark:text-gray-400 dark:hover:text-gold-rose p-1">
             <Mic className="h-4 w-4" />
             <span className="sr-only">Cari dengan Suara</span>
@@ -109,16 +95,15 @@ const MobileProductListingPage: React.FC = () => {
             <span className="sr-only">Cari dengan Gambar</span>
           </Button>
         </form>
-
         <div className="flex flex-col gap-2 mb-4 items-center justify-between">
           <div className="flex flex-wrap gap-1 mb-2">
             <span className="text-xs text-gray-600 font-poppins">Saran:</span>
             {suggestionKeywords.map((keyword, index) => (
-              <Button
-                key={index}
-                variant="outline"
-                size="sm"
-                className="rounded-full text-xs bg-beige border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white px-2 py-0.5 h-6"
+              <Button 
+                key={index} 
+                variant="outline" 
+                size="sm" 
+                className="rounded-full text-xs bg-beige border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white px-2 py-0.5 h-6" 
                 onClick={() => {
                   setSearchTerm(keyword);
                   const queryParams = new URLSearchParams(location.search);
@@ -130,7 +115,6 @@ const MobileProductListingPage: React.FC = () => {
               </Button>
             ))}
           </div>
-
           <div className="flex flex-col gap-2 w-full">
             <div className="w-full">
               <Label htmlFor="category-filter" className="text-xs font-poppins">Kategori</Label>
@@ -146,7 +130,6 @@ const MobileProductListingPage: React.FC = () => {
                 </SelectContent>
               </Select>
             </div>
-
             <div className="w-full">
               <Label htmlFor="sort-by" className="text-xs font-poppins">Urutkan</Label>
               <Select value={sortBy} onValueChange={setSortBy}>
@@ -163,7 +146,6 @@ const MobileProductListingPage: React.FC = () => {
             </div>
           </div>
         </div>
-
         {filteredProducts.length === 0 ? (
           <p className="text-center text-gray-600 text-sm font-poppins py-8">Tidak ada produk yang ditemukan.</p>
         ) : (

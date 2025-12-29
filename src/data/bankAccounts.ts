@@ -5,7 +5,7 @@ const BANK_ACCOUNTS_STORAGE_KEY = "bylunova_bank_accounts";
 const initialBankAccounts: BankAccount[] = [
   {
     id: "bank1",
-    sellerId: "seller1", // Assuming a seller ID
+    sellerId: "seller1",
     bankName: "BCA",
     accountNumber: "1234567890",
     accountHolderName: "PT By.Lunova Indonesia",
@@ -23,7 +23,7 @@ const initialBankAccounts: BankAccount[] = [
     id: "bank3",
     sellerId: "seller1",
     bankName: "Dana",
-    accountNumber: "081234567890", // Example phone number for e-wallet
+    accountNumber: "081234567890",
     accountHolderName: "PT By.Lunova Indonesia",
     isMain: false,
   },
@@ -37,7 +37,6 @@ const initialBankAccounts: BankAccount[] = [
   },
 ];
 
-// Helper to load data from localStorage
 const loadBankAccounts = (): BankAccount[] => {
   if (typeof window !== "undefined") {
     const storedAccounts = localStorage.getItem(BANK_ACCOUNTS_STORAGE_KEY);
@@ -48,7 +47,6 @@ const loadBankAccounts = (): BankAccount[] => {
   return initialBankAccounts;
 };
 
-// Helper to save data to localStorage
 const saveBankAccounts = (currentAccounts: BankAccount[]) => {
   if (typeof window !== "undefined") {
     localStorage.setItem(BANK_ACCOUNTS_STORAGE_KEY, JSON.stringify(currentAccounts));
@@ -63,7 +61,10 @@ export const addBankAccount = (newAccount: Omit<BankAccount, 'id'>) => {
     id: `bank-${Date.now()}`,
   };
   if (accountWithId.isMain) {
-    mockBankAccounts = mockBankAccounts.map(acc => ({ ...acc, isMain: false }));
+    mockBankAccounts = mockBankAccounts.map(acc => ({
+      ...acc,
+      isMain: false
+    }));
   }
   mockBankAccounts.push(accountWithId);
   saveBankAccounts(mockBankAccounts);
@@ -74,7 +75,10 @@ export const updateBankAccount = (updatedAccount: BankAccount) => {
   const index = mockBankAccounts.findIndex(acc => acc.id === updatedAccount.id);
   if (index !== -1) {
     if (updatedAccount.isMain) {
-      mockBankAccounts = mockBankAccounts.map(acc => ({ ...acc, isMain: false }));
+      mockBankAccounts = mockBankAccounts.map(acc => ({
+        ...acc,
+        isMain: false
+      }));
     }
     mockBankAccounts[index] = updatedAccount;
     saveBankAccounts(mockBankAccounts);
@@ -83,7 +87,6 @@ export const updateBankAccount = (updatedAccount: BankAccount) => {
 
 export const deleteBankAccount = (accountId: string) => {
   mockBankAccounts = mockBankAccounts.filter(acc => acc.id !== accountId);
-  // If the main account was deleted, set the first remaining account as main
   if (mockBankAccounts.length > 0 && !mockBankAccounts.some(acc => acc.isMain)) {
     mockBankAccounts[0].isMain = true;
   }

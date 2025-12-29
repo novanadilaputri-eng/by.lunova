@@ -85,7 +85,7 @@ const ProfilePage: React.FC = () => {
   };
 
   const handleWhatsAppClick = () => {
-    const phoneNumber = '6285226426592'; // Format internasional tanpa tanda +
+    const phoneNumber = '6285226426592';
     const message = 'Halo admin By.Lunova, saya ingin bertanya tentang...';
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
@@ -129,7 +129,7 @@ const ProfilePage: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <div className="grid grid-cols-1 gap-4 mb-8">
           <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
             <h3 className="text-xl font-playfair font-bold text-gray-900 dark:text-gray-100 mb-4">Pesanan Saya</h3>
             <div className="grid grid-cols-2 gap-2">
@@ -151,16 +151,6 @@ const ProfilePage: React.FC = () => {
               </Link>
             </div>
           </div>
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-playfair font-bold text-gray-900 dark:text-gray-100 mb-4">LunoPoints & Voucher</h3>
-            <div className="flex items-center justify-between mb-4">
-              <span className="font-poppins text-lg text-gray-700 dark:text-gray-300">LunoPoints Anda:</span>
-              <span className="font-playfair text-xl font-bold text-gold-rose">1200 Poin</span>
-            </div>
-            <Button asChild className="w-full bg-gold-rose hover:bg-gold-rose/80 text-white font-poppins">
-              <Link to="/profile/lunopoints">Tukar Poin</Link>
-            </Button>
-          </div>
         </div>
 
         <div className="space-y-4">
@@ -171,7 +161,6 @@ const ProfilePage: React.FC = () => {
           <ProfileMenuItem icon={Settings} label="Pengaturan Aplikasi" to="/profile/settings" />
           <ProfileMenuItem icon={HelpCircle} label="Pusat Bantuan" to="/profile/help" />
           
-          {/* Tombol kontak admin via WhatsApp */}
           <div 
             className="flex items-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:bg-beige dark:hover:bg-gray-700 transition-colors cursor-pointer"
             onClick={handleWhatsAppClick}

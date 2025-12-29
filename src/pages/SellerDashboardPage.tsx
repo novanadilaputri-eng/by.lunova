@@ -37,7 +37,6 @@ const SellerDashboardPage: React.FC = () => {
   }, [mockProducts, mockOrders, mockNotifications, currentSellerId]);
 
   const sellerProducts = getSellerProducts(currentSellerId);
-  
   const pendingPaymentOrders = currentOrders.filter(order => order.status === "Menunggu Pembayaran");
   const processedOrders = currentOrders.filter(order => order.status === "Diproses");
   const packedOrders = currentOrders.filter(order => order.status === "Dikemas");
@@ -78,30 +77,22 @@ const SellerDashboardPage: React.FC = () => {
       <HomePageHeader />
       <div className="container mx-auto p-4 md:p-8">
         <h1 className="text-4xl font-playfair font-bold text-center mb-10 text-gray-900 dark:text-gray-100">Dashboard Penjual</h1>
-        
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-8">
           <h2 className="text-2xl font-playfair font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-            <Bell className="h-6 w-6 mr-2 text-soft-pink" /> Notifikasi Anda
+            <Bell className="h-6 w-6 mr-2 text-soft-pink" />
+            Notifikasi Anda
           </h2>
           {sellerNotifications.length === 0 ? (
             <p className="text-gray-600 dark:text-gray-400 font-poppins">Tidak ada notifikasi baru.</p>
           ) : (
             <div className="space-y-3">
               {sellerNotifications.map(notif => (
-                <div 
-                  key={notif.id} 
-                  className={`flex items-center p-3 rounded-lg ${notif.isRead ? "bg-gray-50 dark:bg-gray-700" : "bg-beige dark:bg-gray-600 border border-soft-pink"}`}
-                >
+                <div key={notif.id} className={`flex items-center p-3 rounded-lg ${notif.isRead ? "bg-gray-50 dark:bg-gray-700" : "bg-beige dark:bg-gray-600 border border-soft-pink"}`}>
                   <span className={`flex-grow text-gray-800 dark:text-gray-200 font-poppins ${notif.isRead ? "text-gray-600" : "font-semibold"}`}>
                     {notif.message}
                   </span>
                   {!notif.isRead && (
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      onClick={() => handleMarkNotificationAsRead(notif.id)}
-                      className="text-soft-pink hover:text-rose-600 dark:text-gold-rose dark:hover:text-amber-400"
-                    >
+                    <Button variant="ghost" size="sm" onClick={() => handleMarkNotificationAsRead(notif.id)} className="text-soft-pink hover:text-rose-600 dark:text-gold-rose dark:hover:text-amber-400">
                       Tandai Sudah Dibaca
                     </Button>
                   )}
@@ -110,25 +101,18 @@ const SellerDashboardPage: React.FC = () => {
             </div>
           )}
         </div>
-
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-playfair font-bold text-gray-900 dark:text-gray-100">Produk Saya</h2>
-          <Button 
-            onClick={() => navigate("/seller/products/new")} 
-            className="bg-soft-pink hover:bg-rose-600 text-white font-poppins"
-          >
-            <PlusCircle className="h-4 w-4 mr-2" /> Tambah Produk Baru
+          <Button onClick={() => navigate("/seller/products/new")} className="bg-soft-pink hover:bg-rose-600 text-white font-poppins">
+            <PlusCircle className="h-4 w-4 mr-2" />
+            Tambah Produk Baru
           </Button>
         </div>
-        
         {sellerProducts.length === 0 ? (
           <div className="text-center p-10 bg-white dark:bg-gray-800 rounded-lg shadow-md">
             <Package className="h-20 w-20 text-gray-400 mx-auto mb-6" />
             <p className="text-xl text-gray-600 font-poppins dark:text-gray-400 mb-6">Anda belum memiliki produk di toko.</p>
-            <Button 
-              onClick={() => navigate("/seller/products/new")} 
-              className="px-8 py-3 text-lg bg-soft-pink hover:bg-rose-600 text-white font-poppins"
-            >
+            <Button onClick={() => navigate("/seller/products/new")} className="px-8 py-3 text-lg bg-soft-pink hover:bg-rose-600 text-white font-poppins">
               Tambah Produk Pertama Anda
             </Button>
           </div>
@@ -148,43 +132,32 @@ const SellerDashboardPage: React.FC = () => {
                   )}
                 </CardContent>
                 <CardFooter className="p-4 pt-0 flex justify-between space-x-2">
-                  <Button 
-                    onClick={() => navigate(`/seller/products/edit/${product.id}`)} 
-                    variant="outline" 
-                    className="flex-1 border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins dark:border-gold-rose dark:text-gold-rose dark:hover:bg-gold-rose dark:hover:text-white"
-                  >
-                    <Edit className="h-4 w-4 mr-2" /> Edit
+                  <Button onClick={() => navigate(`/seller/products/edit/${product.id}`)} variant="outline" className="flex-1 border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins dark:border-gold-rose dark:text-gold-rose dark:hover:bg-gold-rose dark:hover:text-white">
+                    <Edit className="h-4 w-4 mr-2" />
+                    Edit
                   </Button>
-                  <Button 
-                    variant="destructive" 
-                    className="flex-1 font-poppins"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteProduct(product.id);
-                    }}
-                  >
-                    <Trash2 className="h-4 w-4 mr-2" /> Hapus
+                  <Button variant="destructive" className="flex-1 font-poppins" onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteProduct(product.id);
+                  }}>
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Hapus
                   </Button>
                 </CardFooter>
               </Card>
             ))}
           </div>
         )}
-
         <div className="mb-10">
           <h2 className="text-2xl font-playfair font-bold text-gray-900 dark:text-gray-100 mb-4">Manajemen Promosi</h2>
-          <Button 
-            onClick={() => navigate("/seller/promotions")} 
-            className="w-full py-3 text-lg bg-gold-rose hover:bg-gold-rose/80 text-white font-poppins"
-          >
-            <Megaphone className="h-5 w-5 mr-2" /> Kelola Promosi Anda
+          <Button onClick={() => navigate("/seller/promotions")} className="w-full py-3 text-lg bg-gold-rose hover:bg-gold-rose/80 text-white font-poppins">
+            <Megaphone className="h-5 w-5 mr-2" />
+            Kelola Promosi Anda
           </Button>
         </div>
-
         <div className="mb-10">
           <SellerBankAccountManagement sellerId={currentSellerId} />
         </div>
-
         <h2 className="text-2xl font-playfair font-bold text-gray-900 dark:text-gray-100 mb-6">Manajemen Pesanan</h2>
         <Tabs defaultValue="pending-payment" className="w-full">
           <TabsList className="grid w-full grid-cols-3 md:grid-cols-5 lg:grid-cols-6 bg-beige dark:bg-gray-700">
@@ -262,19 +235,13 @@ const SellerDashboardPage: React.FC = () => {
             )}
           </TabsContent>
         </Tabs>
-
         <div className="mt-10 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md text-center">
           <h2 className="text-2xl font-playfair font-bold text-gray-900 dark:text-gray-100 mb-4">Statistik Toko</h2>
           <p className="text-gray-600 dark:text-gray-400 font-poppins">Grafik penjualan dan omzet akan ditampilkan di sini.</p>
           <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">(Fitur ini akan dikembangkan lebih lanjut)</p>
         </div>
-
         <div className="text-center mt-8">
-          <Button 
-            onClick={() => navigate("/profile")} 
-            variant="outline" 
-            className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins dark:border-gold-rose dark:text-gold-rose dark:hover:bg-gold-rose dark:hover:text-white"
-          >
+          <Button onClick={() => navigate("/profile")} variant="outline" className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins dark:border-gold-rose dark:text-gold-rose dark:hover:bg-gold-rose dark:hover:text-white">
             Kembali ke Akun Saya
           </Button>
         </div>

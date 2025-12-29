@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Search, Bell, MessageSquare, Camera, Mic, Image } from "lucide-react";
+import { Search, Bell, MessageSquare, Mic, Image, Camera } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { showSuccess } from "@/utils/toast"; // Import showSuccess for toast messages
-import { getUnreadNotificationsCount } from "@/data/notifications"; // Import notification count
-import { Badge } from "@/components/ui/badge"; // Import Badge
+import { showSuccess, showError } from "@/utils/toast";
+import { getUnreadNotificationsCount } from "@/data/notifications";
+import { Badge } from "@/components/ui/badge";
 
 const HomePageHeader: React.FC = () => {
   const navigate = useNavigate();
@@ -15,29 +15,23 @@ const HomePageHeader: React.FC = () => {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [unreadNotifications, setUnreadNotifications] = useState(0);
-
-  // For demo, assuming a fixed user ID for notifications
-  const currentUserId = "seller1"; // Or "user1" depending on context
+  const currentUserId = "seller1";
 
   useEffect(() => {
-    // Update notification count periodically or on relevant events
     const updateCount = () => {
       setUnreadNotifications(getUnreadNotificationsCount(currentUserId));
     };
     updateCount();
-    const interval = setInterval(updateCount, 5000); // Update every 5 seconds
+    const interval = setInterval(updateCount, 5000);
     return () => clearInterval(interval);
   }, [currentUserId]);
 
-
-  // Auto-focus search input when navigating to /products
   useEffect(() => {
     if (location.pathname === "/products" && searchInputRef.current) {
       searchInputRef.current.focus();
     }
   }, [location.pathname]);
 
-  // Update search query state if URL search param changes (e.g., from direct link)
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const currentSearch = queryParams.get("search") || "";
@@ -49,13 +43,9 @@ const HomePageHeader: React.FC = () => {
     if (searchQuery.trim()) {
       navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
     } else {
-      navigate("/products"); // Navigate to products page without a specific search term
+      navigate("/products");
     }
-    searchInputRef.current?.blur(); // Remove focus after search
-  };
-
-  const handleCameraClick = () => {
-    showSuccess("Fitur kamera untuk pencarian akan segera hadir!");
+    searchInputRef.current?.blur();
   };
 
   const handleMicClick = () => {
@@ -64,6 +54,10 @@ const HomePageHeader: React.FC = () => {
 
   const handleImageClick = () => {
     showSuccess("Fitur pencarian gambar akan segera hadir!");
+  };
+
+  const handleBellClick = () => {
+    navigate("/notifications");
   };
 
   return (
@@ -75,19 +69,15 @@ const HomePageHeader: React.FC = () => {
         <form onSubmit={handleSearchSubmit} className="flex-1 mx-4 max-w-md flex items-center space-x-2">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 dark:text-gray-400" />
-            <Input
-              ref={searchInputRef}
-              type="text"
-              placeholder="Cari produk fashion..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 pr-3 py-2 rounded-full bg-white border-gray-200 focus-visible:ring-soft-pink dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 dark:focus-visible:ring-gold-rose"
+            <Input 
+              ref={searchInputRef} 
+              type="text" 
+              placeholder="Cari produk fashion..." 
+              value={searchQuery} 
+              onChange={(e) => setSearchQuery(e.target.value)} 
+              className="pl-9 pr-3 py-2 rounded-full bg-white border-gray-200 focus-visible:ring-soft-pink dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 dark:focus-visible:ring-gold-rose" 
             />
           </div>
-          <Button type="button" variant="ghost" size="icon" onClick={handleCameraClick} className="text-gray-600 hover:text-soft-pink dark:text-gray-400 dark:hover:text-gold-rose">
-            <Camera className="h-5 w-5" />
-            <span className="sr-only">Cari dengan Kamera</span>
-          </Button>
           <Button type="button" variant="ghost" size="icon" onClick={handleMicClick} className="text-gray-600 hover:text-soft-pink dark:text-gray-400 dark:hover:text-gold-rose">
             <Mic className="h-5 w-5" />
             <span className="sr-only">Cari dengan Suara</span>
@@ -96,9 +86,7 @@ const HomePageHeader: React.FC = () => {
             <Image className="h-5 w-5" />
             <span className="sr-only">Cari dengan Gambar</span>
           </Button>
-        </form>
-        <div className="flex items-center space-x-2">
-          <Button variant="ghost" size="icon" className="text-gray-600 hover:text-soft-pink dark:text-gray-400 dark:hover:text-gold-rose relative">
+          <Button type="button" variant="ghost" size="icon" onClick={handleBellClick} className="text-gray-600 hover:text-soft-pink dark:text-gray-400 dark:hover:text-gold-rose relative">
             <Bell className="h-5 w-5" />
             <span className="sr-only">Notifikasi</span>
             {unreadNotifications > 0 && (
@@ -107,6 +95,8 @@ const HomePageHeader: React.FC = () => {
               </Badge>
             )}
           </Button>
+        </form>
+        <div className="flex items-center space-x-2">
           <Button asChild variant="ghost" size="icon" className="text-gray-600 hover:text-soft-pink dark:text-gray-400 dark:hover:text-gold-rose">
             <Link to="/chat">
               <MessageSquare className="h-5 w-5" />

@@ -22,7 +22,6 @@ import HelpPage from "./pages/HelpPage";
 import SellerDashboardPage from "./pages/SellerDashboardPage";
 import EditProductPage from "./pages/EditProductPage";
 import OrderListPage from "./pages/OrderListPage";
-import LunoPointsPage from "./pages/LunoPointsPage";
 import LunoLivePage from "./pages/LunoLivePage";
 import ChatPage from "./pages/ChatPage";
 import SplashScreen from "./pages/SplashScreen";
@@ -33,15 +32,9 @@ import { CartProvider } from "./context/CartContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import BottomNavigationBar from "./components/BottomNavigationBar";
 import WhatsAppContact from "./components/WhatsAppContact";
-
-// Import halaman mobile
 import MobileProductListingPage from "./pages/MobileProductListingPage";
 import MobileProductDetailPage from "./pages/MobileProductDetailPage";
-
-// Import halaman notifikasi
 import NotificationPage from "./pages/NotificationPage";
-
-// Import halaman manajemen produk dan flash sale
 import SellerProductManagementPage from "./pages/SellerProductManagementPage";
 import SellerFlashSaleManagementPage from "./pages/SellerFlashSaleManagementPage";
 
@@ -96,7 +89,6 @@ const App = () => {
                     <Route path="/profile/addresses" element={<AddressPage />} />
                     <Route path="/profile/settings" element={<SettingsPage />} />
                     <Route path="/profile/help" element={<HelpPage />} />
-                    <Route path="/profile/lunopoints" element={<LunoPointsPage />} />
                     <Route path="/seller/dashboard" element={<SellerDashboardPage />} />
                     <Route path="/seller/products/new" element={<EditProductPage />} />
                     <Route path="/seller/products/edit/:id" element={<EditProductPage />} />
@@ -108,12 +100,8 @@ const App = () => {
                     <Route path="/seller/videos/edit/:id" element={<EditVideoPage />} />
                     <Route path="/chat" element={<ChatPage />} />
                     <Route path="/notifications" element={<NotificationPage />} />
-                    
-                    {/* Routing untuk versi mobile */}
                     <Route path="/m/products" element={<MobileProductListingPage />} />
                     <Route path="/m/products/:id" element={<MobileProductDetailPage />} />
-                    
-                    {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                 </div>

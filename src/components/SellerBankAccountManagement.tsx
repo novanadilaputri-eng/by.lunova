@@ -19,16 +19,14 @@ const SellerBankAccountManagement: React.FC<SellerBankAccountManagementProps> = 
   const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingAccount, setEditingAccount] = useState<BankAccount | null>(null);
-
   const [bankName, setBankName] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [accountHolderName, setAccountHolderName] = useState("");
   const [isMain, setIsMain] = useState(false);
 
   useEffect(() => {
-    // Filter accounts for the current seller and update local state when global mock data changes
     setBankAccounts(mockBankAccounts.filter(acc => acc.sellerId === sellerId));
-  }, [sellerId, mockBankAccounts]); // Re-run when mockBankAccounts or sellerId change
+  }, [sellerId, mockBankAccounts]);
 
   useEffect(() => {
     if (editingAccount) {
@@ -60,7 +58,6 @@ const SellerBankAccountManagement: React.FC<SellerBankAccountManagementProps> = 
       showError("Mohon lengkapi semua bidang wajib.");
       return;
     }
-
     const newOrUpdatedAccount: Omit<BankAccount, 'id'> = {
       sellerId,
       bankName,
@@ -68,30 +65,29 @@ const SellerBankAccountManagement: React.FC<SellerBankAccountManagementProps> = 
       accountHolderName,
       isMain,
     };
-
     if (editingAccount) {
-      const updated: BankAccount = { ...editingAccount, ...newOrUpdatedAccount };
+      const updated: BankAccount = {
+        ...editingAccount,
+        ...newOrUpdatedAccount,
+      };
       updateBankAccount(updated);
       showSuccess("Rekening bank berhasil diperbarui!");
     } else {
       addBankAccount(newOrUpdatedAccount);
       showSuccess("Rekening bank baru berhasil ditambahkan!");
     }
-    // setBankAccounts([...mockBankAccounts.filter(acc => acc.sellerId === sellerId)]); // State update handled by useEffect
     handleCloseForm();
   };
 
   const handleDelete = (id: string) => {
     if (window.confirm("Apakah Anda yakin ingin menghapus rekening bank ini?")) {
       deleteBankAccount(id);
-      // setBankAccounts([...mockBankAccounts.filter(acc => acc.sellerId === sellerId)]); // State update handled by useEffect
       showSuccess("Rekening bank berhasil dihapus.");
     }
   };
 
   const handleSetMain = (id: string) => {
     setMainBankAccount(id);
-    // setBankAccounts([...mockBankAccounts.filter(acc => acc.sellerId === sellerId)]); // State update handled by useEffect
     showSuccess("Rekening bank utama berhasil diubah.");
   };
 
@@ -100,16 +96,17 @@ const SellerBankAccountManagement: React.FC<SellerBankAccountManagementProps> = 
       <div className="flex items-center justify-between border-b pb-4 mb-4 border-gray-200 dark:border-gray-700">
         <h2 className="text-2xl font-playfair font-bold text-gray-900 dark:text-gray-100">Rekening Bank Saya</h2>
         <Button onClick={() => handleOpenForm()} className="bg-soft-pink hover:bg-rose-600 text-white font-poppins">
-          <PlusCircle className="h-4 w-4 mr-2" /> Tambah Rekening
+          <PlusCircle className="h-4 w-4 mr-2" />
+          Tambah Rekening
         </Button>
       </div>
-
       {bankAccounts.length === 0 ? (
         <div className="text-center py-8">
           <Banknote className="h-16 w-16 text-gray-400 mx-auto mb-4" />
           <p className="text-lg text-gray-600 font-poppins dark:text-gray-400">Anda belum menambahkan rekening bank.</p>
           <Button onClick={() => handleOpenForm()} className="mt-4 bg-soft-pink hover:bg-rose-600 text-white font-poppins">
-            <PlusCircle className="h-4 w-4 mr-2" /> Tambah Rekening Bank
+            <PlusCircle className="h-4 w-4 mr-2" />
+            Tambah Rekening Bank
           </Button>
         </div>
       ) : (
@@ -124,23 +121,24 @@ const SellerBankAccountManagement: React.FC<SellerBankAccountManagementProps> = 
               <p className="text-gray-700 dark:text-gray-300">Atas Nama: {account.accountHolderName}</p>
               <div className="flex space-x-2 mt-3">
                 <Button variant="outline" size="sm" onClick={() => handleOpenForm(account)} className="border-gold-rose text-gold-rose hover:bg-gold-rose hover:text-white font-poppins dark:border-gold-rose dark:text-gold-rose dark:hover:bg-gold-rose dark:hover:text-white">
-                  <Edit className="h-4 w-4 mr-1" /> Edit
+                  <Edit className="h-4 w-4 mr-1" />
+                  Edit
                 </Button>
                 {!account.isMain && (
                   <Button variant="outline" size="sm" onClick={() => handleSetMain(account.id)} className="border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white font-poppins dark:border-soft-pink dark:text-soft-pink dark:hover:bg-soft-pink dark:hover:text-white">
-                    <CheckCircle className="h-4 w-4 mr-1" /> Atur Utama
+                    <CheckCircle className="h-4 w-4 mr-1" />
+                    Atur Utama
                   </Button>
                 )}
                 <Button variant="destructive" size="sm" onClick={() => handleDelete(account.id)} className="font-poppins">
-                  <Trash2 className="h-4 w-4 mr-1" /> Hapus
+                  <Trash2 className="h-4 w-4 mr-1" />
+                  Hapus
                 </Button>
               </div>
             </div>
           ))}
         </div>
       )}
-
-      {/* Bank Account Form Dialog */}
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
         <DialogContent className="sm:max-w-[500px] bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
           <DialogHeader>
@@ -163,18 +161,30 @@ const SellerBankAccountManagement: React.FC<SellerBankAccountManagementProps> = 
                   <SelectItem value="BNI">BNI</SelectItem>
                   <SelectItem value="CIMB Niaga">CIMB Niaga</SelectItem>
                   <SelectItem value="Permata Bank">Permata Bank</SelectItem>
-                  <SelectItem value="Dana">Dana (E-Wallet)</SelectItem> {/* Added Dana */}
-                  <SelectItem value="Bank BTN">Bank BTN</SelectItem> {/* Added Bank BTN */}
+                  <SelectItem value="Dana">Dana (E-Wallet)</SelectItem>
+                  <SelectItem value="Bank BTN">Bank BTN</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="accountNumber" className="text-right font-poppins text-gray-800 dark:text-gray-200">Nomor Rekening</Label>
-              <Input id="accountNumber" value={accountNumber} onChange={(e) => setAccountNumber(e.target.value)} className="col-span-3 font-poppins border-soft-pink focus:ring-soft-pink dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose" required />
+              <Input 
+                id="accountNumber" 
+                value={accountNumber} 
+                onChange={(e) => setAccountNumber(e.target.value)} 
+                className="col-span-3 font-poppins border-soft-pink focus:ring-soft-pink dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose" 
+                required 
+              />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="accountHolderName" className="text-right font-poppins text-gray-800 dark:text-gray-200">Nama Pemilik</Label>
-              <Input id="accountHolderName" value={accountHolderName} onChange={(e) => setAccountHolderName(e.target.value)} className="col-span-3 font-poppins border-soft-pink focus:ring-soft-pink dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose" required />
+              <Input 
+                id="accountHolderName" 
+                value={accountHolderName} 
+                onChange={(e) => setAccountHolderName(e.target.value)} 
+                className="col-span-3 font-poppins border-soft-pink focus:ring-soft-pink dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose" 
+                required 
+              />
             </div>
             <DialogFooter className="col-span-4 mt-4">
               <Button type="submit" className="bg-soft-pink hover:bg-rose-600 text-white font-poppins">

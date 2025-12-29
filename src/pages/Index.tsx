@@ -33,7 +33,7 @@ const Index = () => {
           {/* Decorative elements inspired by SplashScreen */}
           <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
             <div className="absolute top-1/4 left-1/4 w-48 h-48 bg-white rounded-full transform rotate-45 -translate-x-1/2 -translate-y-1/2 animate-float"></div>
-            <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-white rounded-full transform -rotate-30 translate-x-1/2 translate-y-1/2 animate-slow-spin"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-white rounded-full transform -rotate-30 translate-x-1/2 -translate-y-1/2 animate-slow-spin"></div>
             <div className="absolute top-1/2 left-1/2 w-32 h-32 bg-white rounded-full transform -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
           </div>
           <h1 className="text-5xl md:text-7xl font-playfair font-extrabold mb-4 leading-tight relative z-10 drop-shadow-lg">

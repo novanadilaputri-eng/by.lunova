@@ -2,32 +2,8 @@ import { Address } from "@/types/address";
 
 const ADDRESSES_STORAGE_KEY = "bylunova_addresses";
 
-export let mockAddresses: Address[] = [
-  {
-    id: "addr1",
-    recipientName: "Jane Doe",
-    phoneNumber: "081234567890",
-    fullAddress: "Jl. Contoh No. 123, RT 01/RW 02, Kel. Menteng, Kec. Menteng",
-    city: "Jakarta Pusat",
-    province: "DKI Jakarta",
-    postalCode: "10310",
-    latitude: -6.175392,
-    longitude: 106.827153,
-    isMain: true,
-  },
-  {
-    id: "addr2",
-    recipientName: "Jane Doe",
-    phoneNumber: "081298765432",
-    fullAddress: "Gedung Perkantoran, Lt. 5, Jl. Sudirman No. 45",
-    city: "Jakarta Selatan",
-    province: "DKI Jakarta",
-    postalCode: "12190",
-    latitude: -6.222222,
-    longitude: 106.808889,
-    isMain: false,
-  },
-];
+// Inisialisasi dengan array kosong
+export let mockAddresses: Address[] = [];
 
 // Helper to load data from localStorage
 const loadAddresses = (): Address[] => {

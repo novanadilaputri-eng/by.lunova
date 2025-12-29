@@ -28,7 +28,7 @@ const ProfileMenuItem: React.FC<ProfileMenuItemProps> = ({ icon: Icon, label, to
 
 const ProfilePage: React.FC = () => {
   const { userRole, loginAsBuyer, loginAsSeller, logout } = useAuth();
-  const [username, setUsername] = useState(() => localStorage.getItem("profileUsername") || "LunovaUser123"); // Initialize from localStorage
+  const [username, setUsername] = useState(() => localStorage.getItem("profileUsername") || "Pengguna"); // Initialize from localStorage
   const [profilePicture, setProfilePicture] = useState(() => localStorage.getItem("profilePictureUrl") || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); // Initialize from localStorage
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isWhatsAppVerificationOpen, setIsWhatsAppVerificationOpen] = useState(false); // New state for WhatsApp dialog
@@ -77,7 +77,6 @@ const ProfilePage: React.FC = () => {
       showError("Nama pengguna tidak boleh kosong.");
       return;
     }
-
     setUsername(tempUsername);
     localStorage.setItem("profileUsername", tempUsername); // Persist username
 
@@ -93,7 +92,6 @@ const ProfilePage: React.FC = () => {
     } else {
       showSuccess("Profil berhasil diperbarui!");
     }
-
     setIsEditDialogOpen(false);
   };
 
@@ -114,48 +112,33 @@ const ProfilePage: React.FC = () => {
           </Avatar>
           <h2 className="text-2xl font-playfair font-bold text-gray-900 dark:text-gray-100">{username}</h2>
           <p className="text-md text-gray-600 font-poppins dark:text-gray-400">lunova.user@example.com</p>
-          <Button
-            variant="outline"
-            className="mt-4 border-gold-rose text-gold-rose hover:bg-gold-rose hover:text-white font-poppins dark:border-gold-rose dark:text-gold-rose dark:hover:bg-gold-rose dark:hover:text-white"
-            onClick={() => setIsEditDialogOpen(true)}
-          >
+          <Button variant="outline" className="mt-4 border-gold-rose text-gold-rose hover:bg-gold-rose hover:text-white font-poppins dark:border-gold-rose dark:text-gold-rose dark:hover:bg-gold-rose dark:hover:text-white" onClick={() => setIsEditDialogOpen(true)}>
             Edit Profil
           </Button>
           <div className="mt-4 flex space-x-2">
             {userRole === "buyer" && (
-              <Button 
-                onClick={() => setIsWhatsAppVerificationOpen(true)} 
-                className="bg-gold-rose hover:bg-gold-rose/80 text-white font-poppins"
-              >
+              <Button onClick={() => setIsWhatsAppVerificationOpen(true)} className="bg-gold-rose hover:bg-gold-rose/80 text-white font-poppins">
                 Login sebagai Penjual
               </Button>
             )}
             {userRole === "seller" && (
-              <Button 
-                onClick={loginAsBuyer} 
-                className="bg-soft-pink hover:bg-rose-600 text-white font-poppins"
-              >
+              <Button onClick={loginAsBuyer} className="bg-soft-pink hover:bg-rose-600 text-white font-poppins">
                 Login sebagai Pembeli
               </Button>
             )}
             {!userRole && (
               <>
-                <Button 
-                  onClick={loginAsBuyer} 
-                  className="bg-soft-pink hover:bg-rose-600 text-white font-poppins"
-                >
+                <Button onClick={loginAsBuyer} className="bg-soft-pink hover:bg-rose-600 text-white font-poppins">
                   Login sebagai Pembeli
                 </Button>
-                <Button 
-                  onClick={() => setIsWhatsAppVerificationOpen(true)} 
-                  className="bg-gold-rose hover:bg-gold-rose/80 text-white font-poppins"
-                >
+                <Button onClick={() => setIsWhatsAppVerificationOpen(true)} className="bg-gold-rose hover:bg-gold-rose/80 text-white font-poppins">
                   Login sebagai Penjual
                 </Button>
               </>
             )}
           </div>
         </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
           <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
             <h3 className="text-xl font-playfair font-bold text-gray-900 dark:text-gray-100 mb-4">Pesanan Saya</h3>
@@ -189,7 +172,9 @@ const ProfilePage: React.FC = () => {
             </Button>
           </div>
         </div>
+
         {/* E-Wallet Connection Section - Removed as requested */}
+
         <div className="space-y-4">
           <ProfileMenuItem icon={Heart} label="Wishlist" to="/profile/wishlist" />
           <ProfileMenuItem icon={Gift} label="Voucher Saya" to="/profile/vouchers" />
@@ -203,15 +188,13 @@ const ProfilePage: React.FC = () => {
               <ProfileMenuItem icon={Package} label="Tambah Produk" to="/seller/products/new" />
             </>
           )}
-          <Button
-            onClick={handleLogout}
-            className="w-full flex items-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
-          >
+          <Button onClick={handleLogout} className="w-full flex items-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
             <LogOut className="h-5 w-5 mr-4" />
             <span className="font-poppins">Logout</span>
           </Button>
         </div>
       </div>
+
       {/* Edit Profile Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="sm:max-w-[425px] bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
@@ -247,25 +230,18 @@ const ProfilePage: React.FC = () => {
             </div>
             {filePreviewUrl && (
               <div className="col-span-full flex justify-center mt-2">
-                <img
-                  src={filePreviewUrl}
-                  alt="Preview"
-                  className="h-24 w-24 rounded-full object-cover border border-soft-pink dark:border-gold-rose"
-                />
+                <img src={filePreviewUrl} alt="Preview" className="h-24 w-24 rounded-full object-cover border border-soft-pink dark:border-gold-rose" />
               </div>
             )}
           </div>
           <DialogFooter>
-            <Button
-              type="button"
-              onClick={handleSaveProfile}
-              className="bg-soft-pink hover:bg-rose-600 text-white font-poppins"
-            >
+            <Button type="button" onClick={handleSaveProfile} className="bg-soft-pink hover:bg-rose-600 text-white font-poppins">
               Simpan Perubahan
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
       {/* WhatsApp Verification Dialog */}
       <WhatsAppVerificationDialog
         isOpen={isWhatsAppVerificationOpen}

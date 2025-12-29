@@ -32,9 +32,11 @@ import SellerPromotionManagementPage from "./pages/SellerPromotionManagementPage
 import { CartProvider } from "./context/CartContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import BottomNavigationBar from "./components/BottomNavigationBar";
+
 // Import halaman mobile
 import MobileProductListingPage from "./pages/MobileProductListingPage";
 import MobileProductDetailPage from "./pages/MobileProductDetailPage";
+
 // Import halaman notifikasi
 import NotificationPage from "./pages/NotificationPage";
 
@@ -42,7 +44,7 @@ const queryClient = new QueryClient();
 
 const App = () => {
   const [hasSeenSplashScreen, setHasSeenSplashScreen] = useState(false);
-  
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const seen = localStorage.getItem('hasSeenSplashScreen');
@@ -100,9 +102,11 @@ const App = () => {
                     <Route path="/seller/videos/edit/:id" element={<EditVideoPage />} />
                     <Route path="/chat" element={<ChatPage />} />
                     <Route path="/notifications" element={<NotificationPage />} />
+                    
                     {/* Routing untuk versi mobile */}
                     <Route path="/m/products" element={<MobileProductListingPage />} />
                     <Route path="/m/products/:id" element={<MobileProductDetailPage />} />
+                    
                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                     <Route path="*" element={<NotFound />} />
                   </Routes>

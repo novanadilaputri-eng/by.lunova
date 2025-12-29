@@ -17,8 +17,8 @@ const MobileProductListingPage: React.FC = () => {
   
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCategory, setFilterCategory] = useState("all");
-  const [sortBy, setSortBy] = useState("popularity");
-  
+  const [sortBy, setSortBy] = useState("popularity"); // popularity, price-asc, price-desc
+
   // Update searchTerm from URL query params and auto-focus
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -39,7 +39,7 @@ const MobileProductListingPage: React.FC = () => {
       queryParams.delete("search");
     }
     navigate(`?${queryParams.toString()}`);
-    searchInputRef.current?.blur();
+    searchInputRef.current?.blur(); // Remove focus after search
   };
 
   const handleCameraClick = () => {
@@ -54,23 +54,25 @@ const MobileProductListingPage: React.FC = () => {
     showSuccess("Fitur pencarian gambar akan segera hadir!");
   };
 
-  const filteredProducts = products.filter((product) => {
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = filterCategory === "all" || product.category === filterCategory;
-    return matchesSearch && matchesCategory;
-  }).sort((a, b) => {
-    if (sortBy === "price-asc") {
-      return a.price - b.price;
-    }
-    if (sortBy === "price-desc") {
-      return b.price - a.price;
-    }
-    // Default to popularity (higher rating, more reviews)
-    if (a.rating !== b.rating) {
-      return b.rating - a.rating;
-    }
-    return b.reviewsCount - a.reviewsCount;
-  });
+  const filteredProducts = products
+    .filter((product) => {
+      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = filterCategory === "all" || product.category === filterCategory;
+      return matchesSearch && matchesCategory;
+    })
+    .sort((a, b) => {
+      if (sortBy === "price-asc") {
+        return a.price - b.price;
+      }
+      if (sortBy === "price-desc") {
+        return b.price - a.price;
+      }
+      // Default to popularity (higher rating, more reviews)
+      if (a.rating !== b.rating) {
+        return b.rating - a.rating;
+      }
+      return b.reviewsCount - a.reviewsCount;
+    });
 
   const categories = Array.from(new Set(products.map(p => p.category)));
   const suggestionKeywords = ["Dress pastel", "Hijab satin", "Tas kecil", "Atasan kasual"];
@@ -107,15 +109,15 @@ const MobileProductListingPage: React.FC = () => {
             <span className="sr-only">Cari dengan Gambar</span>
           </Button>
         </form>
-        
+
         <div className="flex flex-col gap-2 mb-4 items-center justify-between">
           <div className="flex flex-wrap gap-1 mb-2">
             <span className="text-xs text-gray-600 font-poppins">Saran:</span>
             {suggestionKeywords.map((keyword, index) => (
-              <Button 
-                key={index} 
-                variant="outline" 
-                size="sm" 
+              <Button
+                key={index}
+                variant="outline"
+                size="sm"
                 className="rounded-full text-xs bg-beige border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white px-2 py-0.5 h-6"
                 onClick={() => {
                   setSearchTerm(keyword);
@@ -128,7 +130,7 @@ const MobileProductListingPage: React.FC = () => {
               </Button>
             ))}
           </div>
-          
+
           <div className="flex flex-col gap-2 w-full">
             <div className="w-full">
               <Label htmlFor="category-filter" className="text-xs font-poppins">Kategori</Label>
@@ -144,6 +146,7 @@ const MobileProductListingPage: React.FC = () => {
                 </SelectContent>
               </Select>
             </div>
+
             <div className="w-full">
               <Label htmlFor="sort-by" className="text-xs font-poppins">Urutkan</Label>
               <Select value={sortBy} onValueChange={setSortBy}>
@@ -160,7 +163,7 @@ const MobileProductListingPage: React.FC = () => {
             </div>
           </div>
         </div>
-        
+
         {filteredProducts.length === 0 ? (
           <p className="text-center text-gray-600 text-sm font-poppins py-8">Tidak ada produk yang ditemukan.</p>
         ) : (

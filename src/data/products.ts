@@ -34,16 +34,25 @@ const initialProducts: Product[] = [
     price: 125000,
     mainImageUrl: "https://images.unsplash.com/photo-1581044777550-4cfa607037dc?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     colorImages: [
-      { color: "Putih", imageUrl: "https://images.unsplash.com/photo-1521572178477-fff92947c229?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
-      { color: "Biru", imageUrl: "https://images.unsplash.com/photo-1571867552700-22329921294c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
-      { color: "Pink", imageUrl: "https://images.unsplash.com/photo-1581044777550-4cfa607037dc?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+      {
+        color: "Putih",
+        imageUrl: "https://images.unsplash.com/photo-1521572178477-fff92947c229?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+      },
+      {
+        color: "Biru",
+        imageUrl: "https://images.unsplash.com/photo-1571867552700-22329921294c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+      },
+      {
+        color: "Pink",
+        imageUrl: "https://images.unsplash.com/photo-1581044777550-4cfa607037dc?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+      },
     ],
     description: "Blouse katun lembut dengan motif bunga yang elegan, cocok untuk tampilan kasual maupun semi-formal. Tersedia dalam berbagai ukuran dan warna.",
     sizes: ["S", "M", "L", "XL"],
     colors: ["Putih", "Biru", "Pink"],
-    stock: 50,
-    rating: 4.8,
-    reviewsCount: 24,
+    stock: 0, // Dimulai dari 0
+    rating: 0, // Dimulai dari 0
+    reviewsCount: 0, // Dimulai dari 0
     storeName: "Fashionista Store",
     storeReputation: "Gold Seller",
     isFeatured: true,
@@ -56,16 +65,25 @@ const initialProducts: Product[] = [
     price: 180000,
     mainImageUrl: "https://images.unsplash.com/photo-1571867552700-22329921294c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     colorImages: [
-      { color: "Beige", imageUrl: "https://images.unsplash.com/photo-1521572178477-fff92947c229?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
-      { color: "Hijau Sage", imageUrl: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
-      { color: "Hitam", imageUrl: "https://images.unsplash.com/photo-1591047139829-f96f700860c6?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+      {
+        color: "Beige",
+        imageUrl: "https://images.unsplash.com/photo-1521572178477-fff92947c229?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+      },
+      {
+        color: "Hijau Sage",
+        imageUrl: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+      },
+      {
+        color: "Hitam",
+        imageUrl: "https://images.unsplash.com/photo-1591047139829-f96f700860c6?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+      },
     ],
     description: "Kemeja linen oversize yang nyaman dan stylish, sempurna untuk gaya santai. Bahan adem dan tidak mudah kusut.",
     sizes: ["M", "L", "XL"],
     colors: ["Beige", "Hijau Sage", "Hitam"],
-    stock: 30,
-    rating: 4.6,
-    reviewsCount: 18,
+    stock: 0, // Dimulai dari 0
+    rating: 0, // Dimulai dari 0
+    reviewsCount: 0, // Dimulai dari 0
     storeName: "Trendy Threads",
     storeReputation: "Platinum Seller",
     isFeatured: false,
@@ -78,17 +96,29 @@ const initialProducts: Product[] = [
     price: 75000,
     mainImageUrl: "https://images.unsplash.com/photo-1521572178477-fff92947c229?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     colorImages: [
-      { color: "Hitam", imageUrl: "https://images.unsplash.com/photo-1591047139829-f96f700860c6?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
-      { color: "Putih", imageUrl: "https://images.unsplash.com/photo-1521572178477-fff92947c229?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
-      { color: "Abu-abu", imageUrl: "https://images.unsplash.com/photo-1583743814966-fafea78985f6?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
-      { color: "Navy", imageUrl: "https://images.unsplash.com/photo-1571867552700-22329921294c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+      {
+        color: "Hitam",
+        imageUrl: "https://images.unsplash.com/photo-1591047139829-f96f700860c6?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+      },
+      {
+        color: "Putih",
+        imageUrl: "https://images.unsplash.com/photo-1521572178477-fff92947c229?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+      },
+      {
+        color: "Abu-abu",
+        imageUrl: "https://images.unsplash.com/photo-1583743814966-fafea78985f6?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+      },
+      {
+        color: "Navy",
+        imageUrl: "https://images.unsplash.com/photo-1571867552700-22329921294c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+      },
     ],
     description: "Kaos polos basic dari bahan katun combed 30s, sangat nyaman dan cocok untuk sehari-hari. Pilihan warna lengkap.",
     sizes: ["S", "M", "L", "XL"],
     colors: ["Hitam", "Putih", "Abu-abu", "Navy"],
-    stock: 100,
-    rating: 4.5,
-    reviewsCount: 32,
+    stock: 0, // Dimulai dari 0
+    rating: 0, // Dimulai dari 0
+    reviewsCount: 0, // Dimulai dari 0
     storeName: "Daily Wear",
     storeReputation: "Silver Seller",
     isFeatured: false,
@@ -105,9 +135,9 @@ const initialProducts: Product[] = [
     description: commonDescription,
     sizes: commonSizes,
     colors: commonColors,
-    stock: 25,
-    rating: 4.7,
-    reviewsCount: 15,
+    stock: 0, // Dimulai dari 0
+    rating: 0, // Dimulai dari 0
+    reviewsCount: 0, // Dimulai dari 0
     storeName: "By.Lunova Official",
     storeReputation: "New Seller",
     isFeatured: false,
@@ -123,9 +153,9 @@ const initialProducts: Product[] = [
     description: commonDescription,
     sizes: commonSizes,
     colors: commonColors,
-    stock: 20,
-    rating: 4.4,
-    reviewsCount: 12,
+    stock: 0, // Dimulai dari 0
+    rating: 0, // Dimulai dari 0
+    reviewsCount: 0, // Dimulai dari 0
     storeName: "By.Lunova Official",
     storeReputation: "New Seller",
     isFeatured: false,
@@ -141,9 +171,9 @@ const initialProducts: Product[] = [
     description: commonDescription,
     sizes: commonSizes,
     colors: commonColors,
-    stock: 35,
-    rating: 4.6,
-    reviewsCount: 19,
+    stock: 0, // Dimulai dari 0
+    rating: 0, // Dimulai dari 0
+    reviewsCount: 0, // Dimulai dari 0
     storeName: "By.Lunova Official",
     storeReputation: "New Seller",
     isFeatured: false,
@@ -159,9 +189,9 @@ const initialProducts: Product[] = [
     description: commonDescription,
     sizes: commonSizes,
     colors: commonColors,
-    stock: 15,
-    rating: 4.8,
-    reviewsCount: 22,
+    stock: 0, // Dimulai dari 0
+    rating: 0, // Dimulai dari 0
+    reviewsCount: 0, // Dimulai dari 0
     storeName: "By.Lunova Official",
     storeReputation: "New Seller",
     isFeatured: true,
@@ -177,9 +207,9 @@ const initialProducts: Product[] = [
     description: commonDescription,
     sizes: commonSizes,
     colors: commonColors,
-    stock: 40,
-    rating: 4.3,
-    reviewsCount: 17,
+    stock: 0, // Dimulai dari 0
+    rating: 0, // Dimulai dari 0
+    reviewsCount: 0, // Dimulai dari 0
     storeName: "By.Lunova Official",
     storeReputation: "New Seller",
     isFeatured: false,
@@ -195,9 +225,9 @@ const initialProducts: Product[] = [
     description: commonDescription,
     sizes: commonSizes,
     colors: commonColors,
-    stock: 30,
-    rating: 4.5,
-    reviewsCount: 14,
+    stock: 0, // Dimulai dari 0
+    rating: 0, // Dimulai dari 0
+    reviewsCount: 0, // Dimulai dari 0
     storeName: "By.Lunova Official",
     storeReputation: "New Seller",
     isFeatured: false,
@@ -213,9 +243,9 @@ const initialProducts: Product[] = [
     description: commonDescription,
     sizes: commonSizes,
     colors: commonColors,
-    stock: 20,
-    rating: 4.7,
-    reviewsCount: 20,
+    stock: 0, // Dimulai dari 0
+    rating: 0, // Dimulai dari 0
+    reviewsCount: 0, // Dimulai dari 0
     storeName: "By.Lunova Official",
     storeReputation: "New Seller",
     isFeatured: false,

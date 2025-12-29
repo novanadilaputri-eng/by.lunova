@@ -13,15 +13,11 @@ interface MobileProductCardProps {
 const MobileProductCard: React.FC<MobileProductCardProps> = ({ product }) => {
   return (
     <Card className="w-full max-w-sm overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 border-2 border-beige dark:border-gray-700 bg-white dark:bg-gray-800">
-      <Link to={`/products/${product.id}`}>
-        <img 
-          src={product.mainImageUrl} 
-          alt={product.name} 
-          className="w-full h-48 object-cover"
-        />
+      <Link to={`/m/products/${product.id}`}>
+        <img src={product.mainImageUrl} alt={product.name} className="w-full h-48 object-cover" />
       </Link>
       <CardContent className="p-3">
-        <Link to={`/products/${product.id}`}>
+        <Link to={`/m/products/${product.id}`}>
           <h3 className="text-md font-semibold text-gray-800 hover:text-soft-pink transition-colors duration-200 font-poppins dark:text-gray-200 dark:hover:text-gold-rose line-clamp-2">
             {product.name}
           </h3>
@@ -42,7 +38,7 @@ const MobileProductCard: React.FC<MobileProductCardProps> = ({ product }) => {
       </CardContent>
       <CardFooter className="p-3 pt-0">
         <Button asChild className="w-full bg-soft-pink hover:bg-rose-600 text-white font-poppins text-sm py-2">
-          <Link to={`/products/${product.id}`}>Lihat Detail</Link>
+          <Link to={`/m/products/${product.id}`}>Lihat Detail</Link>
         </Button>
       </CardFooter>
     </Card>

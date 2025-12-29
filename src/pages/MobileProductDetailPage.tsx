@@ -16,6 +16,7 @@ const MobileProductDetailPage: React.FC = () => {
   const { addToCart } = useCart();
   
   const product = products.find((p) => p.id === id);
+  
   const [selectedSize, setSelectedSize] = useState<string | undefined>(product?.sizes[0]);
   const [selectedColor, setSelectedColor] = useState<string | undefined>(product?.colors[0]);
   const [displayImageUrl, setDisplayImageUrl] = useState<string | undefined>(product?.mainImageUrl);
@@ -34,10 +35,7 @@ const MobileProductDetailPage: React.FC = () => {
       <div className="container mx-auto p-4 text-center">
         <h1 className="text-xl font-playfair font-bold mb-4 dark:text-gray-100">Produk Tidak Ditemukan</h1>
         <p className="text-sm text-gray-600 font-poppins dark:text-gray-400">Maaf, produk yang Anda cari tidak tersedia.</p>
-        <Button 
-          onClick={() => navigate("/products")} 
-          className="mt-4 bg-soft-pink hover:bg-rose-600 text-white text-sm"
-        >
+        <Button onClick={() => navigate("/m/products")} className="mt-4 bg-soft-pink hover:bg-rose-600 text-white text-sm">
           Kembali ke Daftar Produk
         </Button>
       </div>
@@ -74,7 +72,7 @@ const MobileProductDetailPage: React.FC = () => {
       <HomePageHeader />
       <div className="container mx-auto p-2">
         <Button 
-          onClick={() => navigate("/products")} 
+          onClick={() => navigate("/m/products")} 
           variant="outline" 
           className="mb-2 text-xs border-soft-pink text-soft-pink hover:bg-soft-pink hover:text-white dark:border-gold-rose dark:text-gold-rose dark:hover:bg-gold-rose dark:hover:text-white"
         >
@@ -86,7 +84,7 @@ const MobileProductDetailPage: React.FC = () => {
             <img 
               src={displayImageUrl} 
               alt={product.name} 
-              className="w-full h-full object-contain"
+              className="w-full h-full object-contain" 
             />
           </div>
           
@@ -115,7 +113,9 @@ const MobileProductDetailPage: React.FC = () => {
             
             <div className="grid grid-cols-1 gap-3 mb-4">
               <div>
-                <Label htmlFor="size-select" className="text-xs font-poppins font-medium text-gray-800 dark:text-gray-200">Ukuran</Label>
+                <Label htmlFor="size-select" className="text-xs font-poppins font-medium text-gray-800 dark:text-gray-200">
+                  Ukuran
+                </Label>
                 <Select value={selectedSize} onValueChange={setSelectedSize}>
                   <SelectTrigger id="size-select" className="w-full mt-1 border-soft-pink focus:ring-soft-pink dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose text-sm">
                     <SelectValue placeholder="Pilih Ukuran" />
@@ -131,7 +131,9 @@ const MobileProductDetailPage: React.FC = () => {
               </div>
               
               <div>
-                <Label htmlFor="color-select" className="text-xs font-poppins font-medium text-gray-800 dark:text-gray-200">Warna</Label>
+                <Label htmlFor="color-select" className="text-xs font-poppins font-medium text-gray-800 dark:text-gray-200">
+                  Warna
+                </Label>
                 <Select value={selectedColor} onValueChange={setSelectedColor}>
                   <SelectTrigger id="color-select" className="w-full mt-1 border-soft-pink focus:ring-soft-pink dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose text-sm">
                     <SelectValue placeholder="Pilih Warna" />
@@ -148,14 +150,16 @@ const MobileProductDetailPage: React.FC = () => {
             </div>
             
             <div className="mb-4">
-              <Label htmlFor="quantity-input" className="text-xs font-poppins font-medium text-gray-800 dark:text-gray-200">Jumlah</Label>
+              <Label htmlFor="quantity-input" className="text-xs font-poppins font-medium text-gray-800 dark:text-gray-200">
+                Jumlah
+              </Label>
               <div className="flex items-center mt-1">
-                <Input 
-                  id="quantity-input" 
-                  type="number" 
-                  min="1" 
-                  value={quantity} 
-                  onChange={(e) => setQuantity(Math.max(1, Number(e.target.value)))} 
+                <Input
+                  id="quantity-input"
+                  type="number"
+                  min="1"
+                  value={quantity}
+                  onChange={(e) => setQuantity(Math.max(1, Number(e.target.value)))}
                   className="w-20 border-soft-pink focus:ring-soft-pink dark:bg-gray-700 dark:text-gray-100 dark:border-gold-rose text-sm"
                 />
                 <span className="ml-2 text-xs text-gray-600 font-poppins dark:text-gray-400">Stok Tersedia: {product.stock}</span>
